@@ -52,6 +52,5 @@ Optimization package:
    mrif.optimization.bruteforce <api_optimization_bruteforce>
    mrif.optimization.differential_evolution <api_optimization_differential_evolution>
    mrif.optimization.saes <api_optimization_saes>
-   mrif.optimization.objectivefunc.tailcut_delta_psi <api_optimization_objectivefunc_tailcut_delta_psi>
    mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi <api_optimization_objectivefunc_wavelets_mrfilter_delta_psi>
 
