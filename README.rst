@@ -14,7 +14,41 @@ Copyright (c) 2016,2017,2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael
 Description
 ===========
 
-Signal processing for gamma-ray science.
+MRIF is an image filtering library aimed at removing additive stationary
+background noise (e.g. noise in CCD or PMT detectors following a Poisson +
+Gaussian noise model). The image filter relies on multiresolution analysis
+methods (Wavelet transforms) that remove some scales (frequencies) locally in
+space… These methods are especially efficient when signal and noise are located
+at different scales (or frequencies). Some optional features improve the SNR
+ratio when the (clean) signal constitute a single cluster of pixels on the
+image (e.g. electromagnetic showers produced with Imaging Atmosphefic Cherenkov
+Telescopes). This library is written in Python and is based on the existing
+Cosmostat tools iSAp (Interactive Sparse Astronomical data analysis Packages
+http://www.cosmostat.org/software/isap/).
+
+The MRIF library also contains a dedicated package to optimize the image filter
+parameters for a given set of images (i.e. to adapt the filter to a specific
+problem). From a given training set of images (containing pairs of noised and
+clean images) and a given performance estimator (a function that assess the
+image filter's parameters comparing the cleaned image to the actual clean
+image), the optimizer can determine the optimal filtering level for each scale.
+
+The MRIF library contains:
+
+* wavelet transform and wavelet filtering functions for image multiresolution
+  analysis and filtering;
+* additional filter to remove some image components (non-significant pixels
+  clusters);
+* a set of generic filtering performance estimators (MSE, NRMSE, SSIM, PSNR,
+  image moment's difference), some relying on the scikit-image Python library
+  (supplementary estimators can be easily added to meet particular needs);
+* a graphical user interface to visualize the filtering process in the wavelet
+  transformed space;
+* an Evolution Strategies (ES) algorithm known in the mathematical optimization
+  community for its good convergence rate on generic derivative-free continuous
+  global optimization problems (Beyer, H. G. (2013) "The theory of evolution
+  strategies", Springer Science & Business Media);
+* additional tools to manage and monitor the parameter's optimization.
 
 Note:
 
