@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-SAp CTA data pipeline's documentation
-=====================================
+MultiResolution Image Filter's Documentation
+============================================
 
-Signal processing for gamma-ray science.
+MultiResolution Image Filter.
 
 Note:
 
@@ -21,10 +21,10 @@ Contents:
    API <api>
    developer
 
-* Online documentation: https://jdhp-sap.github.io/ctapipe-wavelet-filter/
-* Source code: https://github.com/jdhp-sap/ctapipe-wavelet-filter
-* Issue tracker: https://github.com/jdhp-sap/ctapipe-wavelet-filter/issues
-* datapipe on PyPI: https://pypi.python.org/pypi/datapipe
+* Online documentation: https://jeremiedecock.github.io/mrif/
+* Source code: https://github.com/jeremiedecock/mrif
+* Issue tracker: https://github.com/jeremiedecock/mrif/issues
+* MRIF on PyPI: https://pypi.org/project/mrif/
 
 Indices and tables
 ==================

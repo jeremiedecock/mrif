@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# SAp CTA data pipeline documentation build configuration file, created by
+# MRIF documentation build configuration file, created by
 # sphinx-quickstart on Fri Dec  2 12:16:06 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -62,7 +62,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'SAp CTA data pipeline'
+project = 'MultiResolution Image Filter'
 authors = u'Jérémie Decock'
 copyright = u'2010-2015, %s' % (authors)
 
@@ -249,7 +249,7 @@ html_static_path = ['_static']
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SApCTAdatapipelinedoc'
+htmlhelp_basename = 'mrifdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -275,7 +275,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'SApCTAdatapipeline.tex', 'SAp CTA data pipeline Documentation',
+    (master_doc, 'mrif.tex', 'MRIF Documentation',
      authors, 'manual'),
 ]
 
@@ -317,7 +317,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'sapctadatapipeline', 'SAp CTA data pipeline Documentation',
+    (master_doc, 'mrif', 'MRIF Documentation',
      [authors], 1)
 ]
 
@@ -332,8 +332,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'SApCTAdatapipeline', 'SAp CTA data pipeline Documentation',
-     authors, 'SApCTAdatapipeline', 'One line description of project.',
+    (master_doc, 'mrif', 'MRIF Documentation',
+     authors, 'mrif', 'One line description of project.',
      'Miscellaneous'),
 ]
 

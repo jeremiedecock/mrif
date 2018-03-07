@@ -81,7 +81,7 @@ doc-show:
 doc-publish-github: doc
 	# See https://github.com/davisp/ghp-import
 	# Install: pip install ghp-import
-	ghp-import -n -p -m 'Update gh-pages docs' docs/_build/html
+	ghp-import -n -p -m 'Update gh-pages docs' build/sphinx/html
 
 doc-publish-jdhp: doc
 	# JDHP_DOCS_URI is a shell environment variable that contains the
