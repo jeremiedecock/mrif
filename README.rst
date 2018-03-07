@@ -1,13 +1,13 @@
-======================
-CTAPipe Wavelet Filter
-======================
+===================================
+MRIF - MultiResolution Image Filter
+===================================
 
 Copyright (c) 2016,2017,2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael
 
-* Online documentation: https://jdhp-sap.github.io/ctapipe-wavelet-filter/
-* Source code: https://github.com/jdhp-sap/ctapipe-wavelet-filter
-* Issue tracker: https://github.com/jdhp-sap/ctapipe-wavelet-filter/issues
-* CTAPipe wavelet filter on PyPI: https://pypi.python.org/pypi/ctapipe-wavelet-filter
+* Online documentation: https://jeremiedecock.github.io/mrif/
+* Source code: https://github.com/jeremiedecock/mrif
+* Issue tracker: https://github.com/jeremiedecock/mrif/issues
+* MRIF on PyPI: https://pypi.org/project/mrif/
 
 .. Former documentation: http://sap-cta-data-pipeline.readthedocs.io/en/latest/
 
@@ -34,20 +34,20 @@ Installation
 Gnu/Linux
 ---------
 
-You can install, upgrade, uninstall SAp CTA data pipeline with these commands (in a
+You can install, upgrade, uninstall MRIF with these commands (in a
 terminal)::
 
-    pip install --pre ctapipe-wavelet-filter
-    pip install --upgrade ctapipe-wavelet-filter
-    pip uninstall ctapipe-wavelet-filter
+    pip install --pre mrif
+    pip install --upgrade mrif
+    pip uninstall mrif
 
-Or, if you have downloaded the SAp CTA data pipeline source code::
+Or, if you have downloaded the MRIF source code::
 
     python3 setup.py install
 
 .. There's also a package for Debian/Ubuntu::
 .. 
-..     sudo apt-get install ctapipe-wavelet-filter
+..     sudo apt-get install mrif
 
 Windows
 -------
@@ -58,14 +58,14 @@ Windows
 ..     3.4 under Windows 7.
 ..     It should also work with recent Windows systems.
 
-You can install, upgrade, uninstall SAp CTA data pipeline with these commands (in a
+You can install, upgrade, uninstall MRIF with these commands (in a
 `command prompt`_)::
 
-    py -m pip install --pre ctapipe-wavelet-filter
-    py -m pip install --upgrade ctapipe-wavelet-filter
-    py -m pip uninstall ctapipe-wavelet-filter
+    py -m pip install --pre mrif
+    py -m pip install --upgrade mrif
+    py -m pip uninstall mrif
 
-Or, if you have downloaded the SAp CTA data pipeline source code::
+Or, if you have downloaded the MRIF source code::
 
     py setup.py install
 
@@ -78,14 +78,14 @@ MacOSX
 ..     3.5 under MacOSX 10.9 (*Mavericks*).
 ..     It should also work with recent MacOSX systems.
 
-You can install, upgrade, uninstall SAp CTA data pipeline with these commands (in a
+You can install, upgrade, uninstall MRIF with these commands (in a
 terminal)::
 
-    pip install --pre ctapipe-wavelet-filter
-    pip install --upgrade ctapipe-wavelet-filter
-    pip uninstall ctapipe-wavelet-filter
+    pip install --pre mrif
+    pip install --upgrade mrif
+    pip uninstall mrif
 
-Or, if you have downloaded the SAp CTA data pipeline source code::
+Or, if you have downloaded the MRIF source code::
 
     python3 setup.py install
 
@@ -159,8 +159,8 @@ Bug reports
 To search for bugs or report them, please use the SAp Data Pipeline Standalone
 Scripts Bug Tracker at:
 
-    https://github.com/jdhp-sap/sap-cta-data-pipeline/issues
+    https://github.com/jeremiedecock/mrif/issues
 
 
-.. _SAp CTA data pipeline: http://www.jdhp.org/software_en.html#datapipe
+.. _MRIF: https://github.com/jeremiedecock/mrif
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
