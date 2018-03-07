@@ -161,8 +161,7 @@ Clean images:
 Bug reports
 ===========
 
-To search for bugs or report them, please use the SAp Data Pipeline Standalone
-Scripts Bug Tracker at:
+To search for bugs or report them, please use the MRIF Bug Tracker at:
 
     https://github.com/jeremiedecock/mrif/issues
 
