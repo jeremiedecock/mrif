@@ -9,18 +9,18 @@ import pandas as pd
 import os
 from os.path import expanduser
 
-import datapipe
-from datapipe.io import geometry_converter
-from datapipe.io.images import image_generator
-from datapipe.io.images import plot_ctapipe_image
-from datapipe.io.images import plot_hillas_parameters_on_axes
-from datapipe.io.images import print_hillas_parameters
-from datapipe.io.images import hillas_parameters_to_df
-from datapipe.image.hillas_parameters import get_hillas_parameters
-from datapipe.denoising import wavelets_mrtransform
-from datapipe.denoising.wavelets_mrtransform import WaveletTransform
-from datapipe.denoising import inverse_transform_sampling
-from datapipe.denoising.inverse_transform_sampling import EmpiricalDistribution
+import mrif
+from mrif.io import geometry_converter
+from mrif.io.images import image_generator
+from mrif.io.images import plot_ctapipe_image
+from mrif.io.images import plot_hillas_parameters_on_axes
+from mrif.io.images import print_hillas_parameters
+from mrif.io.images import hillas_parameters_to_df
+from mrif.image.hillas_parameters import get_hillas_parameters
+from mrif.denoising import wavelets_mrtransform
+from mrif.denoising.wavelets_mrtransform import WaveletTransform
+from mrif.denoising import inverse_transform_sampling
+from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
 
 MAX_NUM_SAMPLES = 100000000 #0
 PARTICLE = "gamma"   # "gamma" or "proton"

@@ -24,7 +24,7 @@
 This module contains unit tests for the "benchmark.assess" module.
 """
 
-from datapipe.benchmark import assess
+from mrif.benchmark import assess
 
 import numpy as np
 

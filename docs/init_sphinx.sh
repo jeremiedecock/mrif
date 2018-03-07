@@ -1,7 +1,7 @@
 #!/bin/sh
 
-PROJECT_VERSION=$(python -c "import sys ; sys.path.append('..') ; print('.'.join(__import__('datapipe').__version__.split('.')[:2]))")
-PROJECT_RELEASE=$(python -c "import sys ; sys.path.append('..') ; print('.'.join(__import__('datapipe').__version__.split('.')))")
+PROJECT_VERSION=$(python -c "import sys ; sys.path.append('..') ; print('.'.join(__import__('mrif').__version__.split('.')[:2]))")
+PROJECT_RELEASE=$(python -c "import sys ; sys.path.append('..') ; print('.'.join(__import__('mrif').__version__.split('.')))")
 
 sphinx-quickstart \
     --sep \

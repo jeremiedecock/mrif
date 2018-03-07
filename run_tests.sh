@@ -7,7 +7,7 @@ source activate cta
 
 echo
 echo
-python3 -m doctest ./datapipe/io/images.py
+python3 -m doctest ./mrif/io/images.py
 
 # UNITTESTS ###################################################################
 

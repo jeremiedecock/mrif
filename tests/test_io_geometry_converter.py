@@ -28,9 +28,9 @@ import ctapipe
 from ctapipe.io.hessio import hessio_event_source
 import pyhessio
 
-import datapipe
-import datapipe.io.images
-from datapipe.io import geometry_converter
+import mrif
+import mrif.io.images
+from mrif.io import geometry_converter
 
 # Old version
 from ctapipe.io import camera
@@ -159,7 +159,7 @@ class TestGeometryConverter(unittest.TestCase):
 
         # Get the 2D image
 
-        imgs, metadata_dict = datapipe.io.images.load_benchmark_images(ASTRI_FITS_FILE_PATH)
+        imgs, metadata_dict = mrif.io.images.load_benchmark_images(ASTRI_FITS_FILE_PATH)
         img_2d = imgs['input_image']
 
         # Convert to 1D image
@@ -281,7 +281,7 @@ class TestGeometryConverter(unittest.TestCase):
 
         # Get the 2D image
 
-        imgs, metadata_dict = datapipe.io.images.load_benchmark_images(GCT_FITS_FILE_PATH)
+        imgs, metadata_dict = mrif.io.images.load_benchmark_images(GCT_FITS_FILE_PATH)
         img_2d = imgs['input_image']
 
         # Convert to 1D image

@@ -35,7 +35,7 @@ import argparse
 import os
 import numpy as np
 
-from datapipe.io import images
+from mrif.io import images
 
 
 def main():

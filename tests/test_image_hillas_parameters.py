@@ -24,7 +24,7 @@
 This module contains unit tests for the "image.hillas_parameters" module.
 """
 
-from datapipe.image.hillas_parameters import get_hillas_parameters
+from mrif.image.hillas_parameters import get_hillas_parameters
 
 import copy
 import numpy as np

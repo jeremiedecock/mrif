@@ -37,9 +37,9 @@ import ctapipe
 from ctapipe.io.hessio import hessio_event_source
 import pyhessio
 
-from datapipe.io import images
+from mrif.io import images
 
-from datapipe import __version__ as VERSION
+from mrif import __version__ as VERSION
 
 print(ctapipe.__version__)
 print(pyhessio.__version__)
@@ -157,7 +157,7 @@ def extract_images(simtel_file_path,
                     ###########################################################
 
                     # The ctapipe geometry converter operate on one channel
-                    # only and then takes and return a 2D array but datapipe
+                    # only and then takes and return a 2D array but mrif
                     # fits files keep all channels and thus takes 3D arrays...
 
                     uncalibrated_image_2d = np.array([uncalibrated_image_2d])
@@ -189,7 +189,7 @@ def extract_images(simtel_file_path,
 
                     metadata = {}
 
-                    metadata['version'] = 1    # Version of the datapipe fits format
+                    metadata['version'] = 1    # Version of the mrif fits format
 
                     metadata['cam_id'] = "FlashCam"
 

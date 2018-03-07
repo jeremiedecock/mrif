@@ -37,14 +37,14 @@ import ctapipe
 from ctapipe.io.hessio import hessio_event_source
 import pyhessio
 
-from datapipe.io import images
+from mrif.io import images
 
-from datapipe import __version__ as VERSION
+from mrif import __version__ as VERSION
 
 print(ctapipe.__version__)
 print(pyhessio.__version__)
 
-from datapipe.io import geometry_converter
+from mrif.io import geometry_converter
 from ctapipe.instrument import CameraGeometry
 
 # calibrator
@@ -158,7 +158,7 @@ def extract_images(simtel_file_path,
 
                     metadata = {}
 
-                    metadata['version'] = 1    # Version of the datapipe fits format
+                    metadata['version'] = 1    # Version of the mrif fits format
 
                     if crop:
                         metadata['cam_id'] = "ASTRI_CROPPED"

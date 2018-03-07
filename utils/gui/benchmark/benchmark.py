@@ -118,7 +118,7 @@ def main():
 
     # PARSE OPTIONS ###########################################################
 
-    parser = argparse.ArgumentParser(description="GUI for datapipe benchmarks.")
+    parser = argparse.ArgumentParser(description="GUI for mrif benchmarks.")
 
     parser.add_argument("fileargs", nargs=1, metavar="DIRECTORY",
                         help="The directory containing input images (FITS files) used for the benchmark.")

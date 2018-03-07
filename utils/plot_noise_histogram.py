@@ -14,7 +14,7 @@ import os
 import math
 import numpy as np
 
-from datapipe.io import images
+from mrif.io import images
 
 
 def parse_fits_files(fits_file_name_list, progress_bar=True):

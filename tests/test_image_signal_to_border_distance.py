@@ -24,9 +24,9 @@
 This module contains unit tests for the "image.signal_to_border_distance" module.
 """
 
-from datapipe.image.signal_to_border_distance import signal_to_border
-from datapipe.image.signal_to_border_distance import signal_to_border_distance
-from datapipe.image.signal_to_border_distance import pemax_on_border
+from mrif.image.signal_to_border_distance import signal_to_border
+from mrif.image.signal_to_border_distance import signal_to_border_distance
+from mrif.image.signal_to_border_distance import pemax_on_border
 
 import numpy as np
 

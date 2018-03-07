@@ -29,7 +29,7 @@ __all__ = ['export_pixel_mask']
 import argparse
 import numpy as np
 
-from datapipe.io import images
+from mrif.io import images
 
 def export_pixel_mask(input_file_path, output_file_path):
     fits_images_dict, fits_metadata_dict = images.load_benchmark_images(input_file_path)

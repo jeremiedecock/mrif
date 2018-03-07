@@ -44,7 +44,7 @@ except ImportError:
 
 # SETUP VARIABLES #############################################################
 
-from datapipe import __version__ as VERSION
+from mrif import __version__ as VERSION
 
 AUTHOR_NAME = 'Jeremie DECOCK and Tino Michael'
 AUTHOR_EMAIL = 'jd.jdhp@gmail.com'
@@ -71,7 +71,7 @@ KEYWORDS = 'multiresolution image filter wavelet'
 # automatically with a recursive search (from the root directory of the
 # project).
 PACKAGES = find_packages()
-#PACKAGES = ['datapipe']
+#PACKAGES = ['mrif']
 
 
 # The following list contains all dependencies that Python will try to
@@ -95,10 +95,10 @@ SCRIPTS = []
 #   }
 ENTRY_POINTS = {
   'console_scripts': [
-      'dp-simtel-count = datapipe.io.simtel:main_count_simtel_events',
-      'dp-simtel-ls = datapipe.io.simtel:main_list_simtel_content',
-      'dp-simtel-show = datapipe.io.simtel:main_show_image',
-      'dp-simtel-show-pe = datapipe.io.simtel:main_show_pe_image',
+      'dp-simtel-count = mrif.io.simtel:main_count_simtel_events',
+      'dp-simtel-ls = mrif.io.simtel:main_list_simtel_content',
+      'dp-simtel-show = mrif.io.simtel:main_show_image',
+      'dp-simtel-show-pe = mrif.io.simtel:main_show_pe_image',
   ],
 }
 

@@ -43,10 +43,10 @@ from matplotlib.colors import LogNorm
 
 from matplotlib.backends.backend_gtk3cairo import FigureCanvasGTK3Cairo as FigureCanvas
 
-from datapipe.io import images
-from datapipe.denoising import tailcut as tailcut_mod
-from datapipe.denoising import wavelets_mrfilter as wavelets_mod
-from datapipe.benchmark import assess as assess_mod
+from mrif.io import images
+from mrif.denoising import tailcut as tailcut_mod
+from mrif.denoising import wavelets_mrfilter as wavelets_mod
+from mrif.benchmark import assess as assess_mod
 
 from ctapipe.utils import linalg
 
@@ -54,7 +54,7 @@ import astropy.units as u
 from ctapipe.image.hillas import hillas_parameters_1 as hillas_parameters_1
 from ctapipe.image.hillas import hillas_parameters_2 as hillas_parameters_2
 
-from datapipe.image.kill_isolated_pixels import kill_isolated_pixels as scipy_kill_isolated_pixels
+from mrif.image.kill_isolated_pixels import kill_isolated_pixels as scipy_kill_isolated_pixels
 
 ###############################################################################
 

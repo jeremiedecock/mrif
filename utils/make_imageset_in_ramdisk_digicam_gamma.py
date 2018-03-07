@@ -24,7 +24,7 @@ import os
 import random
 import shutil
 
-from datapipe.io import images
+from mrif.io import images
 
 
 NUM_IMAGES = 1000

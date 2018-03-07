@@ -41,7 +41,7 @@ from matplotlib.colors import LogNorm
 import copy
 import math
 
-from datapipe.io import images
+from mrif.io import images
 
 from ctapipe.utils import linalg
 

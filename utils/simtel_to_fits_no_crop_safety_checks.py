@@ -9,7 +9,7 @@ from matplotlib.colors import LogNorm
 from astropy.io import fits
 import os.path
 
-import datapipe
+import mrif
 import common_functions as common
 
 
@@ -79,9 +79,9 @@ for cropped_file_path in cropped_file_path_list:
     not_cropped_file_path = os.path.join(path_not_cropped, file_base)
     
     for key, cropped_data in load_benchmark_images_deprecated(cropped_file_path)[0].items():
-    #for key, cropped_data in datapipe.io.images.load_benchmark_images(cropped_file_path)[0].items():
+    #for key, cropped_data in mrif.io.images.load_benchmark_images(cropped_file_path)[0].items():
         
-        not_cropped_data = datapipe.io.images.load_benchmark_images(not_cropped_file_path)[0][key]
+        not_cropped_data = mrif.io.images.load_benchmark_images(not_cropped_file_path)[0][key]
       
         if cropped_data.ndim == 2:
             test = np.all(not_cropped_data[8:6*8,8:6*8] == cropped_data)
@@ -118,9 +118,9 @@ for cropped_file_path in cropped_file_path_list:
     not_cropped_file_path = os.path.join(path_not_cropped, file_base)
     
     for key, cropped_data in load_benchmark_images_deprecated(cropped_file_path)[0].items():
-    #for key, cropped_data in datapipe.io.images.load_benchmark_images(cropped_file_path)[0].items():
+    #for key, cropped_data in mrif.io.images.load_benchmark_images(cropped_file_path)[0].items():
         
-        not_cropped_data = datapipe.io.images.load_benchmark_images(not_cropped_file_path)[0][key]
+        not_cropped_data = mrif.io.images.load_benchmark_images(not_cropped_file_path)[0][key]
       
         if cropped_data.ndim == 2:
             test = np.all(not_cropped_data[8:6*8,8:6*8] == cropped_data)

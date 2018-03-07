@@ -1,4 +1,4 @@
-.. currentmodule:: datapipe
+.. currentmodule:: mrif
 
 =================
 Developer's notes

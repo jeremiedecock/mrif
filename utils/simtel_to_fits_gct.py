@@ -37,11 +37,11 @@ import ctapipe
 from ctapipe.io.hessio import hessio_event_source
 import pyhessio
 
-from datapipe.io import images
-from datapipe.io import geometry_converter
-import datapipe.io.montecarlo_calibration_gct as mc_calibration
+from mrif.io import images
+from mrif.io import geometry_converter
+import mrif.io.montecarlo_calibration_gct as mc_calibration
 
-from datapipe import __version__ as VERSION
+from mrif import __version__ as VERSION
 
 DEFAULT_TEL_FILTER = list(range(1, 32))   # TODO
 
@@ -151,7 +151,7 @@ def extract_images(simtel_file_path,
 
                     metadata = {}
 
-                    metadata['version'] = 1    # Version of the datapipe fits format
+                    metadata['version'] = 1    # Version of the mrif fits format
 
                     metadata['cam_id'] = "GCT"
 

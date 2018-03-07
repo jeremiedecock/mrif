@@ -2,6 +2,6 @@
 optimization.bruteforce
 =======================
 
-.. automodule:: datapipe.optimization.bruteforce
+.. automodule:: mrif.optimization.bruteforce
    :members:
 

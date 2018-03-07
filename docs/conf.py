@@ -69,7 +69,7 @@ copyright = u'2010-2015, %s' % (authors)
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-project_version = __import__('datapipe').__version__.split('.')
+project_version = __import__('mrif').__version__.split('.')
 # The short X.Y version.
 version = '.'.join(project_version[:2])
 # The full version, including alpha/beta/rc tags.
