@@ -237,11 +237,9 @@ class AbstractCleaningAlgorithm(object):
                 if plot or (saveplot is not None):
                     image_list = [input_img, reference_img, cleaned_img] 
                     title_list = ["Input image", "Reference image", "Cleaned image"] 
-                    geom_list = [None, None, None]  # TODO
 
                     if plot:
                         mrif.io.images.plot_list(image_list,
-                                                     geom_list=geom_list,
                                                      title_list=title_list,
                                                      metadata_dict=image.meta)
 
@@ -251,7 +249,6 @@ class AbstractCleaningAlgorithm(object):
 
                         print("Saving {}".format(plot_file_path))
                         mrif.io.images.mpl_save_list(image_list,
-                                                         geom_list=geom_list,
                                                          output_file_path=plot_file_path,
                                                          title_list=title_list,
                                                          metadata_dict=image.meta)
