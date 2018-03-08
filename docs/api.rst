@@ -25,7 +25,6 @@ Denoising package:
    mrif.denoising.wavelets_mrfilter <api_filter_wavelet_mrfilter>
    mrif.denoising.wavelets_mrtransform <api_filter_wavelet_mrtransform>
    mrif.denoising.abstract_cleaning_algorithm <api_filter_abstract_cleaning_algorithm>
-   mrif.denoising.inverse_transform_sampling <api_filter_inverse_transform_sampling>
 
 Image package:
 

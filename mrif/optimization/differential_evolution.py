@@ -26,51 +26,10 @@ import json
 from scipy import optimize
 from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction
 
-import mrif.denoising.cdf
-from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
-
 def main():
 
-    instrument = "astri"
-    #instrument = "astri_konrad"
-    #instrument = "digicam"
-    #instrument = "flashcam"
-    #instrument = "nectarcam"
-    #instrument = "lstcam"
-
-    if instrument == "astri":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.ASTRI_CDF_FILE)
-        input_files = ["/dev/shm/.jd/astri/gamma/"]
-
-    elif instrument == "astri_konrad":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.ASTRI_CDF_FILE)
-        input_files = ["/dev/shm/.jd/astri_konrad/gamma/"]
-
-    elif instrument == "digicam":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.DIGICAM_CDF_FILE)
-        input_files = ["/dev/shm/.jd/digicam/gamma/"]
-
-    elif instrument == "flashcam":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.FLASHCAM_CDF_FILE)
-        input_files = ["/dev/shm/.jd/flashcam/gamma/"]
-
-    elif instrument == "nectarcam":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.NECTARCAM_CDF_FILE)
-        input_files = ["/dev/shm/.jd/nectarcam/gamma/"]
-
-    elif instrument == "lstcam":
-
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.LSTCAM_CDF_FILE)
-        input_files = ["/dev/shm/.jd/lstcam/gamma/"]
-
-    else:
-
-        raise Exception("Unknown instrument", instrument)
+    input_files = None  # TODO
+    noise_distribution = None  # TODO
 
     func = ObjectiveFunction(input_files=input_files,
                              noise_distribution=noise_distribution,

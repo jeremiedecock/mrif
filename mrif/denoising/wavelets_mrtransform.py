@@ -108,7 +108,6 @@ import os
 import time
 
 from mrif.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
-from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
 from mrif.io import images
 
 from mrif.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
@@ -606,10 +605,10 @@ def main():
     else:
         output_file_path = args.output
 
-    if noise_cdf_file is not None:
-        noise_distribution = EmpiricalDistribution(noise_cdf_file)
-    else:
-        noise_distribution = None
+    #if noise_cdf_file is not None:
+    #    noise_distribution = EmpiricalDistribution(noise_cdf_file)
+    #else:
+    #    noise_distribution = None
 
     cleaning_function_params = {
             "type_of_filtering": type_of_filtering,

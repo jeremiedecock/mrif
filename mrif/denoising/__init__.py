@@ -21,9 +21,7 @@
 # THE SOFTWARE.
 
 __all__ = ['abstract_cleaning_algorithm',
-           'cdf',
            'fft',
            'wavelets_mrfilter',
-           'wavelets_mrtransform',
-           'inverse_transform_sampling']
+           'wavelets_mrtransform']
 

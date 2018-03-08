@@ -28,92 +28,12 @@ import numpy as np
 import json
 from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
 
-# For wavelets
-import mrif.denoising.cdf
-from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
-
 def main():
 
-    algo = "wavelet_mrfilter"
-
-    instrument = "astri"
-    #instrument = "astri_konrad"
-    #instrument = "digicam"
-    #instrument = "flashcam"
-    #instrument = "nectarcam"
-    #instrument = "lstcam"
-
-    print("algo:", algo)
-    print("instrument:", instrument)
-
-    if instrument == "astri":
-
-        input_files = ["/dev/shm/.jd/astri/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.ASTRI_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([0., 0., 0., 0.])  # TODO
-            init_max_val = np.array([5., 5., 5., 5.])  # TODO
-
-    elif instrument == "astri_konrad":
-
-        input_files = ["/dev/shm/.jd/astri_konrad/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.ASTRI_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([0., 0., 0., 0.])  # TODO
-            init_max_val = np.array([5., 5., 5., 5.])  # TODO
-
-    elif instrument == "digicam":
-
-        input_files = ["/dev/shm/.jd/digicam/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.DIGICAM_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([-3., -4., -3., 0.])
-            init_max_val = np.array([10., 8., 7., 5.])
-
-    elif instrument == "flashcam":
-
-        input_files = ["/dev/shm/.jd/flashcam/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.FLASHCAM_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([0., 0., 0., 0.])  # TODO
-            init_max_val = np.array([5., 5., 5., 5.])  # TODO
-
-    elif instrument == "nectarcam":
-
-        input_files = ["/dev/shm/.jd/nectarcam/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.NECTARCAM_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([-4., -4., -4., 0.])
-            init_max_val = np.array([16., 10., 8., 4.])
-
-    elif instrument == "lstcam":
-
-        input_files = ["/dev/shm/.jd/lstcam/gamma/"]
-        noise_distribution = EmpiricalDistribution(mrif.denoising.cdf.LSTCAM_CDF_FILE)
-
-        if algo == "wavelet_mrfilter":
-            init_min_val = np.array([-4., -5., -4., 0.])
-            init_max_val = np.array([14., 9., 6., 4.])
-
-    else:
-
-        raise Exception("Unknown instrument", instrument)
-
-    if algo == "wavelet_mrfilter":
-
-        func = WaveletObjectiveFunction(input_files=input_files,
-                                        noise_distribution=noise_distribution,
-                                        max_num_img=None,
-                                        aggregation_method="mean")  # "mean" or "median"
-
-    else:
-
-        raise ValueError("Unknown algorithm", algo)
+    func = WaveletObjectiveFunction(input_files=input_files,
+                                    noise_distribution=noise_distribution,
+                                    max_num_img=None,
+                                    aggregation_method="mean")  # "mean" or "median"
 
 
     pop_list = []
