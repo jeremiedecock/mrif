@@ -27,7 +27,6 @@ import numpy as np
 
 import json
 from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
-from mrif.optimization.objectivefunc.tailcut_delta_psi import ObjectiveFunction as TailcutObjectiveFunction
 
 # For wavelets
 import mrif.denoising.cdf
@@ -36,7 +35,6 @@ from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
 def main():
 
     algo = "wavelet_mrfilter"
-    #algo = "tailcut"
 
     instrument = "astri"
     #instrument = "astri_konrad"
@@ -56,9 +54,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([0., 0., 0., 0.])  # TODO
             init_max_val = np.array([5., 5., 5., 5.])  # TODO
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     elif instrument == "astri_konrad":
 
@@ -68,9 +63,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([0., 0., 0., 0.])  # TODO
             init_max_val = np.array([5., 5., 5., 5.])  # TODO
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     elif instrument == "digicam":
 
@@ -80,9 +72,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([-3., -4., -3., 0.])
             init_max_val = np.array([10., 8., 7., 5.])
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     elif instrument == "flashcam":
 
@@ -92,9 +81,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([0., 0., 0., 0.])  # TODO
             init_max_val = np.array([5., 5., 5., 5.])  # TODO
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     elif instrument == "nectarcam":
 
@@ -104,9 +90,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([-4., -4., -4., 0.])
             init_max_val = np.array([16., 10., 8., 4.])
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     elif instrument == "lstcam":
 
@@ -116,9 +99,6 @@ def main():
         if algo == "wavelet_mrfilter":
             init_min_val = np.array([-4., -5., -4., 0.])
             init_max_val = np.array([14., 9., 6., 4.])
-        elif algo == "tailcut":
-            init_min_val = np.array([1., 1.])    # TODO
-            init_max_val = np.array([15., 15.])  # TODO
 
     else:
 
@@ -128,12 +108,6 @@ def main():
 
         func = WaveletObjectiveFunction(input_files=input_files,
                                         noise_distribution=noise_distribution,
-                                        max_num_img=None,
-                                        aggregation_method="mean")  # "mean" or "median"
-
-    elif algo == "tailcut":
-
-        func = TailcutObjectiveFunction(input_files=input_files,
                                         max_num_img=None,
                                         aggregation_method="mean")  # "mean" or "median"
 

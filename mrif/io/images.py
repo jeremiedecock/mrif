@@ -1272,8 +1272,6 @@ def _plot_list(img_list,
             plot_hillas_parameters_on_axes(disp.axes,
                                            img,
                                            geom)
-        #plt.savefig('tailcut_cleaned_img.pdf')
-        #disp.show()
 
     if main_title is not None:
         fig.suptitle(main_title, fontsize=18)

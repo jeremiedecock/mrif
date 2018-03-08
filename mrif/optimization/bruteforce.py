@@ -25,7 +25,6 @@ __all__ = []
 import json
 from scipy import optimize
 from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
-from mrif.optimization.objectivefunc.tailcut_delta_psi import ObjectiveFunction as TailcutObjectiveFunction
 
 # For wavelets
 import mrif.denoising.cdf
@@ -34,7 +33,6 @@ from mrif.denoising.inverse_transform_sampling import EmpiricalDistribution
 def main():
 
     algo = "wavelet_mrfilter"
-    #algo = "tailcut"
 
     instrument = "astri"
     #instrument = "astri_konrad"
@@ -96,18 +94,6 @@ def main():
                          s2_slice,
                          s3_slice,
                          s4_slice)
-
-    elif algo == "tailcut":
-
-        func = TailcutObjectiveFunction(input_files=input_files,
-                                        max_num_img=None,
-                                        aggregation_method="mean")  # "mean" or "median"
-
-        s1_slice = slice(-2., 10., 0.5)
-        s2_slice = slice(-2., 10., 0.5)
-
-        search_ranges = (s1_slice,
-                         s2_slice)
 
     else:
 

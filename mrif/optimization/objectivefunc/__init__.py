@@ -20,5 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['tailcut_delta_psi',
-           'wavelets_mrfilter_delta_psi']
+__all__ = ['wavelets_mrfilter_delta_psi']

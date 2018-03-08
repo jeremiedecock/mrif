@@ -23,9 +23,6 @@
 __all__ = ['abstract_cleaning_algorithm',
            'cdf',
            'fft',
-           'null',
-           'null_ref',
-           'tailcut',
            'wavelets_mrfilter',
            'wavelets_mrtransform',
            'inverse_transform_sampling']
