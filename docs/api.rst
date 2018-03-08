@@ -38,7 +38,6 @@ I/O package:
 .. toctree::
    :maxdepth: 1
 
-   mrif.io.geometry_converter <api_io_geometry_converter>
    mrif.io.images <api_io_images>
 
 Optimization package:
