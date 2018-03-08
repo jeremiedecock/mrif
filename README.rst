@@ -156,9 +156,8 @@ Example
 3. Use the ``-h`` option for more options
 
 A "benchmark mode" can also be used to clean images and assess cleaning
-algorithms (it's still a bit experimental): use the same instructions than for
-step 2.1 with the additional option ``-b 1`` in each command (and put several
-fits files in input e.g. ``\*.fits``)
+algorithms (it's still a bit experimental): use the additional option ``-b all``
+in each command (and put several fits files in input e.g. ``\*.fits``)
 
 Bug reports
 ===========
