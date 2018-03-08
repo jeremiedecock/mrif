@@ -21,22 +21,13 @@
 # THE SOFTWARE.
 
 __all__ = ['fill_nan_pixels',
-           'hillas_parameters_to_df',
            'image_files_in_dir',
            'image_files_in_paths',
            'image_generator',
-           'load_benchmark_images',
            'load_fits',
            'mpl_save',
            'plot',
-           'plot_ctapipe_image',
-           'plot_hillas_parameters_on_axes',
-           'print_hillas_parameters',
-           'quantity_to_tuple',
-           'save_benchmark_images',
-           'save_fits',
-           'simtel_event_to_images',
-           'simtel_images_generator']
+           'save_fits']
 
 import math
 
@@ -54,17 +45,6 @@ from astropy.io import fits
 import astropy.units as u
 
 import pandas as pd
-
-import ctapipe
-import pyhessio
-from ctapipe.image.hillas import HillasParameterizationError
-from ctapipe.io.hessio import hessio_event_source
-from ctapipe.instrument import CameraGeometry
-from ctapipe.calib import CameraCalibrator
-import ctapipe.visualization
-
-from mrif.image.hillas_parameters import get_hillas_parameters
-from mrif.io import geometry_converter
 
 DEBUG = False
 
@@ -194,7 +174,7 @@ def fill_nan_pixels(image, noise_distribution=None):
 
 # DIRECTORY PARSER ############################################################
 
-def image_files_in_dir(directory_path, max_num_files=None):
+def image_files_in_dir(directory_path, max_num_files=None, file_ext=(".fits", ".fit")):
     """Return the path of FITS and Simtel files in `directory_path`.
 
     Return the path of all (or `max_num_files`) files having the extension
@@ -213,14 +193,13 @@ def image_files_in_dir(directory_path, max_num_files=None):
         The path of the next FITS or Simtel files in `directory_path`.
     """
 
-    FILE_EXT = (".simtel", ".simtel.gz", ".fits", ".fit")
     directory_path = os.path.expanduser(directory_path)
 
     files_counter = 0
 
     for file_name in os.listdir(directory_path):
         file_path = os.path.join(directory_path, file_name)
-        if os.path.isfile(file_path) and file_name.lower().endswith(FILE_EXT):
+        if os.path.isfile(file_path) and file_name.lower().endswith(file_ext):
             files_counter += 1
             if (max_num_files is not None) and (files_counter > max_num_files):
                 break
@@ -273,23 +252,6 @@ def image_files_in_paths(path_list, max_num_files=None):
 
 # LOAD IMAGES ################################################################
 
-Image1D = collections.namedtuple('Image1D', ('input_image',
-                                             'reference_image',
-                                             'adc_sum_image',
-                                             'pedestal_image',
-                                             'gains_image',
-                                             'pixels_position',
-                                             'meta'))
-
-Image2D = collections.namedtuple('Image2D', ('input_image',
-                                             'reference_image',
-                                             'adc_sum_image',
-                                             'pedestal_image',
-                                             'gains_image',
-                                             'pixels_position',
-                                             'pixels_mask',
-                                             'meta'))
-
 def image_generator(path_list,
                     max_num_images=None,
                     tel_filter_list=None,
@@ -325,20 +287,7 @@ def image_generator(path_list,
         if (max_num_images is not None) and (images_counter >= max_num_images):
             break
         else:
-            if file_path.lower().endswith((".simtel", ".simtel.gz")):
-                # SIMTEL FILES
-                for image in simtel_images_generator(file_path,
-                                                     tel_filter_list,
-                                                     ev_filter_list,
-                                                     cam_filter_list,
-                                                     **kwargs):
-                    if (max_num_images is not None) and (images_counter >= max_num_images):
-                        pyhessio.close_file()
-                        break
-                    else:
-                        images_counter += 1
-                        yield image
-            elif file_path.lower().endswith((".fits", ".fit")):
+            if file_path.lower().endswith((".fits", ".fit")):
                 # FITS FILES
                 image_dict, fits_metadata_dict = load_benchmark_images(file_path)   # TODO: named tuple
                 if (tel_filter_list is None) or (fits_metadata_dict['tel_id'] in tel_filter_list):
@@ -348,495 +297,6 @@ def image_generator(path_list,
                             yield Image2D(**image_dict, meta=fits_metadata_dict)
             else:
                 raise Exception("Wrong item:", file_path)
-
-
-# LOAD SIMTEL IMAGE ##########################################################
-
-def quantity_to_tuple(quantity, unit_str):
-    """Splits a quantity into a tuple of (value,unit) where unit is FITS compliant.
-
-    Useful to write FITS header keywords with units in a comment.
-
-    Parameters
-    ----------
-    quantity : astropy quantity
-        The Astropy quantity to split.
-    unit_str: str
-        Unit string representation readable by astropy.units (e.g. 'm', 'TeV', ...)
-
-    Returns
-    -------
-    tuple
-        A tuple containing the value and the quantity.
-    """
-    return quantity.to(unit_str).value, quantity.to(unit_str).unit.to_string(format='FITS')
-
-
-def simtel_event_to_images(event, tel_id, ctapipe_format=False):
-    """
-    TODO
-    """
-
-    SINGLE_CHANNEL_CAMERAS = ("CHEC", "DigiCam", "FlashCam")
-    TWO_CHANNELS_CAMERAS = ("ASTRICam", "NectarCam", "LSTCam")
-
-    # GUESS THE IMAGE GEOMETRY ################################
-
-    x, y = event.inst.pixel_pos[tel_id]
-    foclen = event.inst.optical_foclen[tel_id]
-    geom1d = CameraGeometry.guess(x, y, foclen)
-
-    # GET IMAGES ##############################################
-
-    mc_pe = event.mc.tel[tel_id].photo_electron_image
-    mc_pedestal = event.mc.tel[tel_id].pedestal                     # [N channels]
-    mc_gain = event.mc.tel[tel_id].dc_to_pe                         # [N channels]
-
-    r0_adc_sums = event.r0.tel[tel_id].adc_sums                     # [N channels]
-    r0_adc_samples = event.r0.tel[tel_id].adc_samples               # [N channels]
-
-    r1_pe_samples = event.r1.tel[tel_id].pe_samples                 # [N channels]
-
-    dl0_pe_samples = event.dl0.tel[tel_id].pe_samples               # [N channels]
-
-    dl1_cleaned_samples = event.dl1.tel[tel_id].cleaned             # [N channels]
-    dl1_extracted_samples = event.dl1.tel[tel_id].extracted_samples # [N channels]
-    dl1_image = event.dl1.tel[tel_id].image                         # [N channels]
-    dl1_peakpos = event.dl1.tel[tel_id].peakpos                     # [N channels]
-
-    # ALIAS #
-
-    pe_image = mc_pe
-    pedestal = mc_pedestal
-    gain = mc_gain
-
-    uncalibrated_image = r0_adc_sums
-    uncalibrated_samples = r0_adc_samples
-
-    calibrated_image = dl1_image.copy()
-
-    pixel_pos = event.inst.pixel_pos[tel_id]
-
-    cam_id = geom1d.cam_id
-
-    # MIX CHANNELS FOR DOUBLE CHANNEL CAMERAS #################
-
-    if cam_id == "ASTRICam":
-        ASTRI_CAM_CHANNEL_THRESHOLD = 14         # cf. "calib_find_channel_selection_threshold" notebook
-        calibrated_image[1, calibrated_image[0,:] <= ASTRI_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image[0, calibrated_image[0,:] >  ASTRI_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image = calibrated_image.sum(axis=0)
-    elif cam_id == "NectarCam":
-        NECTAR_CAM_CHANNEL_THRESHOLD = 190       # cf. "calib_find_channel_selection_threshold" notebook
-        calibrated_image[1, calibrated_image[0,:] <= NECTAR_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image[0, calibrated_image[0,:] >  NECTAR_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image = calibrated_image.sum(axis=0)
-    elif cam_id == "LSTCam":
-        LST_CAM_CHANNEL_THRESHOLD = 100          # cf. "calib_find_channel_selection_threshold" notebook
-        calibrated_image[1, calibrated_image[0,:] <= LST_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image[0, calibrated_image[0,:] >  LST_CAM_CHANNEL_THRESHOLD] = 0
-        calibrated_image = calibrated_image.sum(axis=0)
-    elif cam_id in SINGLE_CHANNEL_CAMERAS :
-        calibrated_image = calibrated_image[0]
-    else:
-        raise NotImplementedError("Unknown camera: {}".format(cam_id))
-
-    # METADATA ###############################################
-
-    metadata = {'cam_id': cam_id}
-
-    ##########################################################
-
-    if ctapipe_format:
-
-        return Image1D(input_image=calibrated_image,
-                       reference_image=pe_image,
-                       adc_sum_image=uncalibrated_image,
-                       pedestal_image=pedestal,
-                       gains_image=gain,
-                       pixels_position=pixel_pos,
-                       meta=metadata)
-
-    else:
-
-        # CONVERTING GEOMETRY (1D TO 2D) ##########################
-
-        if cam_id in SINGLE_CHANNEL_CAMERAS:
-
-            pe_image_2d = geometry_converter.image_1d_to_2d(pe_image, cam_id=cam_id)
-            calibrated_image_2d = geometry_converter.image_1d_to_2d(calibrated_image, cam_id=cam_id)
-
-            uncalibrated_image_2d = geometry_converter.image_1d_to_2d(uncalibrated_image[0], cam_id=cam_id)
-            pedestal_2d = geometry_converter.image_1d_to_2d(pedestal[0], cam_id=cam_id)
-            gains_2d = geometry_converter.image_1d_to_2d(gain[0], cam_id=cam_id)
-
-        elif cam_id in TWO_CHANNELS_CAMERAS:
-
-            pe_image_2d = geometry_converter.image_1d_to_2d(pe_image, cam_id=cam_id)
-            calibrated_image_2d = geometry_converter.image_1d_to_2d(calibrated_image, cam_id=cam_id)
-
-            uncalibrated_image_2d_ch0 = geometry_converter.image_1d_to_2d(uncalibrated_image[0], cam_id=cam_id)
-            uncalibrated_image_2d_ch1 = geometry_converter.image_1d_to_2d(uncalibrated_image[1], cam_id=cam_id)
-            pedestal_2d_ch0 = geometry_converter.image_1d_to_2d(pedestal[0], cam_id=cam_id)
-            pedestal_2d_ch1 = geometry_converter.image_1d_to_2d(pedestal[1], cam_id=cam_id)
-            gains_2d_ch0 = geometry_converter.image_1d_to_2d(gain[0], cam_id=cam_id)
-            gains_2d_ch1 = geometry_converter.image_1d_to_2d(gain[1], cam_id=cam_id)
-
-        else:
-            raise NotImplementedError("Unknown camera: {}".format(cam_id))
-
-        # Make a mock pixel position array...
-        pixel_pos_2d = np.array(np.meshgrid(np.linspace(pixel_pos[0].min().value,
-                                                        pixel_pos[0].max().value,
-                                                        pe_image_2d.shape[0]),
-                                            np.linspace(pixel_pos[1].min().value,
-                                                        pixel_pos[1].max().value,
-                                                        pe_image_2d.shape[1])))
-
-        # FIX THE ARRAY SHAPE #####################################
-
-        # The ctapipe geometry converter operate on one channel
-        # only and then takes and return a 2D array but mrif
-        # fits files keep all channels and thus takes 3D arrays...
-
-        if cam_id in SINGLE_CHANNEL_CAMERAS:
-            uncalibrated_image_2d = np.array([uncalibrated_image_2d])
-            pedestal_2d =           np.array([pedestal_2d])
-            gains_2d =              np.array([gains_2d])
-        elif cam_id in TWO_CHANNELS_CAMERAS:
-            uncalibrated_image_2d = np.array([uncalibrated_image_2d_ch0, uncalibrated_image_2d_ch1])
-            pedestal_2d =           np.array([pedestal_2d_ch0, pedestal_2d_ch1 ])
-            gains_2d =              np.array([gains_2d_ch0, gains_2d_ch1])
-        else:
-            raise NotImplementedError("Unknown camera: {}".format(cam_id))
-
-        # GET PIXEL MASK AND PUT NAN IN BLANK PIXELS ##############
-
-        mask_1d = np.ones(pe_image.shape)
-        mask_2d = geometry_converter.image_1d_to_2d(mask_1d, cam_id=cam_id)
-
-        # TODO: apparently nan values are already there so this step is useless...
-
-        #calibrated_image_2d[mask_2d != 1] = np.nan
-        #pe_image_2d[mask_2d != 1] = np.nan
-
-        #uncalibrated_image_2d[0, mask_2d != 1] = np.nan
-        #pedestal_2d[0, mask_2d != 1] = np.nan
-        #gains_2d[0, mask_2d != 1] = np.nan
-
-        #if cam_id in ("NectarCam", "LSTCam", "ASTRICam", "ASTRI"):
-        #    # Double channel instruments
-        #    uncalibrated_image_2d[1, mask_2d != 1] = np.nan
-        #    pedestal_2d[1, mask_2d != 1] = np.nan
-        #    gains_2d[1, mask_2d != 1] = np.nan
-
-        #pixel_pos_2d[mask_2d != 1] = np.nan
-
-        return Image2D(input_image=calibrated_image_2d,
-                       reference_image=pe_image_2d,
-                       adc_sum_image=uncalibrated_image_2d,
-                       pedestal_image=pedestal_2d,
-                       gains_image=gains_2d,
-                       pixels_position=pixel_pos_2d,
-                       pixels_mask=mask_2d,
-                       meta=metadata)
-
-
-def simtel_images_generator(file_path,
-                            tel_filter_list=None,
-                            ev_filter_list=None,
-                            cam_filter_list=None,
-                            ctapipe_format=False,
-                            **kwargs):
-    """
-    TODO
-    """
-
-    # EXTRACT IMAGES ##########################################################
-
-    # hessio_event_source returns a Python generator that streams data from an
-    # EventIO/HESSIO MC data file (e.g. a standard CTA data file).
-    # This generator contains ctapipe.core.Container instances ("event").
-    # 
-    # Parameters:
-    # - max_events: maximum number of events to read
-    # - allowed_tels: select only a subset of telescope, if None, all are read.
-
-    source = hessio_event_source(file_path, allowed_tels=tel_filter_list)
-
-    # ITERATE OVER EVENTS #####################################################
-
-    calib = CameraCalibrator(None, None)
-
-    for event in source:
-
-        calib.calibrate(event)  # calibrate the event
-
-        event_id = int(event.dl0.event_id)
-
-        if (ev_filter_list is None) or (event_id in ev_filter_list):
-
-            # ITERATE OVER IMAGES #############################################
-
-            for tel_id in event.trig.tels_with_trigger:
-
-                tel_id = int(tel_id)
-
-                if (tel_filter_list is None) or (tel_id in tel_filter_list):
-
-                    try:
-                        image = simtel_event_to_images(event, tel_id, ctapipe_format=ctapipe_format)
-                        cam_id = image.meta['cam_id']
-                    except NotImplementedError:
-                        cam_id = None
-
-                    if (cam_id is not None) and ((cam_filter_list is None) or (cam_id in cam_filter_list)):
-
-                        # MAKE METADATA ###########################################
-
-                        image.meta['version'] = 1    # Version of the mrif data format
-
-                        image.meta['tel_id'] = tel_id
-                        image.meta['event_id'] = event_id
-                        image.meta['file_path'] = file_path
-                        image.meta['simtel_path'] = file_path
-
-                        image.meta['num_tel_with_trigger'] = len(event.trig.tels_with_trigger)
-
-                        image.meta['mc_energy'] =  quantity_to_tuple(event.mc.energy, 'TeV')
-                        image.meta['mc_azimuth'] = quantity_to_tuple(event.mc.az, 'rad')
-                        image.meta['mc_altitude'] = quantity_to_tuple(event.mc.alt, 'rad')
-                        image.meta['mc_core_x'] = quantity_to_tuple(event.mc.core_x, 'm')
-                        image.meta['mc_core_y'] = quantity_to_tuple(event.mc.core_y, 'm')
-                        image.meta['mc_height_first_interaction'] = quantity_to_tuple(event.mc.h_first_int, 'm')
-
-                        image.meta['ev_count'] = int(event.count)
-
-                        image.meta['run_id'] = int(event.dl0.run_id)
-                        image.meta['num_tel_with_data'] = len(event.dl0.tels_with_data)
-
-                        image.meta['optical_foclen'] = quantity_to_tuple(event.inst.optical_foclen[tel_id], 'm')
-                        image.meta['tel_pos_x'] = quantity_to_tuple(event.inst.tel_pos[tel_id][0], 'm')
-                        image.meta['tel_pos_y'] = quantity_to_tuple(event.inst.tel_pos[tel_id][1], 'm')
-                        image.meta['tel_pos_z'] = quantity_to_tuple(event.inst.tel_pos[tel_id][2], 'm')
-
-                        # IMAGES ##################################################
-
-                        #images_dict = {}
-
-                        #images_dict["input_image"] = calibrated_image_2d
-                        #images_dict["reference_image"] = pe_image_2d
-                        #images_dict["adc_sum_image"] = uncalibrated_image_2d
-                        #images_dict["pedestal_image"] = pedestal_2d
-                        #images_dict["gains_image"] = gains_2d
-                        #images_dict["pixels_position"] = pixel_pos_2d
-                        #images_dict["pixels_mask"] = mask_2d
-
-                        yield image
-
-    # End of file
-    pyhessio.close_file()
-
-
-# LOAD FITS BENCHMARK IMAGE ##################################################
-
-def load_benchmark_images(input_file_path):
-    """Return images contained in the given FITS file.
-
-    Parameters
-    ----------
-    input_file_path : str
-        The path of the FITS file to load
-
-    Returns
-    -------
-    dict
-        A dictionary containing the loaded images and their metadata
-
-    Raises
-    ------
-    WrongFitsFileStructure
-        If `input_file_path` doesn't contain a valid structure
-    """
-
-    hdu_list = fits.open(input_file_path)   # open the FITS file
-
-    # METADATA ################################################################
-
-    hdu0 = hdu_list[0]
-
-    metadata_dict = {}
-
-    metadata_dict['version'] = hdu0.header['version']
-    metadata_dict['cam_id'] = hdu0.header['cam_id']
-
-    metadata_dict['tel_id'] = hdu0.header['tel_id']
-    metadata_dict['event_id'] = hdu0.header['event_id']
-    metadata_dict['file_path'] = input_file_path
-    metadata_dict['simtel_path'] = hdu0.header['simtel']
-
-    metadata_dict['num_tel_with_trigger'] = hdu0.header['tel_trig']
-
-    metadata_dict['mc_energy'] = hdu0.header['energy']
-    metadata_dict['mc_energy_unit'] = hdu0.header.comments['energy']
-
-    metadata_dict['mc_azimuth'] = hdu0.header['mc_az']
-    metadata_dict['mc_azimuth_unit'] = hdu0.header.comments['mc_az']
-
-    metadata_dict['mc_altitude'] = hdu0.header['mc_alt']
-    metadata_dict['mc_altitude_unit'] = hdu0.header.comments['mc_alt']
-
-    metadata_dict['mc_core_x'] = hdu0.header['mc_corex']
-    metadata_dict['mc_core_x_unit'] = hdu0.header.comments['mc_corex']
-
-    metadata_dict['mc_core_y'] = hdu0.header['mc_corey']
-    metadata_dict['mc_core_y_unit'] = hdu0.header.comments['mc_corey']
-
-    metadata_dict['mc_height_first_interaction'] = hdu0.header['mc_hfi']
-    metadata_dict['mc_height_first_interaction_unit'] = hdu0.header.comments['mc_hfi']
-
-    metadata_dict['ev_count'] = hdu0.header['count']
-    metadata_dict['run_id'] = hdu0.header['run_id']
-    metadata_dict['num_tel_with_data'] = hdu0.header['tel_data']
-
-    metadata_dict['optical_foclen'] = hdu0.header['foclen']
-    metadata_dict['optical_foclen_unit'] = hdu0.header.comments['foclen']
-
-    metadata_dict['tel_pos_x'] = hdu0.header['tel_posx']
-    metadata_dict['tel_pos_x_unit'] = hdu0.header.comments['tel_posx']
-
-    metadata_dict['tel_pos_y'] = hdu0.header['tel_posy']
-    metadata_dict['tel_pos_y_unit'] = hdu0.header.comments['tel_posy']
-
-    metadata_dict['tel_pos_z'] = hdu0.header['tel_posz']
-    metadata_dict['tel_pos_z_unit'] = hdu0.header.comments['tel_posz']
-
-    # TODO: Astropy fails to store the following data in FITS files
-    #metadata_dict['uid'] = hdu0.header.comments['uid']
-    #metadata_dict['date_time'] = hdu0.header.comments['datetime']
-    #metadata_dict['lib_version'] = hdu0.header.comments['lib_version']
-    #metadata_dict['argv'] = hdu0.header.comments['argv']
-    #metadata_dict['python_version'] = hdu0.header.comments['python']
-    #metadata_dict['system'] = hdu0.header.comments['system']
-
-    # IMAGES ##################################################################
-
-    if metadata_dict['version'] == 1:
-        if (len(hdu_list) != 7) or (not hdu_list[0].is_image) or (not hdu_list[1].is_image) or (not hdu_list[2].is_image) or (not hdu_list[3].is_image) or (not hdu_list[4].is_image) or (not hdu_list[5].is_image) or (not hdu_list[6].is_image):
-            hdu_list.close()
-            raise WrongFitsFileStructure(input_file_path)
-
-        hdu0, hdu1, hdu2, hdu3, hdu4, hdu6, hdu7 = hdu_list
-
-        # IMAGES
-
-        images_dict = {}
-
-        images_dict["input_image"] = hdu0.data        # "hdu.data" is a Numpy Array
-        images_dict["reference_image"] = hdu1.data    # "hdu.data" is a Numpy Array
-        images_dict["adc_sum_image"] = hdu2.data      # "hdu.data" is a Numpy Array
-        images_dict["pedestal_image"] = hdu3.data     # "hdu.data" is a Numpy Array
-        images_dict["gains_image"] = hdu4.data        # "hdu.data" is a Numpy Array
-        #images_dict["calibration_image"] = hdu5.data # "hdu.data" is a Numpy Array
-        images_dict["pixels_position"] = hdu6.data    # "hdu.data" is a Numpy Array
-        images_dict["pixels_mask"] = hdu7.data        # "hdu.data" is a Numpy Array
-    else:
-        raise Exception("Unknown version number")
-
-    # METADATA ################################################################
-
-    metadata_dict['npe'] = float(np.nansum(images_dict["reference_image"]))       # np.sum() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-    metadata_dict['min_npe'] = float(np.nanmin(images_dict["reference_image"]))   # np.min() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-    metadata_dict['max_npe'] = float(np.nanmax(images_dict["reference_image"]))   # np.max() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-
-    hdu_list.close()
-
-    return images_dict, metadata_dict   # TODO: named tuple
-
-
-# SAVE BENCHMARK IMAGE #######################################################
-
-def save_benchmark_images(img,
-                          pe_img,
-                          adc_sums_img,
-                          pedestal_img,
-                          gains_img,
-                          #calibration_img,
-                          pixel_pos,
-                          pixel_mask,
-                          metadata,
-                          output_file_path):
-    """Write a FITS file containing pe_img, output_file_path and metadata.
-
-    Parameters
-    ----------
-    img: ndarray
-        The "input image" to save (it should be a 2D Numpy array).
-    pe_img: ndarray
-        The "reference image" to save (it should be a 2D Numpy array).
-    output_file_path: str
-        The path of the output FITS file.
-    metadata: tuple
-        A dictionary containing all metadata to write in the FITS file.
-    """
-
-    if img.ndim != 2:
-        raise Exception("The input image should be a 2D numpy array.")
-
-    if pe_img.ndim != 2:
-        raise Exception("The input image should be a 2D numpy array.")
-
-    if adc_sums_img.ndim != 3:
-        raise Exception("The input image should be a 3D numpy array.")
-
-    if pedestal_img.ndim != 3:
-        raise Exception("The input image should be a 3D numpy array.")
-
-    if gains_img.ndim != 3:
-        raise Exception("The input image should be a 3D numpy array.")
-
-    #if calibration_img.ndim != 3:
-    #    raise Exception("The input image should be a 3D numpy array.")
-
-    if pixel_pos.ndim != 3:
-        raise Exception("The input image should be a 3D numpy array.")
-
-    if pixel_mask.ndim != 2:
-        raise Exception("The input image should be a 2D numpy array.")
-
-    # http://docs.astropy.org/en/stable/io/fits/appendix/faq.html#how-do-i-create-a-multi-extension-fits-file-from-scratch
-    # http://docs.astropy.org/en/stable/generated/examples/io/create-mef.html#sphx-glr-generated-examples-io-create-mef-py
-    hdu0 = fits.PrimaryHDU(img)
-    hdu1 = fits.ImageHDU(pe_img)
-    hdu2 = fits.ImageHDU(adc_sums_img)
-    hdu3 = fits.ImageHDU(pedestal_img)
-    hdu4 = fits.ImageHDU(gains_img)
-    #hdu5 = fits.ImageHDU(calibration_img)
-    hdu6 = fits.ImageHDU(pixel_pos)
-    hdu7 = fits.ImageHDU(pixel_mask)
-
-    hdu0.header["desc"] = "calibrated image"
-    hdu1.header["desc"] = "pe image"
-    hdu2.header["desc"] = "adc sum images"
-    hdu3.header["desc"] = "pedestal images"
-    hdu4.header["desc"] = "gains images"
-    #hdu5.header["desc"] = "calibration images"
-    hdu6.header["desc"] = "pixels position"
-    hdu7.header["desc"] = "pixels mask"
-
-    for key, val in metadata.items():
-        if type(val) is tuple :
-            hdu0.header[key] = val[0]
-            hdu0.header.comments[key] = val[1]
-        else:
-            hdu0.header[key] = val
-
-    if os.path.isfile(output_file_path):
-        os.remove(output_file_path)
-
-    hdu_list = fits.HDUList([hdu0, hdu1, hdu2, hdu3, hdu4, hdu6, hdu7])
-
-    hdu_list.writeto(output_file_path)
 
 
 # LOAD AND SAVE FITS FILES ###################################################
@@ -908,231 +368,6 @@ def save_fits(img, output_file_path):
 
     hdu.writeto(output_file_path, overwrite=True)  # overwrite=True: overwrite the file if it already exists
 
-
-###############################################################################
-
-def plot_ctapipe_image(image,
-                       geom,
-                       ax=None,
-                       figsize=(10, 10),
-                       title=None,
-                       title_fontsize=24,
-                       norm='lin',
-                       highlight_mask=None,
-                       plot_colorbar=True,
-                       plot_axis=True,
-                       colorbar_orientation='horizontal',
-                       colorbar_limits=None):
-    """Plot an image.
-    
-    Parameters
-    ----------
-    image : array_like
-        Array of values corresponding to the pixels in the CameraGeometry.
-    geometry : `~ctapipe.instrument.CameraGeometry`
-        Definition of the Camera/Image
-    ax : `matplotlib.axes.Axes`
-        A matplotlib axes object to plot on, or None to create a new one
-    title : str (default "Camera")
-        Title to put on camera plot
-    norm : str or `matplotlib.color.Normalize` instance (default 'lin')
-        Normalization for the color scale.
-        Supported str arguments are
-        - 'lin': linear scale
-        - 'log': logarithmic scale (base 10)
-    cmap : str or `matplotlib.colors.Colormap` (default 'hot')
-        Color map to use (see `matplotlib.cm`)
-    """
-
-    if ax is None:
-        fig = plt.figure(figsize=figsize)
-
-    if colorbar_limits is not None:
-        disp.set_limits_minmax(colorbar_limits[0], colorbar_limits[1])
-
-    disp = ctapipe.visualization.CameraDisplay(geom,
-                                               image=image,
-                                               ax=ax,
-                                               norm=norm)
-    #disp.enable_pixel_picker()
-
-    if plot_colorbar:
-        disp.add_colorbar(ax=disp.axes, fraction=0.04, pad=0.04, orientation=colorbar_orientation)
-        disp.colorbar.ax.tick_params(labelsize=18)
-
-    if highlight_mask is not None:
-        disp.highlight_pixels(highlight_mask, linewidth=4, color='white', alpha=0.9)
-
-    if not plot_axis:
-        disp.axes.set_axis_off()
-
-    if title is None:
-        title = geom.cam_id
-
-    disp.axes.set_title(title, fontsize=title_fontsize)
-
-    if colorbar_orientation == 'horizontal':
-        # https://stackoverflow.com/questions/8482588/putting-text-in-top-left-corner-of-matplotlib-plot
-        disp.axes.text(0.5, 0.01, "Intensity (photoelectrons)",
-                       horizontalalignment='center',
-                       verticalalignment='top',
-                       fontsize=22,
-                       transform=disp.axes.transAxes)
-
-    plt.tight_layout()
-
-    return disp
-
-
-def plot_hillas_parameters_on_axes(ax,
-                                   image,
-                                   geom,
-                                   hillas_params=None,
-                                   plot_ellipse=True,
-                                   plot_axis=True,
-                                   plot_actual_axis_pm=True,
-                                   plot_inner_axes=False,
-                                   auto_lim=True,
-                                   hillas_implementation=2):
-    """Plot the shower ellipse and direction on an existing matplotlib axes."""
-
-    x_lim = ax.get_xlim()
-    y_lim = ax.get_ylim()
-
-    try:
-        if hillas_params is None:
-            hillas_params = get_hillas_parameters(geom, image, implementation=hillas_implementation)
-
-        centroid = (hillas_params.cen_x.value, hillas_params.cen_y.value)
-        length = hillas_params.length.value
-        width = hillas_params.width.value
-        angle = hillas_params.psi.to(u.rad).value
-
-        #print("centroid:", centroid)
-        #print("length:",   length)
-        #print("width:",    width)
-        #print("angle:",    angle)
-
-        if plot_ellipse:
-            ellipse = Ellipse(xy=centroid, width=length, height=width, angle=np.degrees(angle), fill=False, color='red', lw=2)
-            ax.axes.add_patch(ellipse)
-
-        title = ax.axes.get_title()
-        ax.title.set_text("{} ({:.2f}°)".format(title, np.degrees(angle)))
-
-        # Plot the center of the ellipse
-
-        if plot_ellipse:
-            ax.scatter(*centroid, c="r", marker="x", linewidth=2)
-
-        # Plot the shower axis
-
-        p0_x = centroid[0]
-        p0_y = centroid[1]
-
-        p1_x = p0_x + math.cos(angle)
-        p1_y = p0_y + math.sin(angle)
-
-        p2_x = p0_x + math.cos(angle + math.pi)
-        p2_y = p0_y + math.sin(angle + math.pi)
-
-        ax.plot([p1_x, p2_x], [p1_y, p2_y], ':r', lw=2)
-
-        # Plot the actual axis in pointing source mode
-
-        if plot_actual_axis_pm:
-            ax.plot([0, p0_x], [0, p0_y], ':g', lw=2)
-
-        # Plot the shower inner axes
-
-        if plot_inner_axes:
-            p3_x = p0_x + math.cos(angle) * length / 2.
-            p3_y = p0_y + math.sin(angle) * length / 2.
-
-            ax.plot([p0_x, p3_x], [p0_y, p3_y], '-r')
-
-            p4_x = p0_x + math.cos(angle + math.pi/2.) * width / 2.
-            p4_y = p0_y + math.sin(angle + math.pi/2.) * width / 2.
-
-            ax.plot([p0_x, p4_x], [p0_y, p4_y], '-g')
-
-        # Set (back) ax limits
-
-        if auto_lim:
-            ax.set_xlim(x_lim)
-            ax.set_ylim(y_lim)
-    except HillasParameterizationError as err:
-        print(err)
-
-
-def print_hillas_parameters(image,
-                            cam_id,
-                            implementation=2):
-
-    geom = geometry_converter.get_geom1d(cam_id)
-
-    try:
-        hillas_params = get_hillas_parameters(geom,
-                                              image,
-                                              implementation=implementation)
-
-        print("cen_x:...", hillas_params.cen_x)
-        print("cen_y:...", hillas_params.cen_y)
-
-        print("length:..", hillas_params.length)
-        print("width:...", hillas_params.width)
-
-        print("size:....", hillas_params.size, "PE")
-        print("NPE: ....", np.nansum(image), "PE")
-
-        print("psi:.....", hillas_params.psi)
-
-        print("miss:....", hillas_params.miss)
-        print("phi:.....", hillas_params.phi)
-        print("r:.......", hillas_params.r)
-
-        print("kurtosis:", hillas_params.kurtosis)
-        print("skewness:", hillas_params.skewness)
-    except HillasParameterizationError as err:
-        print(err)
-
-
-def hillas_parameters_to_df(image,
-                            cam_id,
-                            implementation=2):
-
-    geom = geometry_converter.get_geom1d(cam_id)
-
-    columns = ['cen_x_m', 'cen_y_m', 'length_m', 'width_m', 'size_pe',
-               'psi_rad', 'miss_m', 'phi_rad', 'r_m', 'kurtosis', 'skewness']
-    data = np.full([1, len(columns)], np.nan)
-
-    df = pd.DataFrame(data=data, columns=columns)
-
-    try:
-        hillas_params = get_hillas_parameters(geom,
-                                              image,
-                                              implementation=implementation)
-        df.loc[0, "cen_x_m"] = hillas_params.cen_x.to(u.meter).value
-        df.loc[0, "cen_y_m"] = hillas_params.cen_y.to(u.meter).value
-
-        df.loc[0, "length_m"] = hillas_params.length.to(u.meter).value
-        df.loc[0, "width_m"]  = hillas_params.width.to(u.meter).value
-
-        df.loc[0, "size_pe"] = hillas_params.size
-
-        df.loc[0, "psi_rad"] = hillas_params.psi.to(u.rad).value
-
-        df.loc[0, "miss_m"] = hillas_params.miss.to(u.meter).value
-        df.loc[0, "phi_rad"] = hillas_params.phi.to(u.rad).value
-        df.loc[0, "r_m"] = hillas_params.r.to(u.meter).value
-
-        df.loc[0, "kurtosis"] = hillas_params.kurtosis
-        df.loc[0, "skewness"] = hillas_params.skewness
-    except HillasParameterizationError as err:
-        print(err)
-
-    return df
 
 # MATPLOTLIB ##################################################################
 
@@ -1233,9 +468,7 @@ def plot_hist(img, num_bins=50, logx=False, logy=False, x_max=None, title=""):
 
 
 def _plot_list(img_list,
-               geom_list,
                title_list=None,
-               hillas_list=None,
                highlight_mask_list=None,
                main_title=None):
     """Plot several images at once."""
@@ -1246,32 +479,10 @@ def _plot_list(img_list,
     if title_list is None:
         title_list = [None for i in img_list]
 
-    if hillas_list is None:
-        hillas_list = [None for i in img_list]
-
     if highlight_mask_list is None:
         highlight_mask_list = [None for i in img_list]
 
-    for img, title, ax, geom, plot_hillas, highlight_mask in zip(img_list,
-                                                                 title_list,
-                                                                 ax_tuple,
-                                                                 geom_list,
-                                                                 hillas_list,
-                                                                 highlight_mask_list):
-
-        disp = plot_ctapipe_image(img,
-                                  geom=geom,
-                                  ax=ax,
-                                  title=title,
-                                  norm='lin',
-                                  highlight_mask=highlight_mask,
-                                  plot_colorbar=True,
-                                  plot_axis=False)
-
-        if plot_hillas:
-            plot_hillas_parameters_on_axes(disp.axes,
-                                           img,
-                                           geom)
+    raise NotImplementedError()
 
     if main_title is not None:
         fig.suptitle(main_title, fontsize=18)
@@ -1279,9 +490,7 @@ def _plot_list(img_list,
 
 
 def plot_list(img_list,
-              geom_list,
               title_list=None,
-              hillas_list=None,
               highlight_mask_list=None,
               metadata_dict=None):
     """Plot several images at once.
@@ -1306,19 +515,15 @@ def plot_list(img_list,
         main_title = None
 
     _plot_list(img_list,
-               geom_list,
                title_list=title_list,
-               hillas_list=hillas_list,
                highlight_mask_list=highlight_mask_list,
                main_title=main_title)
     plt.show()
 
 
 def mpl_save_list(img_list,
-                  geom_list,
                   output_file_path,
                   title_list=None,
-                  hillas_list=None,
                   highlight_mask_list=None,
                   metadata_dict=None):
     """Plot several images at once.
@@ -1343,9 +548,7 @@ def mpl_save_list(img_list,
         main_title = ""
 
     _plot_list(img_list,
-               geom_list,
                title_list=title_list,
-               hillas_list=hillas_list,
                highlight_mask_list=highlight_mask_list,
                main_title=main_title)
     plt.savefig(output_file_path, bbox_inches='tight')

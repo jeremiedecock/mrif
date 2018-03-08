@@ -33,14 +33,10 @@ import traceback
 import astropy.units as u
 
 from mrif.benchmark import assess
-from mrif.image.hillas_parameters import get_hillas_parameters
 from mrif.image.pixel_clusters import kill_isolated_pixels_stats
 from mrif.image.pixel_clusters import number_of_islands
-from mrif.io import geometry_converter
 from mrif.io.images import image_generator
 import mrif.io.images
-
-HILLAS_IMPLEMENTATION = 2      # TODO
 
 ###############################################################################
 
@@ -176,12 +172,6 @@ class AbstractCleaningAlgorithm(object):
 
                 image_dict.update(image.meta)
 
-                # Make the original 1D geom (required for the 2D to 1D geometry
-                # conversion, for Tailcut and for Hillas)
-                cam_id = image.meta['cam_id']
-                cleaning_function_params["cam_id"] = cam_id
-                geom1d = geometry_converter.get_geom1d(cam_id)
-
                 if benchmark_method is not None:
 
                     # FETCH ADDITIONAL IMAGE METADATA #####################
@@ -203,24 +193,6 @@ class AbstractCleaningAlgorithm(object):
                     image_dict["img_in_min_pe"] = float(np.nanmin(input_img))
                     image_dict["img_in_max_pe"] = float(np.nanmax(input_img))
                     image_dict["img_in_num_pix"] = int( (input_img[np.isfinite(input_img)] > 0).sum() )
-
-                    reference_img1d = geometry_converter.image_2d_to_1d(reference_img, cam_id)
-                    hillas_params_2_ref_img = get_hillas_parameters(geom1d, reference_img1d, HILLAS_IMPLEMENTATION)   # TODO GEOM
-
-                    image_dict["img_ref_hillas_2_size"] =     float(hillas_params_2_ref_img.size)
-                    image_dict["img_ref_hillas_2_cen_x"] =    hillas_params_2_ref_img.cen_x.value
-                    image_dict["img_ref_hillas_2_cen_y"] =    hillas_params_2_ref_img.cen_y.value
-                    image_dict["img_ref_hillas_2_length"] =   hillas_params_2_ref_img.length.value
-                    image_dict["img_ref_hillas_2_width"] =    hillas_params_2_ref_img.width.value
-                    image_dict["img_ref_hillas_2_r"] =        hillas_params_2_ref_img.r.value
-                    image_dict["img_ref_hillas_2_phi"] =      hillas_params_2_ref_img.phi.to(u.rad).value
-                    image_dict["img_ref_hillas_2_psi"] =      hillas_params_2_ref_img.psi.to(u.rad).value
-                    try:
-                        image_dict["img_ref_hillas_2_miss"] = float(hillas_params_2_ref_img.miss.value)
-                    except:
-                        image_dict["img_ref_hillas_2_miss"] = None
-                    image_dict["img_ref_hillas_2_kurtosis"] = hillas_params_2_ref_img.kurtosis
-                    image_dict["img_ref_hillas_2_skewness"] = hillas_params_2_ref_img.skewness
 
                 # CLEAN THE INPUT IMAGE ###################################
 
@@ -244,8 +216,7 @@ class AbstractCleaningAlgorithm(object):
 
                     # ASSESS THE CLEANING #################################
 
-                    kwargs = {'geom': geom1d,
-                              'hillas_implementation': HILLAS_IMPLEMENTATION}  # TODO GEOM
+                    kwargs = {}  # TODO GEOM
                     score_tuple, score_name_tuple = assess.assess_image_cleaning(input_img,
                                                                                  cleaned_img,
                                                                                  reference_img,
@@ -261,39 +232,17 @@ class AbstractCleaningAlgorithm(object):
                     image_dict["img_cleaned_max_pe"] = float(np.nanmax(cleaned_img))
                     image_dict["img_cleaned_num_pix"] = int( (cleaned_img[np.isfinite(cleaned_img)] > 0).sum() )
 
-                    cleaned_img1d = geometry_converter.image_2d_to_1d(cleaned_img, cam_id)
-                    hillas_params_2_cleaned_img = get_hillas_parameters(geom1d, cleaned_img1d, HILLAS_IMPLEMENTATION)    # GEOM
-
-                    image_dict["img_cleaned_hillas_2_size"] =     float(hillas_params_2_cleaned_img.size)
-                    image_dict["img_cleaned_hillas_2_cen_x"] =    hillas_params_2_cleaned_img.cen_x.value
-                    image_dict["img_cleaned_hillas_2_cen_y"] =    hillas_params_2_cleaned_img.cen_y.value
-                    image_dict["img_cleaned_hillas_2_length"] =   hillas_params_2_cleaned_img.length.value
-                    image_dict["img_cleaned_hillas_2_width"] =    hillas_params_2_cleaned_img.width.value
-                    image_dict["img_cleaned_hillas_2_r"] =        hillas_params_2_cleaned_img.r.value
-                    image_dict["img_cleaned_hillas_2_phi"] =      hillas_params_2_cleaned_img.phi.to(u.rad).value
-                    image_dict["img_cleaned_hillas_2_psi"] =      hillas_params_2_cleaned_img.psi.to(u.rad).value
-                    try:
-                        image_dict["img_cleaned_hillas_2_miss"] = float(hillas_params_2_cleaned_img.miss.value)
-                    except:
-                        image_dict["img_cleaned_hillas_2_miss"] = None
-                    image_dict["img_cleaned_hillas_2_kurtosis"] = hillas_params_2_cleaned_img.kurtosis
-                    image_dict["img_cleaned_hillas_2_skewness"] = hillas_params_2_cleaned_img.skewness
-
                 # PLOT IMAGES #########################################################
 
                 if plot or (saveplot is not None):
-                    image_list = [geometry_converter.image_2d_to_1d(input_img, cam_id),
-                                  geometry_converter.image_2d_to_1d(reference_img, cam_id),
-                                  geometry_converter.image_2d_to_1d(cleaned_img, cam_id)] 
+                    image_list = [input_img, reference_img, cleaned_img] 
                     title_list = ["Input image", "Reference image", "Cleaned image"] 
-                    geom_list = [geom1d, geom1d, geom1d] 
-                    hillas_list = [False, True, True]
+                    geom_list = [None, None, None]  # TODO
 
                     if plot:
                         mrif.io.images.plot_list(image_list,
                                                      geom_list=geom_list,
                                                      title_list=title_list,
-                                                     hillas_list=hillas_list,
                                                      metadata_dict=image.meta)
 
                     if saveplot is not None:
@@ -305,7 +254,6 @@ class AbstractCleaningAlgorithm(object):
                                                          geom_list=geom_list,
                                                          output_file_path=plot_file_path,
                                                          title_list=title_list,
-                                                         hillas_list=hillas_list,
                                                          metadata_dict=image.meta)
 
             except Exception as e:

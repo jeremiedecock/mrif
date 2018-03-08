@@ -29,9 +29,6 @@ __all__ = ['normalize_array',
            'metric4',
            'metric_ssim',
            'metric_psnr',
-           'metric_delta_psi',
-           'metric_hillas_delta',
-           'metric_hillas_delta2',
            'metric_kill_isolated_pixels',
            'assess_image_cleaning']
 
@@ -41,9 +38,6 @@ import collections
 
 import numpy as np
 import math
-
-from mrif.image.hillas_parameters import get_hillas_parameters
-from mrif.io.geometry_converter import image_2d_to_1d
 
 from mrif.image.pixel_clusters import kill_isolated_pixels
 from mrif.image.pixel_clusters import kill_isolated_pixels_stats
@@ -116,14 +110,6 @@ def normalize_array(input_array):
     output_array = (input_array - min_value) / float(max_value - min_value)
 
     return output_array
-
-
-def norm_angle_diff(angle_in_degrees):
-    """Normalize the difference of 2 angles in degree.
-
-    This function is used to normalize the "delta psi" angle.
-    """
-    return abs(((angle_in_degrees + 90) % 180) - 90.)
 
 
 ###############################################################################
@@ -603,230 +589,6 @@ def metric_psnr(input_img, output_image, reference_image, **kwargs):
     return float(psnr_val)
 
 
-# Delta psi ###################################################################
-
-def metric_delta_psi(input_img, output_image, reference_image, geom, **kwargs):
-    r"""Compute the score of ``output_image`` regarding ``reference_image``
-    with the following relative *psi parameters* (relative difference of shower angle between the cleaned image and the reference image).
-
-    Parameters
-    ----------
-    input_img: 2D ndarray
-        The RAW original image.
-    output_image: 2D ndarray
-        The cleaned image returned by the image cleanning algorithm to assess.
-    reference_image: 2D ndarray
-        The actual clean image (the best result that can be expected for the
-        image cleaning algorithm).
-    kwargs: dict
-        Additional options.
-
-    Returns
-    -------
-    float
-        The score of the image cleaning algorithm for the given image.
-    """
-
-    # Copy and cast images to prevent tricky bugs
-    # See https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.astype.html#numpy-ndarray-astype
-    output_image = output_image.astype('float64', copy=True)
-    reference_image = reference_image.astype('float64', copy=True)
-
-    if "kill" in kwargs and kwargs["kill"]:
-        # Remove isolated pixels on the reference image before assessment.
-        reference_image = kill_isolated_pixels(reference_image, threshold=kwargs["kill_threshold"])
-
-    if "hillas_implementation" in kwargs and kwargs["hillas_implementation"] in (1, 2, 3, 4):
-        # Remove isolated pixels on the reference image before assessment.
-        hillas_implementation = kwargs["hillas_implementation"]
-    else:
-        hillas_implementation = 2
-
-    if output_image.ndim == 2:
-        output_image = image_2d_to_1d(output_image, geom.cam_id)        # TODO!!!
-    if reference_image.ndim == 2:
-        reference_image = image_2d_to_1d(reference_image, geom.cam_id)  # TODO!!!
-    output_image_parameters = get_hillas_parameters(geom, output_image, hillas_implementation)
-    reference_image_parameters = get_hillas_parameters(geom, reference_image, hillas_implementation)
-
-    # Psi (shower direction angle)
-    output_image_parameter_psi_rad = output_image_parameters.psi.to(u.rad).value
-    reference_image_parameter_psi_rad = reference_image_parameters.psi.to(u.rad).value
-    delta_psi_rad = reference_image_parameter_psi_rad - output_image_parameter_psi_rad
-
-    normalized_delta_psi_deg = norm_angle_diff(math.degrees(delta_psi_rad))
-
-    return normalized_delta_psi_deg
-
-
-# Hillas delta ################################################################
-
-def metric_hillas_delta(input_img, output_image, reference_image, geom, **kwargs):
-    r"""Compute the score of ``output_image`` regarding ``reference_image``
-    with the following relative *Hillas parameters*:
-
-    * :math:`\Delta_{\text{size}}   = \text{reference_image}_{\text{size}}   - \text{output_image}_{\text{size_out}}`
-    * :math:`\Delta_{\text{cen_x}}  = \text{reference_image}_{\text{cen_x}}  - \text{output_image}_{\text{cen_x_out}}`
-    * :math:`\Delta_{\text{cen_y}}  = \text{reference_image}_{\text{cen_y}}  - \text{output_image}_{\text{cen_y_out}}`
-    * :math:`\Delta_{\text{length}} = \text{reference_image}_{\text{length}} - \text{output_image}_{\text{length_out}}`
-    * :math:`\Delta_{\text{width}}  = \text{reference_image}_{\text{width}}  - \text{output_image}_{\text{width_out}}`
-    * :math:`\Delta_{\text{r}}      = \text{reference_image}_{\text{r}}      - \text{output_image}_{\text{r_out}}`
-    * :math:`\Delta_{\text{phi}}    = \text{reference_image}_{\text{phi}}    - \text{output_image}_{\text{phi_out}}`
-    * :math:`\Delta_{\text{psi}}    = \text{reference_image}_{\text{psi}}    - \text{output_image}_{\text{psi_out}}`
-    * :math:`\Delta_{\text{miss}}   = \text{reference_image}_{\text{miss}}   - \text{output_image}_{\text{miss_out}}`
-
-    See http://adsabs.harvard.edu/abs/1989ApJ...342..379W for more details
-    about Hillas parameters.
-
-    Parameters
-    ----------
-    input_img: 2D ndarray
-        The RAW original image.
-    output_image: 2D ndarray
-        The cleaned image returned by the image cleanning algorithm to assess.
-    reference_image: 2D ndarray
-        The actual clean image (the best result that can be expected for the
-        image cleaning algorithm).
-    kwargs: dict
-        Additional options.
-
-    Returns
-    -------
-    namedtuple
-        The score of the image cleaning algorithm for the given image.
-    """
-
-    # Copy and cast images to prevent tricky bugs
-    # See https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.astype.html#numpy-ndarray-astype
-    output_image = output_image.astype('float64', copy=True)
-    reference_image = reference_image.astype('float64', copy=True)
-
-    if ("kill" in kwargs) and kwargs["kill"] and ("kill_threshold" in kwargs):
-        # Remove isolated pixels on the reference image before assessment.
-        reference_image = kill_isolated_pixels(reference_image, threshold=kwargs["kill_threshold"])
-
-    if ("hillas_implementation" in kwargs) and (kwargs["hillas_implementation"] in (1, 2, 3, 4)):
-        # Remove isolated pixels on the reference image before assessment.
-        hillas_implementation = kwargs["hillas_implementation"]
-    else:
-        hillas_implementation = 2
-
-    if output_image.ndim == 2:
-        output_image = image_2d_to_1d(output_image, geom.cam_id)        # TODO!!!
-    if reference_image.ndim == 2:
-        reference_image = image_2d_to_1d(reference_image, geom.cam_id)  # TODO!!!
-    output_image_parameters = get_hillas_parameters(geom, output_image, hillas_implementation)
-    reference_image_parameters = get_hillas_parameters(geom, reference_image, hillas_implementation)
-
-    #print(reference_image_parameters)
-
-    # Size
-    output_image_parameter_size = float(output_image_parameters.size)
-    reference_image_parameter_size = float(reference_image_parameters.size)
-    delta_size = reference_image_parameter_size - output_image_parameter_size
-
-    # Centroid x
-    output_image_parameter_cen_x = output_image_parameters.cen_x.value
-    reference_image_parameter_cen_x = reference_image_parameters.cen_x.value
-    delta_cen_x = reference_image_parameter_cen_x - output_image_parameter_cen_x
-
-    # Centroid y
-    output_image_parameter_cen_y = output_image_parameters.cen_y.value
-    reference_image_parameter_cen_y = reference_image_parameters.cen_y.value
-    delta_cen_y = reference_image_parameter_cen_y - output_image_parameter_cen_y
-
-    # Length
-    output_image_parameter_length = output_image_parameters.length.value
-    reference_image_parameter_length = reference_image_parameters.length.value
-    delta_length = reference_image_parameter_length - output_image_parameter_length
-
-    # Width
-    output_image_parameter_width = output_image_parameters.width.value
-    reference_image_parameter_width = reference_image_parameters.width.value
-    delta_width = reference_image_parameter_width - output_image_parameter_width
-
-    # R
-    output_image_parameter_r = output_image_parameters.r.value
-    reference_image_parameter_r = reference_image_parameters.r.value
-    delta_r = reference_image_parameter_r - output_image_parameter_r
-
-    # Phi
-    output_image_parameter_phi = output_image_parameters.phi.to(u.rad).value
-    reference_image_parameter_phi = reference_image_parameters.phi.to(u.rad).value
-    delta_phi = reference_image_parameter_phi - output_image_parameter_phi
-
-    # Psi (shower direction angle)
-    output_image_parameter_psi_rad = output_image_parameters.psi.to(u.rad).value
-    reference_image_parameter_psi_rad = reference_image_parameters.psi.to(u.rad).value
-    delta_psi_rad = reference_image_parameter_psi_rad - output_image_parameter_psi_rad
-
-    # Normalized psi
-    normalized_delta_psi = norm_angle_diff(math.degrees(delta_psi_rad))
-
-    ## Miss
-    #output_image_parameter_miss = output_image_parameters.miss.value
-    #reference_image_parameter_miss = reference_image_parameters.miss.value
-    #delta_miss = reference_image_parameter_miss - output_image_parameter_miss
-
-    if "kill" in kwargs and kwargs["kill"]:
-        suffix_str = '_kill'
-    else:
-        suffix_str = ''
-
-    score_dict = collections.OrderedDict((
-                    ('hillas' + str(hillas_implementation) + '_delta_size'     + suffix_str, delta_size),
-                    ('hillas' + str(hillas_implementation) + '_delta_cen_x'    + suffix_str, delta_cen_x),
-                    ('hillas' + str(hillas_implementation) + '_delta_cen_y'    + suffix_str, delta_cen_y),
-                    ('hillas' + str(hillas_implementation) + '_delta_length'   + suffix_str, delta_length),
-                    ('hillas' + str(hillas_implementation) + '_delta_width'    + suffix_str, delta_width),
-                    ('hillas' + str(hillas_implementation) + '_delta_r'        + suffix_str, delta_r),
-                    ('hillas' + str(hillas_implementation) + '_delta_phi'      + suffix_str, delta_phi),
-                    ('hillas' + str(hillas_implementation) + '_delta_psi'      + suffix_str, delta_psi_rad),
-                    ('hillas' + str(hillas_implementation) + '_delta_psi_norm' + suffix_str, normalized_delta_psi),
-                    #('hillas' + str(hillas_implementation) + '_delta_miss'    + suffix_str, delta_miss)
-                 ))
-
-    Score = collections.namedtuple('Score', score_dict.keys())
-
-    return Score(**score_dict)
-
-
-# Hillas delta 2 ##############################################################
-
-def metric_hillas_delta2(input_img, output_image, reference_image, geom, **kwargs):
-    r"""Compute the score of ``output_image`` regarding ``reference_image``
-    with the *Hillas parameters*.
-
-    It works exactly like :func:`metric_hillas_delta` except that isolated
-    pixels are removed from the ``reference_image`` before the evaluation
-    (using :func:`mrif.image.kill_isolated_pixels`).
-
-    Parameters
-    ----------
-    input_img: 2D ndarray
-        The RAW original image.
-    output_image: 2D ndarray
-        The cleaned image returned by the image cleanning algorithm to assess.
-    reference_image: 2D ndarray
-        The actual clean image (the best result that can be expected for the
-        image cleaning algorithm).
-    kwargs: dict
-        Additional options.
-
-    Returns
-    -------
-    namedtuple
-        The score of the image cleaning algorithm for the given image.
-    """
-
-    kwargs["kill"] = True
-    kwargs["kill_threshold"] = 0.2   # TODO: don't give an hardcoded value
-
-    scores = metric_hillas_delta(input_img, output_image, reference_image, geom, **kwargs)
-
-    return scores
-
-
 # Kill isolated pixels ########################################################
 
 def metric_kill_isolated_pixels(input_img, output_image, reference_image, **kwargs):
@@ -856,11 +618,8 @@ BENCHMARK_DICT = {
     "sspd":                 (metric4,),
     "ssim":                 (metric_ssim,),
     "psnr":                 (metric_psnr,),
-    "delta_psi":            (metric_delta_psi,),
-    "hillas_delta":         (metric_hillas_delta,),
-    "hillas_delta2":        (metric_hillas_delta2,),
     "kill_isolated_pixels": (metric_kill_isolated_pixels,),
-    "all":                  (metric_mse, metric_nrmse, metric2, metric3, metric4, metric_ssim, metric_psnr, metric_hillas_delta, metric_hillas_delta2, metric_kill_isolated_pixels)
+    "all":                  (metric_mse, metric_nrmse, metric2, metric3, metric4, metric_ssim, metric_psnr, metric_kill_isolated_pixels)
 }
 
 METRIC_NAME_DICT = {
@@ -872,9 +631,6 @@ METRIC_NAME_DICT = {
     metric4:                     "sspd",
     metric_ssim:                 "ssim",
     metric_psnr:                 "psnr",
-    metric_delta_psi:            "delta_psi",
-    metric_hillas_delta:         "hillas_delta",
-    metric_hillas_delta2:        "hillas_delta2",
     metric_kill_isolated_pixels: "kill_isolated_pixels"
 }
 
@@ -891,11 +647,8 @@ def assess_image_cleaning(input_img, output_img, reference_img, benchmark_method
     - "sspd":                 :func:`metric4`
     - "ssim":                 :func:`metric_ssim`
     - "psnr":                 :func:`metric_psnr`
-    - "delta_psi":            :func:`metric_delta_psi`
-    - "hillas_delta":         :func:`metric_hillas_delta`
-    - "hillas_delta2":        :func:`metric_hillas_delta2`
     - "kill_isolated_pixels": :func:`metric_kill_isolated_pixels`
-    - "all":                  :func:`metric_mse`, :func:`metric_nrmse`, :func:`metric2`, :func:`metric3`, :func:`metric4`, :func:`metric_ssim`, :func:`metric_psnr`, :func:`metric_hillas_delta`, :func:`metric_hillas_delta2`, :func:`metric_kill_isolated_pixels`
+    - "all":                  :func:`metric_mse`, :func:`metric_nrmse`, :func:`metric2`, :func:`metric3`, :func:`metric4`, :func:`metric_ssim`, :func:`metric_psnr`, :func:`metric_kill_isolated_pixels`
 
     Parameters
     ----------
