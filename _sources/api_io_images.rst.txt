@@ -2,6 +2,6 @@
 io.images
 =========
 
-.. automodule:: datapipe.io.images
+.. automodule:: mrif.io.images
    :members:
 

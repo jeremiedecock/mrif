@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; MultiResolution Image Filter 0.1.dev6 documentation</title>
+  <title>Introduction &mdash; MultiResolution Image Filter 0.1.dev7 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="MultiResolution Image Filter 0.1.dev6 documentation" href="index.html"/>
+    <link rel="top" title="MultiResolution Image Filter 0.1.dev7 documentation" href="index.html"/>
         <link rel="next" title="SAp CTA data pipeline API" href="api.html"/>
         <link rel="prev" title="MultiResolution Image Filter’s Documentation" href="index.html"/> 
 
@@ -100,13 +100,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#macosx">MacOSX</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#image-cleaning-guidelines">Image cleaning guidelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#step-1">Step 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-2">Step 2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-3">Step 3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-4">Step 4</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#cosmostat-isap-sparce2d-installation">Cosmostat iSAP Sparce2D installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bug-reports">Bug reports</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
@@ -178,7 +173,7 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>Copyright (c) 2016,2017,2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael</p>
+<p>Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael</p>
 <ul class="simple">
 <li>Online documentation: <a class="reference external" href="https://jeremiedecock.github.io/mrif/">https://jeremiedecock.github.io/mrif/</a></li>
 <li>Source code: <a class="reference external" href="https://github.com/jeremiedecock/mrif">https://github.com/jeremiedecock/mrif</a></li>
@@ -187,7 +182,45 @@
 </ul>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>Signal processing for gamma-ray science.</p>
+<p>MRIF is an image filtering library aimed at removing additive background noise
+from raster graphics images.</p>
+<ul class="simple">
+<li>Input: a FITS file containing the raster graphics to clean (i.e. an image
+defined as a classic rectangular lattice of square pixels).</li>
+<li>Output: a FITS file containing the cleaned raster graphics.</li>
+</ul>
+<p>The image filter relies on multiresolution analysis methods (Wavelet
+transforms) that remove some scales (frequencies) locally in space. These
+methods are particularly efficient when signal and noise are located at
+different scales (or frequencies). Optional features improve the SNR ratio when
+the (clean) signal constitute a single cluster of pixels on the image (e.g.
+electromagnetic showers produced with Imaging Atmospheric Cherenkov
+Telescopes). This library is written in Python and is based on the existing
+Cosmostat tools iSAp (Interactive Sparse Astronomical data analysis Packages
+<a class="reference external" href="http://www.cosmostat.org/software/isap/">http://www.cosmostat.org/software/isap/</a>).</p>
+<p>The MRIF library also contains a dedicated package to optimize the image filter
+parameters for a given set of images (i.e. to adapt the filter to a specific
+problem). From a given training set of images (containing pairs of noised and
+clean images) and a given performance estimator (a function that assess the
+image filter parameters comparing the cleaned image to the actual clean image),
+the optimizer can determine the optimal filtering level for each scale.</p>
+<p>The MRIF library contains:</p>
+<ul class="simple">
+<li>wavelet transform and wavelet filtering functions for image multiresolution
+analysis and filtering;</li>
+<li>additional filter to remove some image components (non-significant pixels
+clusters);</li>
+<li>a set of generic filtering performance estimators (MSE, NRMSE, SSIM, PSNR,
+image moment’s difference), some relying on the scikit-image Python library
+(supplementary estimators can be easily added to meet particular needs);</li>
+<li>a graphical user interface to visualize the filtering process in the wavelet
+transformed space;</li>
+<li>an Evolution Strategies (ES) algorithm known in the mathematical optimization
+community for its good convergence rate on generic derivative-free continuous
+global optimization problems (Beyer, H. G. (2013) “The theory of evolution
+strategies”, Springer Science &amp; Business Media);</li>
+<li>additional tools to manage and monitor the parameter optimization.</li>
+</ul>
 <p>Note:</p>
 <blockquote>
 <div>This project is in beta stage.</div></blockquote>
@@ -196,6 +229,10 @@
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Python &gt;= 3.0</li>
+<li>Numpy</li>
+<li>Scipy</li>
+<li>Scikit-image</li>
+<li>_Cosmostat _iSAP Sparce2D</li>
 </ul>
 </div>
 <div class="section" id="installation">
@@ -243,33 +280,13 @@ terminal):</p>
 </div>
 </div>
 </div>
-<div class="section" id="image-cleaning-guidelines">
-<h2>Image cleaning guidelines<a class="headerlink" href="#image-cleaning-guidelines" title="Permalink to this headline">¶</a></h2>
-<p>Here is the basic guidelines to clean images (and assess cleaning algorithms).</p>
-<div class="section" id="step-1">
-<h3>Step 1<a class="headerlink" href="#step-1" title="Permalink to this headline">¶</a></h3>
-<p>Extract images from Simtel files, crop them, convert them to “regular” 2D
-images and write them into fits files (one fits file per image with the ADC
-signal in HDU0 and the photoelectron signal in HDU1):</p>
-<ol class="arabic simple">
-<li>clone <a class="reference external" href="http://github.com/jdhp-sap/snippets">http://github.com/jdhp-sap/snippets</a></li>
-<li>check snippets/ctapipe/extract_and_crop_simtel_images.py on lines 64 and 66,
-these lines may need to be fixed</li>
-<li>in snippets/ctapipe run <code class="docutils literal"><span class="pre">./extract_crop_and_plot_all_astri_images.sh</span> <span class="pre">ASTRI_SIMTEL_FILE</span></code></li>
-</ol>
-<p>Step 1.4 generate a lot of fits files in your current directory ;
-its execution may be long (up to several hours) as the script is not optimized
-at all and many instructions are redundant (but this is not a big deal because
-you only need to run it once to generate your input files).</p>
-</div>
-<div class="section" id="step-2">
-<h3>Step 2<a class="headerlink" href="#step-2" title="Permalink to this headline">¶</a></h3>
-<p>Install mr_transform (the cosmostat wavelet transform tool):</p>
+<div class="section" id="cosmostat-isap-sparce2d-installation">
+<h2>Cosmostat iSAP Sparce2D installation<a class="headerlink" href="#cosmostat-isap-sparce2d-installation" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">download <a class="reference external" href="http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz">http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz</a> (see <a class="reference external" href="http://www.cosmostat.org/software/isap/">http://www.cosmostat.org/software/isap/</a>)</p>
+<li><p class="first">Download <a class="reference external" href="http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz">http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz</a> (see <a class="reference external" href="http://www.cosmostat.org/software/isap/">http://www.cosmostat.org/software/isap/</a>)</p>
 </li>
-<li><p class="first">unzip this archive, go to the “sparse2d” directory and compile the sparse2d
-library. It should generate an executable named “mr_transform”:</p>
+<li><p class="first">Unzip this archive, go to the “sparse2d” directory and compile the sparse2d
+library. It should generate two executables named <code class="docutils literal"><span class="pre">mr_transform</span></code> and <code class="docutils literal"><span class="pre">mr_filter</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">ISAP_V3</span><span class="o">.</span><span class="mf">1.</span><span class="n">tgz</span>
 <span class="n">cd</span> <span class="n">ISAP_V3</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">cxx</span>
 <span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">sparse2d_V1</span><span class="o">.</span><span class="mf">1.</span><span class="n">tgz</span>
@@ -280,36 +297,27 @@ library. It should generate an executable named “mr_transform”:</p>
 </li>
 </ol>
 </div>
-<div class="section" id="step-3">
-<h3>Step 3<a class="headerlink" href="#step-3" title="Permalink to this headline">¶</a></h3>
-<p>Clean images generated in step 1:</p>
-<ol class="arabic simple">
-<li>clone and install
-<a class="reference external" href="http://github.com/jdhp-sap/data-pipeline-standalone-scripts">http://github.com/jdhp-sap/data-pipeline-standalone-scripts</a> (see
-<a class="reference external" href="https://github.com/jdhp-sap/data-pipeline-standalone-scripts#installation">https://github.com/jdhp-sap/data-pipeline-standalone-scripts#installation</a>)</li>
-<li>to clean one fits file (see for instance run_experiments.sh):<ul>
-<li>with Tailcut : in data-pipeline-standalone-scripts, run <code class="docutils literal"><span class="pre">./datapipe/denoising/tailcut.py</span> <span class="pre">-T</span> <span class="pre">0.75</span> <span class="pre">-t</span> <span class="pre">0.5</span> <span class="pre">FITS_FILE</span></code> (-T = max threshold, -t = min threshold, use the -h option to see command usage)</li>
-<li>with FFT : in data-pipeline-standalone-scripts, run <code class="docutils literal"><span class="pre">./datapipe/denoising/fft.py</span> <span class="pre">-s</span> <span class="pre">-t</span> <span class="pre">0.02</span> <span class="pre">FITS_FILE</span></code> (-t = threshold in the Fourier space, use the -h option to see command usage)</li>
-<li>with Wavelets : in data-pipeline-standalone-scripts, run <code class="docutils literal"><span class="pre">./datapipe/denoising/wavelets_mrtrransform.py</span> <span class="pre">FITS_FILE</span></code> (use the -h option to see command usage)</li>
-</ul>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Download a sample image (<a class="reference external" href="https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits">shower.fits</a>)</p>
 </li>
-<li>instead of the step 3.2, the “benchmark mode” can be set to clean
-images and assess cleaning algorithms (it’s still a bit experimental) : use
-the same instructions than for step 3.2 with the additional option “-b 1” in
-each command (and put several fits files in input e.g. “*.fits”)</li>
+<li><p class="first">In your system terminal, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mrif_mrfilter</span> <span class="n">shower</span><span class="o">.</span><span class="n">fits</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Use the <code class="docutils literal"><span class="pre">-h</span></code> option for more options</p>
+</li>
 </ol>
-</div>
-<div class="section" id="step-4">
-<h3>Step 4<a class="headerlink" href="#step-4" title="Permalink to this headline">¶</a></h3>
-<p>Optionally, plot some stats about scores:
-in data-pipeline-standalone-scripts/utils, use the plot_score_*.py scripts on
-the JSON files generated in step 3.3 (use the -h option to see command usage)</p>
-</div>
+<p>A “benchmark mode” can also be used to clean images and assess cleaning
+algorithms (it’s still a bit experimental): use the same instructions than for
+step 2.1 with the additional option <code class="docutils literal"><span class="pre">-b</span> <span class="pre">1</span></code> in each command (and put several
+fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fits</span></code>)</p>
 </div>
 <div class="section" id="bug-reports">
 <h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this headline">¶</a></h2>
-<p>To search for bugs or report them, please use the SAp Data Pipeline Standalone
-Scripts Bug Tracker at:</p>
+<p>To search for bugs or report them, please use the MRIF Bug Tracker at:</p>
 <blockquote>
 <div><a class="reference external" href="https://github.com/jeremiedecock/mrif/issues">https://github.com/jeremiedecock/mrif/issues</a></div></blockquote>
 </div>
@@ -367,7 +375,7 @@ Scripts Bug Tracker at:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev6',
+            VERSION:'0.1.dev7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

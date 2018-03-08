@@ -2,6 +2,6 @@
 benchmark.assess
 ================
 
-.. automodule:: datapipe.benchmark.assess
+.. automodule:: mrif.benchmark.assess
    :members:
 

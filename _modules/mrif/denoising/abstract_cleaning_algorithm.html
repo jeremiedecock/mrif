@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>datapipe.denoising.abstract_cleaning_algorithm &mdash; MultiResolution Image Filter 0.1.dev6 documentation</title>
+  <title>mrif.denoising.abstract_cleaning_algorithm &mdash; MultiResolution Image Filter 0.1.dev7 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="MultiResolution Image Filter 0.1.dev6 documentation" href="../../../index.html"/>
+    <link rel="top" title="MultiResolution Image Filter 0.1.dev7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -139,7 +139,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>datapipe.denoising.abstract_cleaning_algorithm</li>
+      <li>mrif.denoising.abstract_cleaning_algorithm</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +156,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for datapipe.denoising.abstract_cleaning_algorithm</h1><div class="highlight"><pre>
+  <h1>Source code for mrif.denoising.abstract_cleaning_algorithm</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -191,37 +191,38 @@
 
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
-<span class="kn">from</span> <span class="nn">datapipe.benchmark</span> <span class="k">import</span> <span class="n">assess</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.hillas_parameters</span> <span class="k">import</span> <span class="n">get_hillas_parameters</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">signal_to_border</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">signal_to_border_distance</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">pemax_on_border</span>
-<span class="kn">from</span> <span class="nn">datapipe.io</span> <span class="k">import</span> <span class="n">geometry_converter</span>
-<span class="kn">from</span> <span class="nn">datapipe.io.images</span> <span class="k">import</span> <span class="n">image_generator</span>
-<span class="kn">import</span> <span class="nn">datapipe.io.images</span>
+<span class="kn">from</span> <span class="nn">mrif.benchmark</span> <span class="k">import</span> <span class="n">assess</span>
+<span class="kn">from</span> <span class="nn">mrif.image.hillas_parameters</span> <span class="k">import</span> <span class="n">get_hillas_parameters</span>
+<span class="kn">from</span> <span class="nn">mrif.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
+<span class="kn">from</span> <span class="nn">mrif.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">mrif.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">signal_to_border</span>
+<span class="kn">from</span> <span class="nn">mrif.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">signal_to_border_distance</span>
+<span class="kn">from</span> <span class="nn">mrif.image.signal_to_border_distance</span> <span class="k">import</span> <span class="n">pemax_on_border</span>
+<span class="kn">from</span> <span class="nn">mrif.io</span> <span class="k">import</span> <span class="n">geometry_converter</span>
+<span class="kn">from</span> <span class="nn">mrif.io.images</span> <span class="k">import</span> <span class="n">image_generator</span>
+<span class="kn">import</span> <span class="nn">mrif.io.images</span>
 
 <span class="n">HILLAS_IMPLEMENTATION</span> <span class="o">=</span> <span class="mi">2</span>      <span class="c1"># TODO</span>
 
 <span class="c1">###############################################################################</span>
 
-<div class="viewcode-block" id="AbstractCleaningAlgorithm"><a class="viewcode-back" href="../../../api_filter_abstract_cleaning_algorithm.html#datapipe.denoising.abstract_cleaning_algorithm.AbstractCleaningAlgorithm">[docs]</a><span class="k">class</span> <span class="nc">AbstractCleaningAlgorithm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractCleaningAlgorithm"><a class="viewcode-back" href="../../../api_filter_abstract_cleaning_algorithm.html#mrif.denoising.abstract_cleaning_algorithm.AbstractCleaningAlgorithm">[docs]</a><span class="k">class</span> <span class="nc">AbstractCleaningAlgorithm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A convenient optional wrapper to simplify the image cleaning analysis.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Common processing to run and assess the image cleaning procedure on a set</span>
 <span class="sd">    of images and save results. This class gather some common procedures to</span>
 <span class="sd">    avoid code duplication in image cleaning modules:</span>
-<span class="sd">    - call the cleaning algorithm on an image set;</span>
-<span class="sd">    - assess the cleaning procedure using a set of estimators;</span>
-<span class="sd">    - apply various pre-processing and post-processing procedures (e.g.</span>
+
+<span class="sd">    * call the cleaning algorithm on an image set;</span>
+<span class="sd">    * assess the cleaning procedure using a set of estimators;</span>
+<span class="sd">    * apply various pre-processing and post-processing procedures (e.g.</span>
 <span class="sd">      geometry conversion);</span>
-<span class="sd">    - collect and save metadata, results and intermediate values that are</span>
+<span class="sd">    * collect and save metadata, results and intermediate values that are</span>
 <span class="sd">      useful for analysis;</span>
-<span class="sd">    - measure and save the execution time;</span>
-<span class="sd">    - manage exceptions;</span>
-<span class="sd">    - ...</span>
-<span class="sd">    </span>
+<span class="sd">    * measure and save the execution time;</span>
+<span class="sd">    * manage exceptions;</span>
+<span class="sd">    * ...</span>
+
 <span class="sd">    This abstract class is supposed to be inherited by the others image</span>
 <span class="sd">    cleaning classes.&quot;&quot;&quot;</span>
 
@@ -235,7 +236,7 @@
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm_label</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AbstractCleaningAlgorithm.run"><a class="viewcode-back" href="../../../api_filter_abstract_cleaning_algorithm.html#datapipe.denoising.abstract_cleaning_algorithm.AbstractCleaningAlgorithm.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="AbstractCleaningAlgorithm.run"><a class="viewcode-back" href="../../../api_filter_abstract_cleaning_algorithm.html#mrif.denoising.abstract_cleaning_algorithm.AbstractCleaningAlgorithm.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">cleaning_function_params</span><span class="p">,</span>
             <span class="n">input_file_or_dir_path_list</span><span class="p">,</span>
             <span class="n">benchmark_method</span><span class="p">,</span>
@@ -459,7 +460,7 @@
                     <span class="n">hillas_list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
 
                     <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-                        <span class="n">datapipe</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">plot_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span>
+                        <span class="n">mrif</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">plot_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span>
                                                      <span class="n">geom_list</span><span class="o">=</span><span class="n">geom_list</span><span class="p">,</span>
                                                      <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
                                                      <span class="n">hillas_list</span><span class="o">=</span><span class="n">hillas_list</span><span class="p">,</span>
@@ -470,7 +471,7 @@
                         <span class="n">plot_file_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_E</span><span class="si">{}</span><span class="s2">_T</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;event_id&quot;</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;tel_id&quot;</span><span class="p">],</span> <span class="n">extension</span><span class="p">)</span>
 
                         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">plot_file_path</span><span class="p">))</span>
-                        <span class="n">datapipe</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">mpl_save_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span>
+                        <span class="n">mrif</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">mpl_save_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span>
                                                          <span class="n">geom_list</span><span class="o">=</span><span class="n">geom_list</span><span class="p">,</span>
                                                          <span class="n">output_file_path</span><span class="o">=</span><span class="n">plot_file_path</span><span class="p">,</span>
                                                          <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
@@ -580,7 +581,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev6',
+            VERSION:'0.1.dev7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

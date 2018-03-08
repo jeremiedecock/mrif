@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>datapipe.denoising.wavelets_mrtransform &mdash; MultiResolution Image Filter 0.1.dev6 documentation</title>
+  <title>mrif.denoising.wavelets_mrtransform &mdash; MultiResolution Image Filter 0.1.dev7 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="MultiResolution Image Filter 0.1.dev6 documentation" href="../../../index.html"/>
+    <link rel="top" title="MultiResolution Image Filter 0.1.dev7 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -139,7 +139,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>datapipe.denoising.wavelets_mrtransform</li>
+      <li>mrif.denoising.wavelets_mrtransform</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +156,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for datapipe.denoising.wavelets_mrtransform</h1><div class="highlight"><pre>
+  <h1>Source code for mrif.denoising.wavelets_mrtransform</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -179,10 +179,8 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wavelet_transform&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;filter_planes&#39;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;filter_planes&#39;</span><span class="p">,</span>
            <span class="s1">&#39;inverse_wavelet_transform&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;clean_image&#39;</span><span class="p">,</span>
            <span class="s1">&#39;WaveletTransform&#39;</span><span class="p">]</span>
 
 <span class="sd">&quot;&quot;&quot;Denoise FITS and PNG images with Wavelet Transform.</span>
@@ -268,13 +266,13 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">datapipe.denoising.abstract_cleaning_algorithm</span> <span class="k">import</span> <span class="n">AbstractCleaningAlgorithm</span>
-<span class="kn">from</span> <span class="nn">datapipe.denoising.inverse_transform_sampling</span> <span class="k">import</span> <span class="n">EmpiricalDistribution</span>
-<span class="kn">from</span> <span class="nn">datapipe.io</span> <span class="k">import</span> <span class="n">images</span>
+<span class="kn">from</span> <span class="nn">mrif.denoising.abstract_cleaning_algorithm</span> <span class="k">import</span> <span class="n">AbstractCleaningAlgorithm</span>
+<span class="kn">from</span> <span class="nn">mrif.denoising.inverse_transform_sampling</span> <span class="k">import</span> <span class="n">EmpiricalDistribution</span>
+<span class="kn">from</span> <span class="nn">mrif.io</span> <span class="k">import</span> <span class="n">images</span>
 
-<span class="kn">from</span> <span class="nn">datapipe.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">datapipe.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">mrif.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
+<span class="kn">from</span> <span class="nn">mrif.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
+<span class="kn">from</span> <span class="nn">mrif.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
 
 <span class="c1"># CONSTANTS ##################################################################</span>
 
@@ -310,7 +308,7 @@
 
 <span class="c1">##############################################################################</span>
 
-<div class="viewcode-block" id="wavelet_transform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#datapipe.denoising.wavelets_mrtransform.wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
                       <span class="n">number_of_scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                       <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                       <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -404,10 +402,10 @@
         <span class="k">for</span> <span class="n">plane</span> <span class="ow">in</span> <span class="n">wavelet_planes_list</span><span class="p">:</span>
             <span class="n">plane</span><span class="p">[</span><span class="n">nan_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">return</span> <span class="n">wavelet_planes_list</span></div>
+    <span class="k">return</span> <span class="n">wavelet_planes_list</span>
 
 
-<div class="viewcode-block" id="filter_planes"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#datapipe.denoising.wavelets_mrtransform.filter_planes">[docs]</a><span class="k">def</span> <span class="nf">filter_planes</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
+<div class="viewcode-block" id="filter_planes"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#mrif.denoising.wavelets_mrtransform.filter_planes">[docs]</a><span class="k">def</span> <span class="nf">filter_planes</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
                   <span class="n">method</span><span class="o">=</span><span class="n">DEFAULT_TYPE_OF_FILTERING</span><span class="p">,</span>
                   <span class="n">thresholds</span><span class="o">=</span><span class="n">DEFAULT_FILTER_THRESHOLDS</span><span class="p">,</span>
                   <span class="n">detect_only_positive_structures</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -495,7 +493,7 @@
     <span class="k">return</span> <span class="n">filtered_wavelet_planes</span></div>
 
 
-<div class="viewcode-block" id="inverse_wavelet_transform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#datapipe.denoising.wavelets_mrtransform.inverse_wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">inverse_wavelet_transform</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
+<div class="viewcode-block" id="inverse_wavelet_transform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#mrif.denoising.wavelets_mrtransform.inverse_wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">inverse_wavelet_transform</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
                               <span class="n">last_plane</span><span class="o">=</span><span class="n">DEFAULT_LAST_SCALE_TREATMENT</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute the inverse wavelet transform of `wavelet_planes`.</span>
 
@@ -536,14 +534,14 @@
     <span class="k">return</span> <span class="n">output_image</span></div>
 
 
-<div class="viewcode-block" id="WaveletTransform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#datapipe.denoising.wavelets_mrtransform.WaveletTransform">[docs]</a><span class="k">class</span> <span class="nc">WaveletTransform</span><span class="p">(</span><span class="n">AbstractCleaningAlgorithm</span><span class="p">):</span>
+<div class="viewcode-block" id="WaveletTransform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#mrif.denoising.wavelets_mrtransform.WaveletTransform">[docs]</a><span class="k">class</span> <span class="nc">WaveletTransform</span><span class="p">(</span><span class="n">AbstractCleaningAlgorithm</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The wavelet transform wrapper for ctapipe.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;WT (mr_transform)&quot;</span>  <span class="c1"># Name to show in plots</span>
 
-<div class="viewcode-block" id="WaveletTransform.clean_image"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#datapipe.denoising.wavelets_mrtransform.WaveletTransform.clean_image">[docs]</a>    <span class="k">def</span> <span class="nf">clean_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="WaveletTransform.clean_image"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#mrif.denoising.wavelets_mrtransform.WaveletTransform.clean_image">[docs]</a>    <span class="k">def</span> <span class="nf">clean_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">input_image</span><span class="p">,</span>
                     <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">DEFAULT_TYPE_OF_FILTERING</span><span class="p">,</span>
                     <span class="n">filter_thresholds</span><span class="o">=</span><span class="n">DEFAULT_FILTER_THRESHOLDS</span><span class="p">,</span>
@@ -842,7 +840,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev6',
+            VERSION:'0.1.dev7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
