@@ -375,7 +375,7 @@ def inverse_wavelet_transform(wavelet_planes,
 
 
 class WaveletTransform(AbstractCleaningAlgorithm):
-    """The wavelet transform wrapper for ctapipe."""
+    """A wavelet transform wrapper."""
 
     def __init__(self):
         super().__init__()

@@ -142,8 +142,7 @@ class AbstractCleaningAlgorithm(object):
                                      max_num_images=max_num_img,
                                      tel_filter_list=tel_id,
                                      ev_filter_list=event_id,
-                                     cam_filter_list=cam_id,
-                                     ctapipe_format=False):
+                                     cam_filter_list=cam_id):
 
             input_file_path = image.meta['file_path']
 
