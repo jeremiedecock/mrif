@@ -31,9 +31,7 @@ Image package:
 .. toctree::
    :maxdepth: 1
 
-   mrif.image.hillas_parameters <api_image_hillas_parameters>
    mrif.image.pixel_clusters <api_image_pixel_clusters>
-   mrif.image.signal_to_border_distance <api_image_signal_to_border_distance>
 
 I/O package:
 

@@ -36,9 +36,6 @@ from mrif.benchmark import assess
 from mrif.image.hillas_parameters import get_hillas_parameters
 from mrif.image.pixel_clusters import kill_isolated_pixels_stats
 from mrif.image.pixel_clusters import number_of_islands
-from mrif.image.signal_to_border_distance import signal_to_border
-from mrif.image.signal_to_border_distance import signal_to_border_distance
-from mrif.image.signal_to_border_distance import pemax_on_border
 from mrif.io import geometry_converter
 from mrif.io.images import image_generator
 import mrif.io.images
@@ -189,10 +186,6 @@ class AbstractCleaningAlgorithm(object):
 
                     # FETCH ADDITIONAL IMAGE METADATA #####################
 
-                    image_dict["img_ref_signal_to_border"] = signal_to_border(reference_img)                   # TODO: NaN
-                    image_dict["img_ref_signal_to_border_distance"] = signal_to_border_distance(reference_img) # TODO: NaN
-                    image_dict["img_ref_pemax_on_border"] = pemax_on_border(reference_img)                     # TODO: NaN
-
                     delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(reference_img)       # TODO: NaN
                     num_islands = number_of_islands(reference_img)                                             # TODO: NaN
 
@@ -258,10 +251,6 @@ class AbstractCleaningAlgorithm(object):
                                                                                  reference_img,
                                                                                  benchmark_method,
                                                                                  **kwargs)
-
-                    image_dict["img_cleaned_signal_to_border"] = signal_to_border(cleaned_img)
-                    image_dict["img_cleaned_signal_to_border_distance"] = signal_to_border_distance(cleaned_img)
-                    image_dict["img_cleaned_pemax_on_border"] = pemax_on_border(cleaned_img)
 
                     image_dict["score"] = score_tuple
                     image_dict["score_name"] = score_name_tuple

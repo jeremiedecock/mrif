@@ -20,7 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['hillas_parameters',
-           'pixel_clusters',
-           'signal_to_border_distance']
-
+__all__ = ['pixel_clusters']
