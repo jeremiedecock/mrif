@@ -135,9 +135,9 @@ Or, if you have downloaded the MRIF source code::
 Cosmostat iSAP Sparce2D installation
 ====================================
 
-1. download http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz (see http://www.cosmostat.org/software/isap/)
-2. unzip this archive, go to the "sparse2d" directory and compile the sparse2d
-   library. It should generate an executable named "mr_transform"::
+1. Download http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz (see http://www.cosmostat.org/software/isap/)
+2. Unzip this archive, go to the "sparse2d" directory and compile the sparse2d
+   library. It should generate two executables named ``mr_transform`` and ``mr_filter``::
 
     tar -xzvf ISAP_V3.1.tgz
     cd ISAP_V3.1/cxx
@@ -151,14 +151,14 @@ Example
 1. Download a sample image (`shower.fits <https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits>`_)
 2. In your system terminal, type::
   
-  mrif_mrfilter shower.fits
+    mrif_mrfilter shower.fits
 
 3. Use the ``-h`` option for more options
 
 A "benchmark mode" can also be used to clean images and assess cleaning
-algorithms (it's still a bit experimental) : use the same instructions than for
-step 2.1 with the additional option "-b 1" in each command (and put several
-fits files in input e.g. "\*.fits")
+algorithms (it's still a bit experimental): use the same instructions than for
+step 2.1 with the additional option ``-b 1`` in each command (and put several
+fits files in input e.g. ``\*.fits``)
 
 Bug reports
 ===========

@@ -215,7 +215,7 @@ This script requires the mr_filter program
 (http://www.cosmostat.org/software/isap/).
 """
 
-__all__ = ['wavelet_transform']
+__all__ = ['WaveletTransform']
 
 import argparse
 import numpy as np

@@ -20,10 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['wavelet_transform',
-           'filter_planes',
+__all__ = ['filter_planes',
            'inverse_wavelet_transform',
-           'clean_image',
            'WaveletTransform']
 
 """Denoise FITS and PNG images with Wavelet Transform.

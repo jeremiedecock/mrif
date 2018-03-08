@@ -49,20 +49,21 @@ HILLAS_IMPLEMENTATION = 2      # TODO
 
 class AbstractCleaningAlgorithm(object):
     """A convenient optional wrapper to simplify the image cleaning analysis.
-    
+
     Common processing to run and assess the image cleaning procedure on a set
     of images and save results. This class gather some common procedures to
     avoid code duplication in image cleaning modules:
-    - call the cleaning algorithm on an image set;
-    - assess the cleaning procedure using a set of estimators;
-    - apply various pre-processing and post-processing procedures (e.g.
+
+    * call the cleaning algorithm on an image set;
+    * assess the cleaning procedure using a set of estimators;
+    * apply various pre-processing and post-processing procedures (e.g.
       geometry conversion);
-    - collect and save metadata, results and intermediate values that are
+    * collect and save metadata, results and intermediate values that are
       useful for analysis;
-    - measure and save the execution time;
-    - manage exceptions;
-    - ...
-    
+    * measure and save the execution time;
+    * manage exceptions;
+    * ...
+
     This abstract class is supposed to be inherited by the others image
     cleaning classes."""
 

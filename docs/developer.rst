@@ -8,7 +8,7 @@ Source code
 ~~~~~~~~~~~
 
 The source code is currently `available on GitHub`_ under the terms and
-conditions of the :ref:`MIT license <license>`. Fork away!
+conditions of the `MIT license`_. Fork away!
 
 
 Bug reports
@@ -46,7 +46,7 @@ Changes
 .. include:: ../CHANGES.rst
    :start-line: 2
 
-
+.. _MIT license: https://opensource.org/licenses/MIT
 .. _available on GitHub: https://github.com/jdhp-sap/sap-cta-data-pipeline
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _PEP257: https://www.python.org/dev/peps/pep-0257/
@@ -57,4 +57,3 @@ Changes
 .. _pylint: http://www.pylint.org/
 .. _pyflakes: https://pypi.python.org/pypi/pyflakes
 .. _TODO.md: https://github.com/jdhp-sap/sap-cta-data-pipeline/blob/master/TODO.md
-
