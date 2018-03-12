@@ -100,12 +100,12 @@ Note that you need to have `Python3.x` and `pip` already installed on your syste
 .. warning::
 
     Users of the Anaconda python distribution should follow the instructions
-    for :ref:`anaconda_install`.
+    for Anaconda install (see `Using conda`_ bellow).
 
 .. note::
 
-    You will need a C compiler (e.g. ``gcc`` or ``clang``) to be installed (see
-    `Building from source`_ below) to install some dependencies (e.g. Numpy).
+    You will need a C compiler (e.g. ``gcc`` or ``clang``) to be installed to
+    install some dependencies (e.g. Numpy).
 
 .. note::
 
