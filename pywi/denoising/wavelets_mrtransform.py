@@ -107,7 +107,7 @@ import numpy as np
 import os
 import time
 
-from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+#from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
 from pywi.io import images
 
 from pywi.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
@@ -374,7 +374,8 @@ def inverse_wavelet_transform(wavelet_planes,
     return output_image
 
 
-class WaveletTransform(AbstractCleaningAlgorithm):
+#class WaveletTransform(AbstractCleaningAlgorithm):
+class WaveletTransform:
     """A wavelet transform wrapper."""
 
     def __init__(self):
@@ -522,16 +523,16 @@ def main():
     parser.add_argument("--debug", action="store_true",
                         help="Debug mode")
 
-    parser.add_argument("--max-images", type=int, metavar="INTEGER", 
-                        help="The maximum number of images to process")
+#    parser.add_argument("--max-images", type=int, metavar="INTEGER", 
+#                        help="The maximum number of images to process")
 
-    parser.add_argument("--benchmark", "-b", metavar="STRING", 
-                        help="The benchmark method to use to assess the algorithm for the"
-                             "given images")
+#    parser.add_argument("--benchmark", "-b", metavar="STRING", 
+#                        help="The benchmark method to use to assess the algorithm for the"
+#                             "given images")
 
-    parser.add_argument("--label", "-l", default=None,
-                        metavar="STRING",
-                        help="The label attached to the produced results")
+#    parser.add_argument("--label", "-l", default=None,
+#                        metavar="STRING",
+#                        help="The label attached to the produced results")
 
     parser.add_argument("--plot", action="store_true",
                         help="Plot images")
@@ -539,14 +540,15 @@ def main():
     parser.add_argument("--saveplot", default=None, metavar="FILE",
                         help="The output file where to save plotted images")
 
-    parser.add_argument("--output", "-o", default=None,
-                        metavar="FILE",
-                        help="The output file path (JSON)")
+#    parser.add_argument("--output", "-o", default=None,
+#                        metavar="FILE",
+#                        help="The output file path (JSON)")
 
-    parser.add_argument("fileargs", nargs="+", metavar="FILE",
-                        help="The files image to process (FITS)."
-                             "If fileargs is a directory,"
-                             "all FITS files it contains are processed.")
+#    parser.add_argument("fileargs", nargs="+", metavar="FILE",
+    parser.add_argument("fileargs", nargs=1, metavar="FILE",
+                        help="The files image to process.")
+#                             "If fileargs is a directory,"
+#                             "all FITS files it contains are processed.")
 
     args = parser.parse_args()
 
@@ -560,13 +562,14 @@ def main():
 
     verbose = args.verbose
     debug = args.debug
-    max_images = args.max_images
-    benchmark_method = args.benchmark
-    label = args.label
+#    max_images = args.max_images
+#    benchmark_method = args.benchmark
+#    label = args.label
     plot = args.plot
     saveplot = args.saveplot
 
-    input_file_or_dir_path_list = args.fileargs
+#    input_file_or_dir_path_list = args.fileargs
+    input_file = args.fileargs[0]
 
     # CHECK OPTIONS #############################
 
@@ -588,44 +591,83 @@ def main():
 
     #############################################
 
-    if args.output is None:
-        output_file_path = "score_wavelets_benchmark_{}.json".format(benchmark_method)
-    else:
-        output_file_path = args.output
-
-    #if noise_cdf_file is not None:
-    #    noise_distribution = EmpiricalDistribution(noise_cdf_file)
+    #if args.output is None:
+    #    output_file_path = "score_wavelets_benchmark_{}.json".format(benchmark_method)
     #else:
-    #    noise_distribution = None
+    #    output_file_path = args.output
+
+    ##if noise_cdf_file is not None:
+    ##    noise_distribution = EmpiricalDistribution(noise_cdf_file)
+    ##else:
+    ##    noise_distribution = None
     noise_distribution = None
 
-    cleaning_function_params = {
-            "type_of_filtering": type_of_filtering,
-            "filter_thresholds": filter_thresholds,
-            "last_scale_treatment": last_scale_treatment,
-            "detect_only_positive_structures": detect_only_positive_structures,
-            "kill_isolated_pixels": kill_isolated_pixels,
-            "noise_distribution": noise_distribution,
-            "tmp_files_directory": tmp_dir,
-            "verbose": verbose
-        }
+    #cleaning_function_params = {
+    #        "type_of_filtering": type_of_filtering,
+    #        "filter_thresholds": filter_thresholds,
+    #        "last_scale_treatment": last_scale_treatment,
+    #        "detect_only_positive_structures": detect_only_positive_structures,
+    #        "kill_isolated_pixels": kill_isolated_pixels,
+    #        "noise_distribution": noise_distribution,
+    #        "tmp_files_directory": tmp_dir,
+    #        "verbose": verbose
+    #    }
 
-    cleaning_algorithm = WaveletTransform()
+    #cleaning_algorithm = WaveletTransform()
 
-    if verbose:
-        cleaning_algorithm.verbose = True
+    #if verbose:
+    #    cleaning_algorithm.verbose = True
 
-    if label is not None:
-        cleaning_algorithm.label = label
+    #if label is not None:
+    #    cleaning_algorithm.label = label
 
-    output_dict = cleaning_algorithm.run(cleaning_function_params,
-                                         input_file_or_dir_path_list,
-                                         benchmark_method,
-                                         output_file_path,
-                                         plot=plot,
-                                         saveplot=saveplot,
-                                         max_num_img=max_images,
-                                         debug=debug)
+    #output_dict = cleaning_algorithm.run(cleaning_function_params,
+    #                                     input_file_or_dir_path_list,
+    #                                     benchmark_method,
+    #                                     output_file_path,
+    #                                     plot=plot,
+    #                                     saveplot=saveplot,
+    #                                     max_num_img=max_images,
+    #                                     debug=debug)
+
+    # CLEAN THE INPUT IMAGE ###################################
+
+    img_filter = WaveletTransform()
+    input_img = images.load_image(input_file)
+
+    # Copy the image (otherwise some cleaning functions may change it)
+    input_img_copy = input_img.astype('float64', copy=True)
+
+    cleaned_img = img_filter.clean_image(input_img_copy,
+                                         type_of_filtering=type_of_filtering,
+                                         filter_thresholds=filter_thresholds,
+                                         last_scale_treatment=last_scale_treatment,
+                                         detect_only_positive_structures=detect_only_positive_structures,
+                                         kill_isolated_pixels=kill_isolated_pixels,
+                                         noise_distribution=noise_distribution,
+                                         tmp_files_directory=tmp_dir)
+
+    # PLOT IMAGES #########################################################
+
+    if plot or (saveplot is not None):
+        image_list = [input_img, cleaned_img] 
+        title_list = ["Input image", "Filtered image"] 
+
+        if plot:
+            images.plot_list(image_list, title_list=title_list)
+
+        if saveplot is not None:
+            plot_file_path = saveplot
+            print("Saving {}".format(plot_file_path))
+            images.mpl_save_list(image_list,
+                                 output_file_path=plot_file_path,
+                                 title_list=title_list)
+
+    # SAVE IMAGE ##########################################################
+
+    basename, extension = os.path.splitext(input_file)
+    output_file_path = "{}-out{}".format(basename, extension)
+    images.save_image(cleaned_img, output_file_path)
 
 if __name__ == "__main__":
     main()

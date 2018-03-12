@@ -160,7 +160,7 @@ Example
 2. In your system terminal, from the directory that contains the sample image, type::
   
     pywi-mrtransform -t 256,256,256,0 --plot archives_ngc3576.png
-    pywi-mrfilter -t 256,256,256,0 --plot archives_ngc3576.png
+    pywi-mrfilter -s 256,256,256,0 --plot archives_ngc3576.png
 
 3. Type ``pywi-mrtransform -h`` or ``pywi-mrfilter -h`` to display the list of
    available options and their documentation.

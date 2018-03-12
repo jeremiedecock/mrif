@@ -24,10 +24,12 @@ __all__ = ['fill_nan_pixels',
            'image_files_in_dir',
            'image_files_in_paths',
            'image_generator',
+           'load_image',
            'load_fits',
            'mpl_save',
            'plot',
-           'save_fits']
+           'save_fits',
+           'save_image']
 
 import math
 
@@ -38,6 +40,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.patches import Ellipse
+
+import PIL.Image as pil_image     # PIL.Image is a module not a class...
 
 import os
 
@@ -253,9 +257,6 @@ def image_files_in_paths(path_list, max_num_files=None):
 
 def image_generator(path_list,
                     max_num_images=None,
-                    tel_filter_list=None,
-                    ev_filter_list=None,
-                    cam_filter_list=None,
                     **kwargs):
     """Return an iterable sequence all calibrated images in `path_list`.
 
@@ -266,12 +267,6 @@ def image_generator(path_list,
         FITS/Simtel files and directories.
     max_num_images
         The maximum number of images to iterate.
-    tel_filter_list
-        Only iterate images from telescopes defined in this list.
-    ev_filter_list
-        Only iterate images from events defined in this list.
-    cam_filter_list
-        Only iterate images from cameras defined in this list.
 
     Yields
     ------
@@ -289,18 +284,107 @@ def image_generator(path_list,
             if file_path.lower().endswith((".fits", ".fit")):
                 # FITS FILES
                 image_dict, fits_metadata_dict = load_benchmark_images(file_path)   # TODO: named tuple
-                if (tel_filter_list is None) or (fits_metadata_dict['tel_id'] in tel_filter_list):
-                    if (ev_filter_list is None) or (fits_metadata_dict['event_id'] in ev_filter_list):
-                        if (cam_filter_list is None) or (fits_metadata_dict['cam_id'] in cam_filter_list):
-                            images_counter += 1
-                            yield Image2D(**image_dict, meta=fits_metadata_dict)
+                images_counter += 1
+                yield Image2D(**image_dict, meta=fits_metadata_dict)
             else:
                 raise Exception("Wrong item:", file_path)
 
 
 # LOAD AND SAVE FITS FILES ###################################################
 
-def load_fits(input_file_path, hdu_index):
+def load_benchmark_images(input_file_path):
+    """Return images contained in the given FITS file.
+
+    Parameters
+    ----------
+    input_file_path : str
+        The path of the FITS file to load
+
+    Returns
+    -------
+    dict
+        A dictionary containing the loaded images and their metadata
+
+    Raises
+    ------
+    WrongFitsFileStructure
+        If `input_file_path` doesn't contain a valid structure
+    """
+
+    hdu_list = fits.open(input_file_path)   # open the FITS file
+
+    # METADATA ################################################################
+
+    hdu0 = hdu_list[0]
+
+    metadata_dict = {}
+
+    metadata_dict['version'] = hdu0.header['version']
+    #metadata_dict['cam_id'] = hdu0.header['cam_id']
+
+    # IMAGES ##################################################################
+
+    if metadata_dict['version'] == 1:
+        if (len(hdu_list) != 2) or (not hdu_list[0].is_image) or (not hdu_list[1].is_image):
+            hdu_list.close()
+            raise WrongFitsFileStructure(input_file_path)
+
+        hdu0, hdu1 = hdu_list
+
+        # IMAGES
+
+        images_dict = {}
+
+        images_dict["input_image"] = hdu0.data        # "hdu.data" is a Numpy Array
+        images_dict["reference_image"] = hdu1.data    # "hdu.data" is a Numpy Array
+    else:
+        raise Exception("Unknown version number")
+
+    # METADATA ################################################################
+
+    metadata_dict['npe'] = float(np.nansum(images_dict["reference_image"]))       # np.sum() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
+    metadata_dict['min_npe'] = float(np.nanmin(images_dict["reference_image"]))   # np.min() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
+    metadata_dict['max_npe'] = float(np.nanmax(images_dict["reference_image"]))   # np.max() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
+
+    hdu_list.close()
+
+    return images_dict, metadata_dict   # TODO: named tuple
+
+
+def load_image(input_file_path, **kwargs):
+    """Return the image array contained in the given image file.
+
+    So far, this function convert all multi-channel input images as
+    mono-channel grayscale.
+
+    The list of supported formats is available in the following page:
+    https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html
+
+    Fits format is also supported thanks to astropy.
+
+    Parameters
+    ----------
+    input_file_path : str
+        The path of the image file to load
+
+    Returns
+    -------
+    ndarray
+        The loaded image
+    """
+    
+    if input_file_path.lower().endswith((".fits", ".fit")):
+        # FITS FILES
+        image_array = load_fits(input_file_path, **kwargs)
+    else:
+        pil_img = pil_image.open(input_file_path)
+        pil_img = pil_img.convert('L')
+        image_array = np.array(pil_img)  # It works also with .png, .jpg, tiff, ...
+
+    return image_array
+
+
+def load_fits(input_file_path, hdu_index=0):
     """Return the image array contained in the given HDU of the given FITS file.
 
     Parameters
@@ -342,6 +426,66 @@ def load_fits(input_file_path, hdu_index):
     hdu_list.close()
 
     return image_array
+
+
+def normalize(array):
+    """Normalize the values of a Numpy array in the range [0,1].
+
+    Parameters
+    ----------
+    array : array like
+        The array to normalize
+
+    Returns
+    -------
+    ndarray
+        The normalized array
+    """
+    min_value = array.min()
+    max_value = array.max()
+    size = max_value - min_value
+
+    if size > 0:
+        array = array.astype('float64', copy=True)
+        norm_array = (array - min_value)/size
+    else:
+        norm_array = array
+
+    return norm_array
+
+
+def save_image(image_array, output_file_path, **kwargs):
+    """Save the image array `image` in the given file `output_file_path`.
+
+    The list of supported formats is available in the following page:
+    https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html
+
+    Fits format is also supported thanks to astropy.
+
+    Parameters
+    ----------
+    image : array_like
+        The image to save
+    output_file_path : str
+        The destination path of the image
+    """
+    
+    if output_file_path.lower().endswith((".fits", ".fit")):
+        # FITS FILES
+        save_fits(image_array, output_file_path, **kwargs)
+    else:
+        mode = "L"              # Grayscale
+        size_y, size_x = image_array.shape
+        pil_img = pil_image.new(mode, (size_x, size_y))
+
+        # Make the data (pixels value in [0;255])
+        # WARNING: nested list and 2D numpy arrays are silently rejected!!!
+        #          data *must* be a list or a 1D numpy array!
+        image_array = normalize(image_array) * 255.
+        image_array = image_array.astype('uint8', copy=True)
+
+        pil_img.putdata(image_array.flatten())
+        pil_img.save(output_file_path)
 
 
 def save_fits(img, output_file_path):
@@ -481,7 +625,18 @@ def _plot_list(img_list,
     if highlight_mask_list is None:
         highlight_mask_list = [None for i in img_list]
 
-    raise NotImplementedError()
+    for ax, img, title in zip(ax_tuple, img_list, title_list):
+        masked = np.ma.masked_where(np.isnan(img), img)
+
+        cmap = COLOR_MAP
+        cmap.set_bad('black')
+        im = ax.imshow(masked,
+                       origin='lower',
+                       interpolation='nearest',
+                       cmap=cmap)
+
+        ax.set_title(title)
+        plt.colorbar(im, ax=ax) # draw the colorbar
 
     if main_title is not None:
         fig.suptitle(main_title, fontsize=18)
@@ -501,22 +656,13 @@ def plot_list(img_list,
     """
 
     # Main title
-    if metadata_dict is not None:
-        mc_energy = metadata_dict['mc_energy'] if 'mc_energy_unit' in metadata_dict else metadata_dict['mc_energy'][0]
-        mc_energy_unit = metadata_dict['mc_energy_unit'] if 'mc_energy_unit' in metadata_dict else metadata_dict['mc_energy'][1]
-
-        main_title = "{} (Tel. {}, Ev. {}) {:.2E}{}".format(os.path.basename(metadata_dict['simtel_path']),
-                                                            metadata_dict['tel_id'],
-                                                            metadata_dict['event_id'],
-                                                            mc_energy,
-                                                            mc_energy_unit)
-    else:
-        main_title = None
+    main_title = None
 
     _plot_list(img_list,
                title_list=title_list,
                highlight_mask_list=highlight_mask_list,
                main_title=main_title)
+
     plt.show()
 
 
@@ -534,22 +680,13 @@ def mpl_save_list(img_list,
     """
 
     # Main title
-    if metadata_dict is not None:
-        mc_energy = metadata_dict['mc_energy'] if 'mc_energy_unit' in metadata_dict else metadata_dict['mc_energy'][0]
-        mc_energy_unit = metadata_dict['mc_energy_unit'] if 'mc_energy_unit' in metadata_dict else metadata_dict['mc_energy'][1]
-
-        main_title = "{} (Tel. {}, Ev. {}) {:.2E}{}".format(os.path.basename(metadata_dict['simtel_path']),
-                                                            metadata_dict['tel_id'],
-                                                            metadata_dict['event_id'],
-                                                            mc_energy,
-                                                            mc_energy_unit)
-    else:
-        main_title = ""
+    main_title = None
 
     _plot_list(img_list,
                title_list=title_list,
                highlight_mask_list=highlight_mask_list,
                main_title=main_title)
+
     plt.savefig(output_file_path, bbox_inches='tight')
     plt.close('all')
 
