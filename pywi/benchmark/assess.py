@@ -32,8 +32,6 @@ __all__ = ['normalize_array',
            'metric_kill_isolated_pixels',
            'assess_image_cleaning']
 
-import astropy.units as u
-
 import collections
 
 import numpy as np

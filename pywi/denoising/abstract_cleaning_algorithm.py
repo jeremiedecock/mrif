@@ -30,8 +30,6 @@ import sys
 import time
 import traceback
 
-import astropy.units as u
-
 from pywi.benchmark import assess
 from pywi.image.pixel_clusters import kill_isolated_pixels_stats
 from pywi.image.pixel_clusters import number_of_islands

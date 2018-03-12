@@ -67,6 +67,7 @@ Dependencies
 * Numpy
 * Scipy
 * Scikit-image
+* Astropy (fits package)
 * _Cosmostat _iSAP Sparce2D
 
 .. _install:

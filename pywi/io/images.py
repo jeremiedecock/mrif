@@ -42,7 +42,6 @@ from matplotlib.patches import Ellipse
 import os
 
 from astropy.io import fits
-import astropy.units as u
 
 import pandas as pd
 
