@@ -95,8 +95,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#macosx-and-gnu-linux">MacOSX and Gnu/Linux</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-pip">Using pip</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#on-macosx-and-gnu-linux">On MacOSX and Gnu/Linux</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#on-windows">On Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-conda">Using conda</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cosmostat-isap-sparce2d-installation">Cosmostat iSAP Sparce2D installation</a></li>
@@ -226,30 +230,69 @@ strategies”, Springer Science &amp; Business Media);</li>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>PyWI has the following strict requirements:</p>
 <ul class="simple">
-<li>Python &gt;= 3.0</li>
-<li>Numpy</li>
-<li>Scipy</li>
-<li>Scikit-image</li>
-<li>Pillow (a.k.a. PIL)</li>
-<li>Astropy (if you want to read Fits files)</li>
-<li>_Cosmostat _iSAP Sparce2D</li>
+<li><a class="reference external" href="https://www.python.org/">Python</a> 3.5 or 3.6</li>
+<li><a class="reference external" href="http://www.numpy.org/">Numpy</a></li>
 </ul>
+<p>PyWI also depends on other packages for optional features:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.scipy.org/">Scipy</a></li>
+<li><a class="reference external" href="http://scikit-image.org/">Scikit-image</a></li>
+<li><a class="reference external" href="https://pillow.readthedocs.io/en/latest/">Pillow (a.k.a. PIL)</a> to read and write many image formats (PNG, JPEG, TIFF, …)</li>
+<li><a class="reference external" href="http://www.astropy.org/">Astropy</a> to provide Fits file format</li>
+<li><a class="reference external" href="http://matplotlib.org/">Matplotlib</a> 1.5 or later to provide plotting functionality</li>
+<li><a class="reference external" href="http://pandas.pydata.org/">Pandas</a></li>
+<li><a class="reference external" href="http://www.cosmostat.org/software/isap/">Cosmostat iSAP Sparce2D</a></li>
+</ul>
+<p>However, note that these only need to be installed if those particular features
+are needed. PyWI will import even if these dependencies are not installed.</p>
 </div>
 <div class="section" id="installation">
 <span id="install"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-pip">
+<h3>Using pip<a class="headerlink" href="#using-pip" title="Permalink to this headline">¶</a></h3>
 <p>Most major projects upload official packages to the <em>Python Package Index</em>.
 They can be installed on most operating systems using Python standard <cite>pip</cite>
 package manager.</p>
 <p>Note that you need to have <cite>Python3.x</cite> and <cite>pip</cite> already installed on your system.</p>
-<div class="section" id="macosx-and-gnu-linux">
-<h3>MacOSX and Gnu/Linux<a class="headerlink" href="#macosx-and-gnu-linux" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Users of the Anaconda python distribution should follow the instructions
+for Anaconda install (see <a class="reference internal" href="#using-conda">Using conda</a> bellow).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will need a C compiler (e.g. <code class="docutils literal"><span class="pre">gcc</span></code> or <code class="docutils literal"><span class="pre">clang</span></code>) to be installed to
+install some dependencies (e.g. Numpy).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">--no-deps</span></code> flag is optional, but highly recommended if you already
+have Numpy installed, since otherwise pip will sometimes try to “help” you
+by upgrading your Numpy installation, which may not always be desired.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you get a <code class="docutils literal"><span class="pre">PermissionError</span></code> this means that you do not have the
+required administrative access to install new packages to your Python
+installation.  In this case you may consider using the <code class="docutils literal"><span class="pre">--user</span></code> option
+to install the package into your home directory. You can read more
+about how to do this in the <a class="reference external" href="https://pip.pypa.io/en/stable/user_guide/#user-installs">pip documentation</a>.</p>
+<p>Alternatively, if you intend to do development on other software that uses
+PyWI, such as an affiliated package, consider installing PyWI into a
+<a class="reference external" href="http://docs.astropy.org/en/stable/development/workflow/virtualenv_detail.html#using-virtualenv">virtualenv</a>.</p>
+<p class="last">Do <strong>not</strong> install PyWI or other third-party packages using <code class="docutils literal"><span class="pre">sudo</span></code>
+unless you are fully aware of the risks.</p>
+</div>
+<div class="section" id="on-macosx-and-gnu-linux">
+<h4>On MacOSX and Gnu/Linux<a class="headerlink" href="#on-macosx-and-gnu-linux" title="Permalink to this headline">¶</a></h4>
 <p>You can install PyWI using the following command (in a terminal):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>As an alternative, you can install PyWI from the downloaded source code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>If PyWI is already installed on your system you can upgrade it with this command:</p>
@@ -261,14 +304,14 @@ package manager.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="windows">
-<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="on-windows">
+<h4>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h4>
 <p>You can install PyWI using the following command (in a <a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">command prompt</a>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>As an alternative, you can install PyWI from the downloaded source code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>If PyWI is already installed on your system you can upgrade it with this command:</p>
@@ -278,6 +321,16 @@ package manager.</p>
 <p>To uninstall PyWI, type:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="using-conda">
+<span id="anaconda-install"></span><h3>Using conda<a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
+<p>The Anaconda package will be available soon.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Attempting to use <a class="reference external" href="https://pip.pypa.io">pip</a> to upgrade your installation of PyWI may result
+in a corrupted installation.</p>
 </div>
 </div>
 </div>
