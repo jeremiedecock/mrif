@@ -67,7 +67,8 @@ Dependencies
 * Numpy
 * Scipy
 * Scikit-image
-* Astropy (fits package)
+* Pillow (a.k.a. PIL)
+* Astropy (if you want to read Fits files)
 * _Cosmostat _iSAP Sparce2D
 
 .. _install:
@@ -75,23 +76,40 @@ Dependencies
 Installation
 ============
 
-Gnu/Linux
----------
+Most major projects upload official packages to the *Python Package Index*.
+They can be installed on most operating systems using Python standard `pip`
+package manager.
 
-You can install, upgrade, uninstall PyWI with these commands (in a
-terminal)::
+Note that you need to have `Python3.x` and `pip` already installed on your system.
 
-    pip install --pre pywi
-    pip install --upgrade pywi
-    pip uninstall pywi
+MacOSX and Gnu/Linux
+--------------------
 
-Or, if you have downloaded the PyWI source code::
+You can install PyWI using the following command (in a terminal)::
+
+    pip install --user pywi
+
+.. python -m pip install --user numpy scipy matplotlib pandas
+
+It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
+which can cause problems) to install packages in your local user space instead
+of the shared system directories.
+
+As an alternative, you can install PyWI from the downloaded source code::
 
     python3 setup.py install
 
 .. There's also a package for Debian/Ubuntu::
 .. 
 ..     sudo apt-get install pywi
+
+If PyWI is already installed on your system you can upgrade it with this command::
+
+    pip install --upgrade pywi
+
+To uninstall PyWI, type::
+
+    pip uninstall pywi
 
 Windows
 -------
@@ -102,36 +120,25 @@ Windows
 ..     3.4 under Windows 7.
 ..     It should also work with recent Windows systems.
 
-You can install, upgrade, uninstall PyWI with these commands (in a
-`command prompt`_)::
+You can install PyWI using the following command (in a `command prompt`_)::
 
-    py -m pip install --pre pywi
-    py -m pip install --upgrade pywi
-    py -m pip uninstall pywi
+    py -m pip install --user pywi
 
-Or, if you have downloaded the PyWI source code::
+It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
+which can cause problems) to install packages in your local user space instead
+of the shared system directories.
+
+As an alternative, you can install PyWI from the downloaded source code::
 
     py setup.py install
 
-MacOSX
--------
+If PyWI is already installed on your system you can upgrade it with this command::
 
-.. Note:
-.. 
-..     The following installation procedure has been tested to work with Python
-..     3.5 under MacOSX 10.9 (*Mavericks*).
-..     It should also work with recent MacOSX systems.
+    py -m pip install --upgrade pywi
 
-You can install, upgrade, uninstall PyWI with these commands (in a
-terminal)::
+To uninstall PyWI, type::
 
-    pip install --pre pywi
-    pip install --upgrade pywi
-    pip uninstall pywi
-
-Or, if you have downloaded the PyWI source code::
-
-    python3 setup.py install
+    py -m uninstall pywi
 
 Cosmostat iSAP Sparce2D installation
 ====================================
@@ -149,16 +156,16 @@ Cosmostat iSAP Sparce2D installation
 Example
 =======
 
-1. Download a sample image (`shower.fits <https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits>`_)
-2. In your system terminal, type::
+1. Download a sample image (`archives_ngc3576.png <https://gist.githubusercontent.com/jeremiedecock/144c83f74e46b171ab3a426230d40848/raw/4a9ea99dd18504baff404a074a4e7541d98a50c5/archives_ngc3576.png>`_)
+2. In your system terminal, from the directory that contains the sample image, type::
   
-    pywi-mrfilter shower.fits
+    pywi-mrtransform -t 256,256,256,0 --plot archives_ngc3576.png
 
 3. Use the ``-h`` option for more options
 
-A "benchmark mode" can also be used to clean images and assess cleaning
-algorithms (it's still a bit experimental): use the additional option ``-b all``
-in each command (and put several fits files in input e.g. ``\*.fits``)
+.. A "benchmark mode" can also be used to clean images and assess cleaning
+.. algorithms (it's still a bit experimental): use the additional option ``-b all``
+.. in each command (and put several fits files in input e.g. ``\*.fits``)
 
 Bug reports
 ===========
