@@ -736,15 +736,6 @@ def main():
     parser.add_argument("--max-images", type=int, metavar="INTEGER", 
                         help="The maximum number of images to process")
 
-    parser.add_argument("--telid", type=int, metavar="INTEGER", 
-                        help="Only process images from the specified telescope")
-
-    parser.add_argument("--eventid", type=int, metavar="INTEGER", 
-                        help="Only process images from the specified event")
-
-    parser.add_argument("--camid", metavar="STRING", 
-                        help="Only process images from the specified camera")
-
     parser.add_argument("--benchmark", "-b", metavar="STRING",
                         help="The benchmark method to use to assess the algorithm for the"
                              "given images")
@@ -797,9 +788,6 @@ def main():
     verbose = args.verbose
     debug = args.debug
     max_images = args.max_images
-    tel_id = args.telid
-    event_id = args.eventid
-    cam_id = args.camid
     benchmark_method = args.benchmark
     label = args.label
     plot = args.plot
@@ -816,6 +804,7 @@ def main():
     #    noise_distribution = EmpiricalDistribution(noise_cdf_file)
     #else:
     #    noise_distribution = None
+    noise_distribution = None
 
     cleaning_function_params = {
                 "type_of_multiresolution_transform": type_of_multiresolution_transform,
@@ -861,9 +850,6 @@ def main():
                                          plot=plot,
                                          saveplot=saveplot,
                                          max_num_img=max_images,
-                                         tel_id=tel_id,
-                                         event_id=event_id,
-                                         cam_id=cam_id,
                                          debug=debug)
 
 if __name__ == "__main__":
