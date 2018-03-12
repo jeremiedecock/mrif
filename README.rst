@@ -97,7 +97,7 @@ of the shared system directories.
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    python3 setup.py install
+    python3 setup.py --user install
 
 .. There's also a package for Debian/Ubuntu::
 .. 
@@ -105,7 +105,7 @@ As an alternative, you can install PyWI from the downloaded source code::
 
 If PyWI is already installed on your system you can upgrade it with this command::
 
-    pip install --upgrade pywi
+    pip install --user --upgrade pywi
 
 To uninstall PyWI, type::
 
@@ -130,11 +130,11 @@ of the shared system directories.
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    py setup.py install
+    py setup.py install --user
 
 If PyWI is already installed on your system you can upgrade it with this command::
 
-    py -m pip install --upgrade pywi
+    py -m pip install --user --upgrade pywi
 
 To uninstall PyWI, type::
 
