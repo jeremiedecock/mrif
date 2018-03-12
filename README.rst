@@ -151,7 +151,7 @@ Example
 1. Download a sample image (`shower.fits <https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits>`_)
 2. In your system terminal, type::
   
-    pywi_mrfilter shower.fits
+    pywi-mrfilter shower.fits
 
 3. Use the ``-h`` option for more options
 
