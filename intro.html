@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; MultiResolution Image Filter 0.1.dev7 documentation</title>
+  <title>Introduction &mdash; Python Wavelet Imaging 0.1.dev8 documentation</title>
   
 
   
@@ -35,9 +35,9 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="MultiResolution Image Filter 0.1.dev7 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev8 documentation" href="index.html"/>
         <link rel="next" title="SAp CTA data pipeline API" href="api.html"/>
-        <link rel="prev" title="MultiResolution Image Filter’s Documentation" href="index.html"/> 
+        <link rel="prev" title="Python Wavelet Imaging Documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -56,7 +56,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> MultiResolution Image Filter
+            <a href="index.html" class="icon icon-home"> Python Wavelet Imaging
           
 
           
@@ -122,7 +122,7 @@
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MultiResolution Image Filter</a>
+          <a href="index.html">Python Wavelet Imaging</a>
         
       </nav>
 
@@ -173,16 +173,16 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael</p>
+<p>Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)</p>
 <ul class="simple">
-<li>Online documentation: <a class="reference external" href="https://jeremiedecock.github.io/mrif/">https://jeremiedecock.github.io/mrif/</a></li>
-<li>Source code: <a class="reference external" href="https://github.com/jeremiedecock/mrif">https://github.com/jeremiedecock/mrif</a></li>
-<li>Issue tracker: <a class="reference external" href="https://github.com/jeremiedecock/mrif/issues">https://github.com/jeremiedecock/mrif/issues</a></li>
-<li>MRIF on PyPI: <a class="reference external" href="https://pypi.org/project/mrif/">https://pypi.org/project/mrif/</a></li>
+<li>Online documentation: <a class="reference external" href="https://jeremiedecock.github.io/pywi/">https://jeremiedecock.github.io/pywi/</a></li>
+<li>Source code: <a class="reference external" href="https://github.com/jeremiedecock/pywi">https://github.com/jeremiedecock/pywi</a></li>
+<li>Issue tracker: <a class="reference external" href="https://github.com/jeremiedecock/pywi/issues">https://github.com/jeremiedecock/pywi/issues</a></li>
+<li>PyWI on PyPI: <a class="reference external" href="https://pypi.org/project/pywi/">https://pypi.org/project/pywi/</a></li>
 </ul>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>MRIF is an image filtering library aimed at removing additive background noise
+<p>PyWI is an image filtering library aimed at removing additive background noise
 from raster graphics images.</p>
 <ul class="simple">
 <li>Input: a FITS file containing the raster graphics to clean (i.e. an image
@@ -198,13 +198,13 @@ electromagnetic showers produced with Imaging Atmospheric Cherenkov
 Telescopes). This library is written in Python and is based on the existing
 Cosmostat tools iSAp (Interactive Sparse Astronomical data analysis Packages
 <a class="reference external" href="http://www.cosmostat.org/software/isap/">http://www.cosmostat.org/software/isap/</a>).</p>
-<p>The MRIF library also contains a dedicated package to optimize the image filter
+<p>The PyWI library also contains a dedicated package to optimize the image filter
 parameters for a given set of images (i.e. to adapt the filter to a specific
 problem). From a given training set of images (containing pairs of noised and
 clean images) and a given performance estimator (a function that assess the
 image filter parameters comparing the cleaned image to the actual clean image),
 the optimizer can determine the optimal filtering level for each scale.</p>
-<p>The MRIF library contains:</p>
+<p>The PyWI library contains:</p>
 <ul class="simple">
 <li>wavelet transform and wavelet filtering functions for image multiresolution
 analysis and filtering;</li>
@@ -239,42 +239,42 @@ strategies”, Springer Science &amp; Business Media);</li>
 <span id="install"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="gnu-linux">
 <h3>Gnu/Linux<a class="headerlink" href="#gnu-linux" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall MRIF with these commands (in a
+<p>You can install, upgrade, uninstall PyWI with these commands (in a
 terminal):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">mrif</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">mrif</span>
-<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">mrif</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the MRIF source code:</p>
+<p>Or, if you have downloaded the PyWI source code:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall MRIF with these commands (in a
+<p>You can install, upgrade, uninstall PyWI with these commands (in a
 <a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">command prompt</a>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">mrif</span>
-<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">mrif</span>
-<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">uninstall</span> <span class="n">mrif</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
+<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the MRIF source code:</p>
+<p>Or, if you have downloaded the PyWI source code:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="macosx">
 <h3>MacOSX<a class="headerlink" href="#macosx" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall MRIF with these commands (in a
+<p>You can install, upgrade, uninstall PyWI with these commands (in a
 terminal):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">mrif</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">mrif</span>
-<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">mrif</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the MRIF source code:</p>
+<p>Or, if you have downloaded the PyWI source code:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
@@ -303,7 +303,7 @@ library. It should generate two executables named <code class="docutils literal"
 <li><p class="first">Download a sample image (<a class="reference external" href="https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits">shower.fits</a>)</p>
 </li>
 <li><p class="first">In your system terminal, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mrif_mrfilter</span> <span class="n">shower</span><span class="o">.</span><span class="n">fits</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pywi_mrfilter</span> <span class="n">shower</span><span class="o">.</span><span class="n">fits</span>
 </pre></div>
 </div>
 </li>
@@ -311,15 +311,14 @@ library. It should generate two executables named <code class="docutils literal"
 </li>
 </ol>
 <p>A “benchmark mode” can also be used to clean images and assess cleaning
-algorithms (it’s still a bit experimental): use the same instructions than for
-step 2.1 with the additional option <code class="docutils literal"><span class="pre">-b</span> <span class="pre">1</span></code> in each command (and put several
-fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fits</span></code>)</p>
+algorithms (it’s still a bit experimental): use the additional option <code class="docutils literal"><span class="pre">-b</span> <span class="pre">all</span></code>
+in each command (and put several fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fits</span></code>)</p>
 </div>
 <div class="section" id="bug-reports">
 <h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this headline">¶</a></h2>
-<p>To search for bugs or report them, please use the MRIF Bug Tracker at:</p>
+<p>To search for bugs or report them, please use the PyWI Bug Tracker at:</p>
 <blockquote>
-<div><a class="reference external" href="https://github.com/jeremiedecock/mrif/issues">https://github.com/jeremiedecock/mrif/issues</a></div></blockquote>
+<div><a class="reference external" href="https://github.com/jeremiedecock/pywi/issues">https://github.com/jeremiedecock/pywi/issues</a></div></blockquote>
 </div>
 <div class="section" id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
@@ -344,7 +343,7 @@ fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fit
         <a href="api.html" class="btn btn-neutral float-right" title="SAp CTA data pipeline API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="MultiResolution Image Filter’s Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Python Wavelet Imaging Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -353,7 +352,7 @@ fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fit
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2010-2015, Jérémie Decock.
+        &copy; Copyright 2016-2018, Jérémie Decock.
 
     </p>
   </div>
@@ -375,7 +374,7 @@ fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fit
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev7',
+            VERSION:'0.1.dev8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

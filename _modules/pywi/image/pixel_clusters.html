@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>mrif.image.pixel_clusters &mdash; MultiResolution Image Filter 0.1.dev7 documentation</title>
+  <title>pywi.image.pixel_clusters &mdash; Python Wavelet Imaging 0.1.dev8 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="MultiResolution Image Filter 0.1.dev7 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev8 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -55,7 +55,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> MultiResolution Image Filter
+            <a href="../../../index.html" class="icon icon-home"> Python Wavelet Imaging
           
 
           
@@ -107,7 +107,7 @@
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">MultiResolution Image Filter</a>
+          <a href="../../../index.html">Python Wavelet Imaging</a>
         
       </nav>
 
@@ -139,7 +139,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>mrif.image.pixel_clusters</li>
+      <li>pywi.image.pixel_clusters</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +156,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for mrif.image.pixel_clusters</h1><div class="highlight"><pre>
+  <h1>Source code for pywi.image.pixel_clusters</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -190,7 +190,7 @@
 <span class="c1"># See: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html</span>
 
 
-<div class="viewcode-block" id="get_islands"><a class="viewcode-back" href="../../../api_image_pixel_clusters.html#mrif.image.pixel_clusters.get_islands">[docs]</a><span class="k">def</span> <span class="nf">get_islands</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+<div class="viewcode-block" id="get_islands"><a class="viewcode-back" href="../../../api_image_pixel_clusters.html#pywi.image.pixel_clusters.get_islands">[docs]</a><span class="k">def</span> <span class="nf">get_islands</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ...</span>
 
@@ -236,7 +236,7 @@
     <span class="k">return</span> <span class="n">filtered_array</span><span class="p">,</span> <span class="n">label_array</span><span class="p">,</span> <span class="n">num_labels</span></div>
 
 
-<div class="viewcode-block" id="kill_isolated_pixels"><a class="viewcode-back" href="../../../api_image_pixel_clusters.html#mrif.image.pixel_clusters.kill_isolated_pixels">[docs]</a><span class="k">def</span> <span class="nf">kill_isolated_pixels</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+<div class="viewcode-block" id="kill_isolated_pixels"><a class="viewcode-back" href="../../../api_image_pixel_clusters.html#pywi.image.pixel_clusters.kill_isolated_pixels">[docs]</a><span class="k">def</span> <span class="nf">kill_isolated_pixels</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ...</span>
 
@@ -313,7 +313,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2010-2015, Jérémie Decock.
+        &copy; Copyright 2016-2018, Jérémie Decock.
 
     </p>
   </div>
@@ -335,7 +335,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev7',
+            VERSION:'0.1.dev8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

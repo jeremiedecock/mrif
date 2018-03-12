@@ -2,6 +2,6 @@
 optimization.bruteforce
 =======================
 
-.. automodule:: mrif.optimization.bruteforce
+.. automodule:: pywi.optimization.bruteforce
    :members:
 

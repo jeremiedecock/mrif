@@ -2,6 +2,6 @@
 io.images
 =========
 
-.. automodule:: mrif.io.images
+.. automodule:: pywi.io.images
    :members:
 

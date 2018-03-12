@@ -1,4 +1,4 @@
-.. currentmodule:: mrif
+.. currentmodule:: pywi
 
 ============
 Introduction

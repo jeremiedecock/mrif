@@ -2,6 +2,6 @@
 image.pixel_clusters
 ====================
 
-.. automodule:: mrif.image.pixel_clusters
+.. automodule:: pywi.image.pixel_clusters
    :members:
 
