@@ -41,10 +41,7 @@
 __version__ = '0.1.dev9'
 
 __all__ = ['benchmark',
-           'classifiers',
            'denoising',
            'image',
            'io',
-           'optimization',
-           'reco',
-           'utils']
+           'optimization']
