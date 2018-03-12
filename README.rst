@@ -63,18 +63,33 @@ Note:
 Dependencies
 ============
 
-* Python >= 3.0
-* Numpy
-* Scipy
-* Scikit-image
-* Pillow (a.k.a. PIL)
-* Astropy (if you want to read Fits files)
-* _Cosmostat _iSAP Sparce2D
+.. Highly inspired by http://docs.astropy.org/en/stable/_sources/install.rst.txt
+
+PyWI has the following strict requirements:
+
+* `Python <https://www.python.org/>`_ 3.5 or 3.6
+* `Numpy <http://www.numpy.org/>`_
+
+PyWI also depends on other packages for optional features:
+
+* `Scipy <https://www.scipy.org/>`_
+* `Scikit-image <http://scikit-image.org/>`_
+* `Pillow (a.k.a. PIL) <https://pillow.readthedocs.io/en/latest/>`_ to read and write many image formats (PNG, JPEG, TIFF, ...)
+* `Astropy <http://www.astropy.org/>`_ to provide Fits file format
+* `Matplotlib <http://matplotlib.org/>`_ 1.5 or later to provide plotting functionality
+* `Pandas <http://pandas.pydata.org/>`_
+* `Cosmostat iSAP Sparce2D <http://www.cosmostat.org/software/isap/>`_
+
+However, note that these only need to be installed if those particular features
+are needed. PyWI will import even if these dependencies are not installed.
 
 .. _install:
 
 Installation
 ============
+
+Using pip
+---------
 
 Most major projects upload official packages to the *Python Package Index*.
 They can be installed on most operating systems using Python standard `pip`
@@ -82,12 +97,44 @@ package manager.
 
 Note that you need to have `Python3.x` and `pip` already installed on your system.
 
-MacOSX and Gnu/Linux
---------------------
+.. warning::
+
+    Users of the Anaconda python distribution should follow the instructions
+    for :ref:`anaconda_install`.
+
+.. note::
+
+    You will need a C compiler (e.g. ``gcc`` or ``clang``) to be installed (see
+    `Building from source`_ below) to install some dependencies (e.g. Numpy).
+
+.. note::
+
+    The ``--no-deps`` flag is optional, but highly recommended if you already
+    have Numpy installed, since otherwise pip will sometimes try to "help" you
+    by upgrading your Numpy installation, which may not always be desired.
+
+.. note::
+
+    If you get a ``PermissionError`` this means that you do not have the
+    required administrative access to install new packages to your Python
+    installation.  In this case you may consider using the ``--user`` option
+    to install the package into your home directory. You can read more
+    about how to do this in the `pip documentation
+    <https://pip.pypa.io/en/stable/user_guide/#user-installs>`_.
+
+    Alternatively, if you intend to do development on other software that uses
+    PyWI, such as an affiliated package, consider installing PyWI into a
+    `virtualenv <http://docs.astropy.org/en/stable/development/workflow/virtualenv_detail.html#using-virtualenv>`_.
+
+    Do **not** install PyWI or other third-party packages using ``sudo``
+    unless you are fully aware of the risks.
+
+On MacOSX and Gnu/Linux
+~~~~~~~~~~~~~~~~~~~~~~~
 
 You can install PyWI using the following command (in a terminal)::
 
-    pip install pywi
+    pip install pywi --no-deps
 
 .. python -m pip install --user numpy scipy matplotlib pandas
 
@@ -100,7 +147,7 @@ You can install PyWI using the following command (in a terminal)::
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    python3 setup.py install
+    python3 setup.py install --no-deps
 
 .. There's also a package for Debian/Ubuntu::
 .. 
@@ -114,8 +161,8 @@ To uninstall PyWI, type::
 
     pip uninstall pywi
 
-Windows
--------
+On Windows
+~~~~~~~~~~
 
 .. Note:
 .. 
@@ -125,7 +172,7 @@ Windows
 
 You can install PyWI using the following command (in a `command prompt`_)::
 
-    py -m pip install pywi
+    py -m pip install pywi --no-deps
 
 .. It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
 .. which can cause problems) to install packages in your local user space instead
@@ -136,7 +183,7 @@ You can install PyWI using the following command (in a `command prompt`_)::
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    py setup.py install
+    py setup.py install --no-deps
 
 If PyWI is already installed on your system you can upgrade it with this command::
 
@@ -145,6 +192,19 @@ If PyWI is already installed on your system you can upgrade it with this command
 To uninstall PyWI, type::
 
     py -m uninstall pywi
+
+
+.. _anaconda_install:
+
+Using conda
+-----------
+
+The Anaconda package will be available soon.
+
+.. note::
+
+    Attempting to use `pip <https://pip.pypa.io>`__ to upgrade your installation of PyWI may result
+    in a corrupted installation.
 
 Cosmostat iSAP Sparce2D installation
 ====================================
@@ -185,5 +245,3 @@ To search for bugs or report them, please use the PyWI Bug Tracker at:
 
 .. _PyWI: https://github.com/jeremiedecock/pywi
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
-.. _Cosmostat: http://www.cosmostat.org/
-.. _iSAP: http://www.cosmostat.org/software/isap

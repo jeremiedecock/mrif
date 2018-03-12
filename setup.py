@@ -77,7 +77,13 @@ PACKAGES = find_packages()
 # The following list contains all dependencies that Python will try to
 # install with this project
 # E.g. INSTALL_REQUIRES = ['pyserial >= 2.6']
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = ['numpy >= 1.14.0',
+                    'scipy >= 1.0.0',
+                    'scikit-image >= 0.13.1',
+                    'Pillow >= 5.0.0',
+                    'astropy >= 2.0.3',
+                    'pandas >= 0.22.0',
+                    'matplotlib >= 2.1.2']
 
 
 # E.g. SCRIPTS = ["examples/pyax12demo"]
