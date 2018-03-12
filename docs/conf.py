@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# MRIF documentation build configuration file, created by
+# PyWI documentation build configuration file, created by
 # sphinx-quickstart on Fri Dec  2 12:16:06 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -62,14 +62,14 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'MultiResolution Image Filter'
+project = 'Python Wavelet Imaging'
 authors = u'Jérémie Decock'
-copyright = u'2010-2015, %s' % (authors)
+copyright = u'2016-2018, %s' % (authors)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-project_version = __import__('mrif').__version__.split('.')
+project_version = __import__('pywi').__version__.split('.')
 # The short X.Y version.
 version = '.'.join(project_version[:2])
 # The full version, including alpha/beta/rc tags.
@@ -249,7 +249,7 @@ html_static_path = ['_static']
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'mrifdoc'
+htmlhelp_basename = 'pywidoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -275,7 +275,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'mrif.tex', 'MRIF Documentation',
+    (master_doc, 'pywi.tex', 'PyWI Documentation',
      authors, 'manual'),
 ]
 
@@ -317,7 +317,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mrif', 'MRIF Documentation',
+    (master_doc, 'pywi', 'PyWI Documentation',
      [authors], 1)
 ]
 
@@ -332,8 +332,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'mrif', 'MRIF Documentation',
-     authors, 'mrif', 'One line description of project.',
+    (master_doc, 'pywi', 'PyWI Documentation',
+     authors, 'pywi', 'One line description of project.',
      'Miscellaneous'),
 ]
 

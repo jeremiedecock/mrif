@@ -24,8 +24,8 @@ __all__ = ['ObjectiveFunction']
 
 import numpy as np
 
-from mrif.denoising.wavelets_mrfilter import WaveletTransform
-from mrif.benchmark import assess
+from pywi.denoising.wavelets_mrfilter import WaveletTransform
+from pywi.benchmark import assess
 
 
 def norm_angle_diff(angle_in_degrees):

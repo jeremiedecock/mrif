@@ -222,12 +222,12 @@ import numpy as np
 import os
 import time
 
-from mrif.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
-from mrif.io import images
+from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+from pywi.io import images
 
-from mrif.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
-from mrif.image.pixel_clusters import kill_isolated_pixels_stats
-from mrif.image.pixel_clusters import number_of_islands
+from pywi.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
+from pywi.image.pixel_clusters import kill_isolated_pixels_stats
+from pywi.image.pixel_clusters import number_of_islands
 
 # CONSTANTS ##################################################################
 
@@ -391,7 +391,7 @@ class WaveletTransform(AbstractCleaningAlgorithm):
             cmd += ' -U{}'.format(type_of_non_orthog_filters) if type_of_non_orthog_filters is not None else ''
             cmd += ' -n{}'.format(number_of_scales) if number_of_scales is not None else ''
             cmd += ' -K' if suppress_last_scale else ''
-            cmd += ' -k' if suppress_isolated_pixels else ''      # You should use scipy implementation instead (mrif/denoising/kill_isolated_pixels.py); it's much more efficient
+            cmd += ' -k' if suppress_isolated_pixels else ''      # You should use scipy implementation instead (pywi/denoising/kill_isolated_pixels.py); it's much more efficient
             cmd += ' -C{}'.format(coef_detection_method) if coef_detection_method is not None else ''
             cmd += ' -s{}'.format(k_sigma_noise_threshold) if k_sigma_noise_threshold is not None else ''
             cmd += ' -m{}'.format(noise_model) if noise_model is not None else ''

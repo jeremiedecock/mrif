@@ -24,8 +24,8 @@
 This module contains unit tests for the "image.kill_isolated_pixels" module.
 """
 
-from mrif.image.kill_isolated_pixels import kill_isolated_pixels
-from mrif.image.kill_isolated_pixels import kill_isolated_pixels_stats
+from pywi.image.kill_isolated_pixels import kill_isolated_pixels
+from pywi.image.kill_isolated_pixels import kill_isolated_pixels_stats
 
 import numpy as np
 

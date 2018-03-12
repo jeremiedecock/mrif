@@ -24,7 +24,7 @@ __all__ = []
 
 import json
 from scipy import optimize
-from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction
+from pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction
 
 def main():
 

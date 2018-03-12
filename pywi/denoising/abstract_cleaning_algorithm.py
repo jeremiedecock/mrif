@@ -32,11 +32,11 @@ import traceback
 
 import astropy.units as u
 
-from mrif.benchmark import assess
-from mrif.image.pixel_clusters import kill_isolated_pixels_stats
-from mrif.image.pixel_clusters import number_of_islands
-from mrif.io.images import image_generator
-import mrif.io.images
+from pywi.benchmark import assess
+from pywi.image.pixel_clusters import kill_isolated_pixels_stats
+from pywi.image.pixel_clusters import number_of_islands
+from pywi.io.images import image_generator
+import pywi.io.images
 
 ###############################################################################
 
@@ -238,7 +238,7 @@ class AbstractCleaningAlgorithm(object):
                     title_list = ["Input image", "Reference image", "Cleaned image"] 
 
                     if plot:
-                        mrif.io.images.plot_list(image_list,
+                        pywi.io.images.plot_list(image_list,
                                                      title_list=title_list,
                                                      metadata_dict=image.meta)
 
@@ -247,7 +247,7 @@ class AbstractCleaningAlgorithm(object):
                         plot_file_path = "{}_E{}_T{}{}".format(basename, image.meta["event_id"], image.meta["tel_id"], extension)
 
                         print("Saving {}".format(plot_file_path))
-                        mrif.io.images.mpl_save_list(image_list,
+                        pywi.io.images.mpl_save_list(image_list,
                                                          output_file_path=plot_file_path,
                                                          title_list=title_list,
                                                          metadata_dict=image.meta)

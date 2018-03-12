@@ -24,7 +24,7 @@
 This module contains unit tests for the "benchmark.assess" module.
 """
 
-from mrif.benchmark import assess
+from pywi.benchmark import assess
 
 import numpy as np
 

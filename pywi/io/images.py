@@ -120,7 +120,7 @@ def fill_nan_pixels(image, noise_distribution=None):
     image : array_like
         The image to process. `NaN` values are replaced **in-place** thus this
         function changes the provided object.
-    noise_distribution : `mrif.denoising.inverse_transform_sampling.EmpiricalDistribution`
+    noise_distribution : `pywi.denoising.inverse_transform_sampling.EmpiricalDistribution`
         The random generator to use to replace `NaN` pixels by random noise.
 
     Returns

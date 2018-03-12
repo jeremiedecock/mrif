@@ -44,14 +44,14 @@ except ImportError:
 
 # SETUP VARIABLES #############################################################
 
-from mrif import __version__ as VERSION
+from pywi import __version__ as VERSION
 
-AUTHOR_NAME = 'Jeremie DECOCK and Tino Michael'
+AUTHOR_NAME = 'Jeremie DECOCK'
 AUTHOR_EMAIL = 'jd.jdhp@gmail.com'
 
-PYPI_PACKAGE_NAME = 'mrif'
-PROJECT_SHORT_DESC = 'MultiResolution Image Filter'
-PROJECT_WEB_SITE_URL = 'https://github.com/jeremiedecock/mrif'
+PYPI_PACKAGE_NAME = 'pywi'
+PROJECT_SHORT_DESC = 'Python Wavelet Imaging'
+PROJECT_WEB_SITE_URL = 'https://github.com/jeremiedecock/pywi'
 
 # See :  http://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = ['Development Status :: 4 - Beta',
@@ -71,7 +71,7 @@ KEYWORDS = 'multiresolution image filter wavelet'
 # automatically with a recursive search (from the root directory of the
 # project).
 PACKAGES = find_packages()
-#PACKAGES = ['mrif']
+#PACKAGES = ['pywi']
 
 
 # The following list contains all dependencies that Python will try to
@@ -95,10 +95,10 @@ SCRIPTS = []
 #   }
 ENTRY_POINTS = {
   'console_scripts': [
-      'dp-simtel-count = mrif.io.simtel:main_count_simtel_events',
-      'dp-simtel-ls = mrif.io.simtel:main_list_simtel_content',
-      'dp-simtel-show = mrif.io.simtel:main_show_image',
-      'dp-simtel-show-pe = mrif.io.simtel:main_show_pe_image',
+      'dp-simtel-count = pywi.io.simtel:main_count_simtel_events',
+      'dp-simtel-ls = pywi.io.simtel:main_list_simtel_content',
+      'dp-simtel-show = pywi.io.simtel:main_show_image',
+      'dp-simtel-show-pe = pywi.io.simtel:main_show_pe_image',
   ],
 }
 

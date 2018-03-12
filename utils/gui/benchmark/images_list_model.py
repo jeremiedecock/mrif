@@ -26,7 +26,7 @@ import json
 import math
 import os
 
-from mrif.io import images
+from pywi.io import images
 
 class ImagesListModel(object):
 

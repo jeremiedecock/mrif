@@ -1,20 +1,20 @@
-===================================
-MRIF - MultiResolution Image Filter
-===================================
+=============================
+PyWI - Python Wavelet Imaging
+=============================
 
-Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org) and Tino Michael
+Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 
-* Online documentation: https://jeremiedecock.github.io/mrif/
-* Source code: https://github.com/jeremiedecock/mrif
-* Issue tracker: https://github.com/jeremiedecock/mrif/issues
-* MRIF on PyPI: https://pypi.org/project/mrif/
+* Online documentation: https://jeremiedecock.github.io/pywi/
+* Source code: https://github.com/jeremiedecock/pywi
+* Issue tracker: https://github.com/jeremiedecock/pywi/issues
+* PyWI on PyPI: https://pypi.org/project/pywi/
 
 .. Former documentation: http://sap-cta-data-pipeline.readthedocs.io/en/latest/
 
 Description
 ===========
 
-MRIF is an image filtering library aimed at removing additive background noise
+PyWI is an image filtering library aimed at removing additive background noise
 from raster graphics images.
 
 * Input: a FITS file containing the raster graphics to clean (i.e. an image
@@ -31,14 +31,14 @@ Telescopes). This library is written in Python and is based on the existing
 Cosmostat tools iSAp (Interactive Sparse Astronomical data analysis Packages
 http://www.cosmostat.org/software/isap/).
 
-The MRIF library also contains a dedicated package to optimize the image filter
+The PyWI library also contains a dedicated package to optimize the image filter
 parameters for a given set of images (i.e. to adapt the filter to a specific
 problem). From a given training set of images (containing pairs of noised and
 clean images) and a given performance estimator (a function that assess the
 image filter parameters comparing the cleaned image to the actual clean image),
 the optimizer can determine the optimal filtering level for each scale.
 
-The MRIF library contains:
+The PyWI library contains:
 
 * wavelet transform and wavelet filtering functions for image multiresolution
   analysis and filtering;
@@ -77,20 +77,20 @@ Installation
 Gnu/Linux
 ---------
 
-You can install, upgrade, uninstall MRIF with these commands (in a
+You can install, upgrade, uninstall PyWI with these commands (in a
 terminal)::
 
-    pip install --pre mrif
-    pip install --upgrade mrif
-    pip uninstall mrif
+    pip install --pre pywi
+    pip install --upgrade pywi
+    pip uninstall pywi
 
-Or, if you have downloaded the MRIF source code::
+Or, if you have downloaded the PyWI source code::
 
     python3 setup.py install
 
 .. There's also a package for Debian/Ubuntu::
 .. 
-..     sudo apt-get install mrif
+..     sudo apt-get install pywi
 
 Windows
 -------
@@ -101,14 +101,14 @@ Windows
 ..     3.4 under Windows 7.
 ..     It should also work with recent Windows systems.
 
-You can install, upgrade, uninstall MRIF with these commands (in a
+You can install, upgrade, uninstall PyWI with these commands (in a
 `command prompt`_)::
 
-    py -m pip install --pre mrif
-    py -m pip install --upgrade mrif
-    py -m pip uninstall mrif
+    py -m pip install --pre pywi
+    py -m pip install --upgrade pywi
+    py -m pip uninstall pywi
 
-Or, if you have downloaded the MRIF source code::
+Or, if you have downloaded the PyWI source code::
 
     py setup.py install
 
@@ -121,14 +121,14 @@ MacOSX
 ..     3.5 under MacOSX 10.9 (*Mavericks*).
 ..     It should also work with recent MacOSX systems.
 
-You can install, upgrade, uninstall MRIF with these commands (in a
+You can install, upgrade, uninstall PyWI with these commands (in a
 terminal)::
 
-    pip install --pre mrif
-    pip install --upgrade mrif
-    pip uninstall mrif
+    pip install --pre pywi
+    pip install --upgrade pywi
+    pip uninstall pywi
 
-Or, if you have downloaded the MRIF source code::
+Or, if you have downloaded the PyWI source code::
 
     python3 setup.py install
 
@@ -151,7 +151,7 @@ Example
 1. Download a sample image (`shower.fits <https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits>`_)
 2. In your system terminal, type::
   
-    mrif_mrfilter shower.fits
+    pywi_mrfilter shower.fits
 
 3. Use the ``-h`` option for more options
 
@@ -162,12 +162,12 @@ in each command (and put several fits files in input e.g. ``\*.fits``)
 Bug reports
 ===========
 
-To search for bugs or report them, please use the MRIF Bug Tracker at:
+To search for bugs or report them, please use the PyWI Bug Tracker at:
 
-    https://github.com/jeremiedecock/mrif/issues
+    https://github.com/jeremiedecock/pywi/issues
 
 
-.. _MRIF: https://github.com/jeremiedecock/mrif
+.. _PyWI: https://github.com/jeremiedecock/pywi
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
 .. _Cosmostat: http://www.cosmostat.org/
 .. _iSAP: http://www.cosmostat.org/software/isap

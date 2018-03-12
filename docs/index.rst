@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-MultiResolution Image Filter's Documentation
-============================================
+Python Wavelet Imaging Documentation
+====================================
 
-MultiResolution Image Filter.
+A multiresolution image analyser.
 
 Note:
 
@@ -21,10 +21,10 @@ Contents:
    API <api>
    developer
 
-* Online documentation: https://jeremiedecock.github.io/mrif/
-* Source code: https://github.com/jeremiedecock/mrif
-* Issue tracker: https://github.com/jeremiedecock/mrif/issues
-* MRIF on PyPI: https://pypi.org/project/mrif/
+* Online documentation: https://jeremiedecock.github.io/pywi/
+* Source code: https://github.com/jeremiedecock/pywi
+* Issue tracker: https://github.com/jeremiedecock/pywi/issues
+* PyWI on PyPI: https://pypi.org/project/pywi/
 
 Indices and tables
 ==================
@@ -36,6 +36,6 @@ Indices and tables
 Credits
 =======
 
-Created by `Jérémie Decock`_ and Tino Michael.
+Created by `Jérémie Decock`_.
 
 .. _Jérémie Decock: http://www.jdhp.org

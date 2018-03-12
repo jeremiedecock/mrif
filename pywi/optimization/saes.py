@@ -26,7 +26,7 @@ import math
 import numpy as np
 
 import json
-from mrif.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
+from pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
 
 def main():
 

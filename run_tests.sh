@@ -6,7 +6,7 @@ export PYTHONPATH=.:$PYTHONPATH
 
 echo
 echo
-python3 -m doctest ./mrif/io/images.py
+python3 -m doctest ./pywi/io/images.py
 
 # UNITTESTS ###################################################################
 

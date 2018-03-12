@@ -48,10 +48,10 @@ import os
 import numpy as np
 import time
 
-import mrif.denoising
-from mrif.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
-from mrif.benchmark import assess
-from mrif.io import images
+import pywi.denoising
+from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+from pywi.benchmark import assess
+from pywi.io import images
 
 class FFT(AbstractCleaningAlgorithm):
 

@@ -107,12 +107,12 @@ import numpy as np
 import os
 import time
 
-from mrif.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
-from mrif.io import images
+from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+from pywi.io import images
 
-from mrif.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
-from mrif.image.pixel_clusters import kill_isolated_pixels_stats
-from mrif.image.pixel_clusters import number_of_islands
+from pywi.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
+from pywi.image.pixel_clusters import kill_isolated_pixels_stats
+from pywi.image.pixel_clusters import number_of_islands
 
 # CONSTANTS ##################################################################
 

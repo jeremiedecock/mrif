@@ -2,6 +2,6 @@
 benchmark.assess
 ================
 
-.. automodule:: mrif.benchmark.assess
+.. automodule:: pywi.benchmark.assess
    :members:
 

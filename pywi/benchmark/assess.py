@@ -39,8 +39,8 @@ import collections
 import numpy as np
 import math
 
-from mrif.image.pixel_clusters import kill_isolated_pixels
-from mrif.image.pixel_clusters import kill_isolated_pixels_stats
+from pywi.image.pixel_clusters import kill_isolated_pixels
+from pywi.image.pixel_clusters import kill_isolated_pixels_stats
 
 from skimage.measure import compare_ssim as ssim
 from skimage.measure import compare_psnr as psnr

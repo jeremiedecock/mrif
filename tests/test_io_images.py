@@ -24,7 +24,7 @@
 This module contains unit tests for the "io.images" module.
 """
 
-from mrif.io import images
+from pywi.io import images
 
 import numpy as np
 import os
