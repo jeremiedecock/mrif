@@ -79,9 +79,6 @@ class AbstractCleaningAlgorithm(object):
             saveplot=None,
             ref_img_as_input=False,     # A hack to easily produce CSV files...
             max_num_img=None,
-            tel_id=None,
-            event_id=None,
-            cam_id=None,
             debug=False):
         """A convenient optional wrapper to simplify the image cleaning analysis.
 
@@ -129,20 +126,8 @@ class AbstractCleaningAlgorithm(object):
         if benchmark_method is not None:
             io_list = []           # The list of returned dictionaries
 
-        if tel_id is not None:
-            tel_id = [tel_id]
-
-        if event_id is not None:
-            event_id = [event_id]
-
-        if cam_id is not None:
-            cam_id = [cam_id]
-
         for image in image_generator(input_file_or_dir_path_list,
-                                     max_num_images=max_num_img,
-                                     tel_filter_list=tel_id,
-                                     ev_filter_list=event_id,
-                                     cam_filter_list=cam_id):
+                                     max_num_images=max_num_img):
 
             input_file_path = image.meta['file_path']
 
@@ -154,10 +139,6 @@ class AbstractCleaningAlgorithm(object):
 
             try:
                 # READ THE INPUT FILE #####################################
-
-                if self.verbose:
-                    print("TEL{}_EV{}".format(image.meta["tel_id"],
-                                              image.meta["event_id"]))
 
                 reference_img = image.reference_image
                 pixels_position = image.pixels_position
@@ -243,9 +224,7 @@ class AbstractCleaningAlgorithm(object):
                                                      metadata_dict=image.meta)
 
                     if saveplot is not None:
-                        basename, extension = os.path.splitext(saveplot)
-                        plot_file_path = "{}_E{}_T{}{}".format(basename, image.meta["event_id"], image.meta["tel_id"], extension)
-
+                        plot_file_path = saveplot
                         print("Saving {}".format(plot_file_path))
                         pywi.io.images.mpl_save_list(image_list,
                                                          output_file_path=plot_file_path,
