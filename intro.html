@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; Python Wavelet Imaging 0.1.dev8 documentation</title>
+  <title>Introduction &mdash; Python Wavelet Imaging 0.1.dev10 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev8 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev10 documentation" href="index.html"/>
         <link rel="next" title="SAp CTA data pipeline API" href="api.html"/>
         <link rel="prev" title="Python Wavelet Imaging Documentation" href="index.html"/> 
 
@@ -95,9 +95,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#gnu-linux">Gnu/Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macosx-and-gnu-linux">MacOSX and Gnu/Linux</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#macosx">MacOSX</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cosmostat-isap-sparce2d-installation">Cosmostat iSAP Sparce2D installation</a></li>
@@ -232,50 +231,58 @@ strategies”, Springer Science &amp; Business Media);</li>
 <li>Numpy</li>
 <li>Scipy</li>
 <li>Scikit-image</li>
+<li>Pillow (a.k.a. PIL)</li>
+<li>Astropy (if you want to read Fits files)</li>
 <li>_Cosmostat _iSAP Sparce2D</li>
 </ul>
 </div>
 <div class="section" id="installation">
 <span id="install"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="gnu-linux">
-<h3>Gnu/Linux<a class="headerlink" href="#gnu-linux" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall PyWI with these commands (in a
-terminal):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
-<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
+<p>Most major projects upload official packages to the <em>Python Package Index</em>.
+They can be installed on most operating systems using Python standard <cite>pip</cite>
+package manager.</p>
+<p>Note that you need to have <cite>Python3.x</cite> and <cite>pip</cite> already installed on your system.</p>
+<div class="section" id="macosx-and-gnu-linux">
+<h3>MacOSX and Gnu/Linux<a class="headerlink" href="#macosx-and-gnu-linux" title="Permalink to this headline">¶</a></h3>
+<p>You can install PyWI using the following command (in a terminal):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the PyWI source code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<p>It is recommended to use the –user flag to <code class="docutils literal"><span class="pre">pip</span></code> (note: do not use sudo pip,
+which can cause problems) to install packages in your local user space instead
+of the shared system directories.</p>
+<p>As an alternative, you can install PyWI from the downloaded source code:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">user</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>If PyWI is already installed on your system you can upgrade it with this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+</pre></div>
+</div>
+<p>To uninstall PyWI, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="windows">
 <h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall PyWI with these commands (in a
-<a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">command prompt</a>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
-<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
-<span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
+<p>You can install PyWI using the following command (in a <a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">command prompt</a>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the PyWI source code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<p>It is recommended to use the –user flag to <code class="docutils literal"><span class="pre">pip</span></code> (note: do not use sudo pip,
+which can cause problems) to install packages in your local user space instead
+of the shared system directories.</p>
+<p>As an alternative, you can install PyWI from the downloaded source code:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="macosx">
-<h3>MacOSX<a class="headerlink" href="#macosx" title="Permalink to this headline">¶</a></h3>
-<p>You can install, upgrade, uninstall PyWI with these commands (in a
-terminal):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="n">pywi</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
-<span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
+<p>If PyWI is already installed on your system you can upgrade it with this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
 </pre></div>
 </div>
-<p>Or, if you have downloaded the PyWI source code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<p>To uninstall PyWI, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 </div>
@@ -300,19 +307,18 @@ library. It should generate two executables named <code class="docutils literal"
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Download a sample image (<a class="reference external" href="https://raw.githubusercontent.com/jdhp-misc/sample-images/master/shower.fits">shower.fits</a>)</p>
+<li><p class="first">Download a sample image (<a class="reference external" href="https://gist.githubusercontent.com/jeremiedecock/144c83f74e46b171ab3a426230d40848/raw/4a9ea99dd18504baff404a074a4e7541d98a50c5/archives_ngc3576.png">archives_ngc3576.png</a>)</p>
 </li>
-<li><p class="first">In your system terminal, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pywi_mrfilter</span> <span class="n">shower</span><span class="o">.</span><span class="n">fits</span>
+<li><p class="first">In your system terminal, from the directory that contains the sample image, type:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pywi</span><span class="o">-</span><span class="n">mrtransform</span> <span class="o">-</span><span class="n">t</span> <span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">0</span> <span class="o">--</span><span class="n">plot</span> <span class="n">archives_ngc3576</span><span class="o">.</span><span class="n">png</span>
+<span class="n">pywi</span><span class="o">-</span><span class="n">mrfilter</span> <span class="o">-</span><span class="n">s</span> <span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">0</span> <span class="o">--</span><span class="n">plot</span> <span class="n">archives_ngc3576</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Use the <code class="docutils literal"><span class="pre">-h</span></code> option for more options</p>
+<li><p class="first">Type <code class="docutils literal"><span class="pre">pywi-mrtransform</span> <span class="pre">-h</span></code> or <code class="docutils literal"><span class="pre">pywi-mrfilter</span> <span class="pre">-h</span></code> to display the list of
+available options and their documentation.</p>
 </li>
 </ol>
-<p>A “benchmark mode” can also be used to clean images and assess cleaning
-algorithms (it’s still a bit experimental): use the additional option <code class="docutils literal"><span class="pre">-b</span> <span class="pre">all</span></code>
-in each command (and put several fits files in input e.g. <code class="docutils literal"><span class="pre">\*.fits</span></code>)</p>
 </div>
 <div class="section" id="bug-reports">
 <h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this headline">¶</a></h2>
@@ -374,7 +380,7 @@ in each command (and put several fits files in input e.g. <code class="docutils 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev8',
+            VERSION:'0.1.dev10',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

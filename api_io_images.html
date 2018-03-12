@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>io.images &mdash; Python Wavelet Imaging 0.1.dev8 documentation</title>
+  <title>io.images &mdash; Python Wavelet Imaging 0.1.dev10 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev8 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev10 documentation" href="index.html"/>
         <link rel="up" title="SAp CTA data pipeline API" href="api.html"/>
         <link rel="next" title="optimization.bruteforce" href="api_optimization_bruteforce.html"/>
         <link rel="prev" title="image.pixel_clusters" href="api_image_pixel_clusters.html"/> 
@@ -276,7 +276,7 @@ and directories path).</li>
 
 <dl class="function">
 <dt id="pywi.io.images.image_generator">
-<code class="descclassname">pywi.io.images.</code><code class="descname">image_generator</code><span class="sig-paren">(</span><em>path_list</em>, <em>max_num_images=None</em>, <em>tel_filter_list=None</em>, <em>ev_filter_list=None</em>, <em>cam_filter_list=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#image_generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.image_generator" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pywi.io.images.</code><code class="descname">image_generator</code><span class="sig-paren">(</span><em>path_list</em>, <em>max_num_images=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#image_generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.image_generator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterable sequence all calibrated images in <cite>path_list</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -286,9 +286,6 @@ and directories path).</li>
 <li><strong>path_list</strong> – The path of files containing the images to extract. It can contain
 FITS/Simtel files and directories.</li>
 <li><strong>max_num_images</strong> – The maximum number of images to iterate.</li>
-<li><strong>tel_filter_list</strong> – Only iterate images from telescopes defined in this list.</li>
-<li><strong>ev_filter_list</strong> – Only iterate images from events defined in this list.</li>
-<li><strong>cam_filter_list</strong> – Only iterate images from cameras defined in this list.</li>
 </ul>
 </td>
 </tr>
@@ -301,8 +298,31 @@ in <cite>path_list</cite>.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pywi.io.images.load_image">
+<code class="descclassname">pywi.io.images.</code><code class="descname">load_image</code><span class="sig-paren">(</span><em>input_file_path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#load_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.load_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the image array contained in the given image file.</p>
+<p>So far, this function convert all multi-channel input images as
+mono-channel grayscale.</p>
+<p>The list of supported formats is available in the following page:
+<a class="reference external" href="https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html">https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html</a></p>
+<p>Fits format is also supported thanks to astropy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The path of the image file to load</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The loaded image</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="pywi.io.images.load_fits">
-<code class="descclassname">pywi.io.images.</code><code class="descname">load_fits</code><span class="sig-paren">(</span><em>input_file_path</em>, <em>hdu_index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#load_fits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.load_fits" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pywi.io.images.</code><code class="descname">load_fits</code><span class="sig-paren">(</span><em>input_file_path</em>, <em>hdu_index=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#load_fits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.load_fits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the image array contained in the given HDU of the given FITS file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -365,6 +385,27 @@ images stored in different HDU)</li>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="pywi.io.images.save_image">
+<code class="descclassname">pywi.io.images.</code><code class="descname">save_image</code><span class="sig-paren">(</span><em>image_array</em>, <em>output_file_path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#save_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.save_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the image array <cite>image</cite> in the given file <cite>output_file_path</cite>.</p>
+<p>The list of supported formats is available in the following page:
+<a class="reference external" href="https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html">https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html</a></p>
+<p>Fits format is also supported thanks to astropy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>image</strong> (<em>array_like</em>) – The image to save</li>
+<li><strong>output_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The destination path of the image</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -411,7 +452,7 @@ images stored in different HDU)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev8',
+            VERSION:'0.1.dev10',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

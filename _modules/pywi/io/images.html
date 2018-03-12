@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.io.images &mdash; Python Wavelet Imaging 0.1.dev8 documentation</title>
+  <title>pywi.io.images &mdash; Python Wavelet Imaging 0.1.dev10 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev8 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev10 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -183,10 +183,12 @@
            <span class="s1">&#39;image_files_in_dir&#39;</span><span class="p">,</span>
            <span class="s1">&#39;image_files_in_paths&#39;</span><span class="p">,</span>
            <span class="s1">&#39;image_generator&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;load_image&#39;</span><span class="p">,</span>
            <span class="s1">&#39;load_fits&#39;</span><span class="p">,</span>
            <span class="s1">&#39;mpl_save&#39;</span><span class="p">,</span>
            <span class="s1">&#39;plot&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;save_fits&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;save_fits&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;save_image&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
 
@@ -198,10 +200,11 @@
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Ellipse</span>
 
+<span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="k">as</span> <span class="nn">pil_image</span>     <span class="c1"># PIL.Image is a module not a class...</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
-<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">u</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -413,9 +416,6 @@
 
 <div class="viewcode-block" id="image_generator"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.image_generator">[docs]</a><span class="k">def</span> <span class="nf">image_generator</span><span class="p">(</span><span class="n">path_list</span><span class="p">,</span>
                     <span class="n">max_num_images</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">tel_filter_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">ev_filter_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">cam_filter_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return an iterable sequence all calibrated images in `path_list`.</span>
 
@@ -426,12 +426,6 @@
 <span class="sd">        FITS/Simtel files and directories.</span>
 <span class="sd">    max_num_images</span>
 <span class="sd">        The maximum number of images to iterate.</span>
-<span class="sd">    tel_filter_list</span>
-<span class="sd">        Only iterate images from telescopes defined in this list.</span>
-<span class="sd">    ev_filter_list</span>
-<span class="sd">        Only iterate images from events defined in this list.</span>
-<span class="sd">    cam_filter_list</span>
-<span class="sd">        Only iterate images from cameras defined in this list.</span>
 
 <span class="sd">    Yields</span>
 <span class="sd">    ------</span>
@@ -449,18 +443,107 @@
             <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
                 <span class="c1"># FITS FILES</span>
                 <span class="n">image_dict</span><span class="p">,</span> <span class="n">fits_metadata_dict</span> <span class="o">=</span> <span class="n">load_benchmark_images</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>   <span class="c1"># TODO: named tuple</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">tel_filter_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fits_metadata_dict</span><span class="p">[</span><span class="s1">&#39;tel_id&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">tel_filter_list</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">ev_filter_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fits_metadata_dict</span><span class="p">[</span><span class="s1">&#39;event_id&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">ev_filter_list</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">cam_filter_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fits_metadata_dict</span><span class="p">[</span><span class="s1">&#39;cam_id&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">cam_filter_list</span><span class="p">):</span>
-                            <span class="n">images_counter</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="k">yield</span> <span class="n">Image2D</span><span class="p">(</span><span class="o">**</span><span class="n">image_dict</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">fits_metadata_dict</span><span class="p">)</span>
+                <span class="n">images_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">yield</span> <span class="n">Image2D</span><span class="p">(</span><span class="o">**</span><span class="n">image_dict</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">fits_metadata_dict</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong item:&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span></div>
 
 
 <span class="c1"># LOAD AND SAVE FITS FILES ###################################################</span>
 
-<div class="viewcode-block" id="load_fits"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.load_fits">[docs]</a><span class="k">def</span> <span class="nf">load_fits</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_benchmark_images</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return images contained in the given FITS file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_file_path : str</span>
+<span class="sd">        The path of the FITS file to load</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary containing the loaded images and their metadata</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    WrongFitsFileStructure</span>
+<span class="sd">        If `input_file_path` doesn&#39;t contain a valid structure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">hdu_list</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>   <span class="c1"># open the FITS file</span>
+
+    <span class="c1"># METADATA ################################################################</span>
+
+    <span class="n">hdu0</span> <span class="o">=</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">metadata_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu0</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
+    <span class="c1">#metadata_dict[&#39;cam_id&#39;] = hdu0.header[&#39;cam_id&#39;]</span>
+
+    <span class="c1"># IMAGES ##################################################################</span>
+
+    <span class="k">if</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hdu_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">is_image</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">is_image</span><span class="p">):</span>
+            <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">WrongFitsFileStructure</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
+
+        <span class="n">hdu0</span><span class="p">,</span> <span class="n">hdu1</span> <span class="o">=</span> <span class="n">hdu_list</span>
+
+        <span class="c1"># IMAGES</span>
+
+        <span class="n">images_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;input_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu0</span><span class="o">.</span><span class="n">data</span>        <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
+        <span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu1</span><span class="o">.</span><span class="n">data</span>    <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown version number&quot;</span><span class="p">)</span>
+
+    <span class="c1"># METADATA ################################################################</span>
+
+    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>       <span class="c1"># np.sum() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
+    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;min_npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>   <span class="c1"># np.min() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
+    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;max_npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>   <span class="c1"># np.max() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
+
+    <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">images_dict</span><span class="p">,</span> <span class="n">metadata_dict</span>   <span class="c1"># TODO: named tuple</span>
+
+
+<div class="viewcode-block" id="load_image"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.load_image">[docs]</a><span class="k">def</span> <span class="nf">load_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the image array contained in the given image file.</span>
+
+<span class="sd">    So far, this function convert all multi-channel input images as</span>
+<span class="sd">    mono-channel grayscale.</span>
+
+<span class="sd">    The list of supported formats is available in the following page:</span>
+<span class="sd">    https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html</span>
+
+<span class="sd">    Fits format is also supported thanks to astropy.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_file_path : str</span>
+<span class="sd">        The path of the image file to load</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        The loaded image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">input_file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
+        <span class="c1"># FITS FILES</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">load_fits</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pil_img</span><span class="p">)</span>  <span class="c1"># It works also with .png, .jpg, tiff, ...</span>
+
+    <span class="k">return</span> <span class="n">image_array</span></div>
+
+
+<div class="viewcode-block" id="load_fits"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.load_fits">[docs]</a><span class="k">def</span> <span class="nf">load_fits</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the image array contained in the given HDU of the given FITS file.</span>
 
 <span class="sd">    Parameters</span>
@@ -502,6 +585,66 @@
     <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">image_array</span></div>
+
+
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Normalize the values of a Numpy array in the range [0,1].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array : array like</span>
+<span class="sd">        The array to normalize</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        The normalized array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">min_value</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">max_value</span> <span class="o">-</span> <span class="n">min_value</span>
+
+    <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">norm_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">min_value</span><span class="p">)</span><span class="o">/</span><span class="n">size</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm_array</span> <span class="o">=</span> <span class="n">array</span>
+
+    <span class="k">return</span> <span class="n">norm_array</span>
+
+
+<div class="viewcode-block" id="save_image"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.save_image">[docs]</a><span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save the image array `image` in the given file `output_file_path`.</span>
+
+<span class="sd">    The list of supported formats is available in the following page:</span>
+<span class="sd">    https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html</span>
+
+<span class="sd">    Fits format is also supported thanks to astropy.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image : array_like</span>
+<span class="sd">        The image to save</span>
+<span class="sd">    output_file_path : str</span>
+<span class="sd">        The destination path of the image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="n">output_file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
+        <span class="c1"># FITS FILES</span>
+        <span class="n">save_fits</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span>              <span class="c1"># Grayscale</span>
+        <span class="n">size_y</span><span class="p">,</span> <span class="n">size_x</span> <span class="o">=</span> <span class="n">image_array</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="p">(</span><span class="n">size_x</span><span class="p">,</span> <span class="n">size_y</span><span class="p">))</span>
+
+        <span class="c1"># Make the data (pixels value in [0;255])</span>
+        <span class="c1"># WARNING: nested list and 2D numpy arrays are silently rejected!!!</span>
+        <span class="c1">#          data *must* be a list or a 1D numpy array!</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">image_array</span><span class="p">)</span> <span class="o">*</span> <span class="mf">255.</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">image_array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">pil_img</span><span class="o">.</span><span class="n">putdata</span><span class="p">(</span><span class="n">image_array</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+        <span class="n">pil_img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="save_fits"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.save_fits">[docs]</a><span class="k">def</span> <span class="nf">save_fits</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
@@ -641,7 +784,18 @@
     <span class="k">if</span> <span class="n">highlight_mask_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">highlight_mask_list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">img_list</span><span class="p">]</span>
 
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax_tuple</span><span class="p">,</span> <span class="n">img_list</span><span class="p">,</span> <span class="n">title_list</span><span class="p">):</span>
+        <span class="n">masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">img</span><span class="p">)</span>
+
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">COLOR_MAP</span>
+        <span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span>
+                       <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                       <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
+                       <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c1"># draw the colorbar</span>
 
     <span class="k">if</span> <span class="n">main_title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">main_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
@@ -661,22 +815,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Main title</span>
-    <span class="k">if</span> <span class="n">metadata_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">mc_energy</span> <span class="o">=</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;mc_energy_unit&#39;</span> <span class="ow">in</span> <span class="n">metadata_dict</span> <span class="k">else</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">mc_energy_unit</span> <span class="o">=</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy_unit&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;mc_energy_unit&#39;</span> <span class="ow">in</span> <span class="n">metadata_dict</span> <span class="k">else</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">main_title</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (Tel. </span><span class="si">{}</span><span class="s2">, Ev. </span><span class="si">{}</span><span class="s2">) </span><span class="si">{:.2E}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;simtel_path&#39;</span><span class="p">]),</span>
-                                                            <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;tel_id&#39;</span><span class="p">],</span>
-                                                            <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;event_id&#39;</span><span class="p">],</span>
-                                                            <span class="n">mc_energy</span><span class="p">,</span>
-                                                            <span class="n">mc_energy_unit</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">main_title</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">main_title</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">_plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
                <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
                <span class="n">highlight_mask_list</span><span class="o">=</span><span class="n">highlight_mask_list</span><span class="p">,</span>
                <span class="n">main_title</span><span class="o">=</span><span class="n">main_title</span><span class="p">)</span>
+
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
@@ -694,22 +839,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Main title</span>
-    <span class="k">if</span> <span class="n">metadata_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">mc_energy</span> <span class="o">=</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;mc_energy_unit&#39;</span> <span class="ow">in</span> <span class="n">metadata_dict</span> <span class="k">else</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">mc_energy_unit</span> <span class="o">=</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy_unit&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;mc_energy_unit&#39;</span> <span class="ow">in</span> <span class="n">metadata_dict</span> <span class="k">else</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;mc_energy&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">main_title</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (Tel. </span><span class="si">{}</span><span class="s2">, Ev. </span><span class="si">{}</span><span class="s2">) </span><span class="si">{:.2E}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;simtel_path&#39;</span><span class="p">]),</span>
-                                                            <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;tel_id&#39;</span><span class="p">],</span>
-                                                            <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;event_id&#39;</span><span class="p">],</span>
-                                                            <span class="n">mc_energy</span><span class="p">,</span>
-                                                            <span class="n">mc_energy_unit</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">main_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">main_title</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">_plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
                <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
                <span class="n">highlight_mask_list</span><span class="o">=</span><span class="n">highlight_mask_list</span><span class="p">,</span>
                <span class="n">main_title</span><span class="o">=</span><span class="n">main_title</span><span class="p">)</span>
+
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
@@ -759,7 +895,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev8',
+            VERSION:'0.1.dev10',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
