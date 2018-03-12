@@ -156,7 +156,7 @@ Cosmostat iSAP Sparce2D installation
 Example
 =======
 
-1. Download a sample image (`archives_ngc3576.png <https://gist.githubusercontent.com/jeremiedecock/144c83f74e46b171ab3a426230d40848/raw/4a9ea99dd18504baff404a074a4e7541d98a50c5/archives_ngc3576.png>`_)
+1. Download a sample image (e.g. `archives_ngc3576.png <https://gist.githubusercontent.com/jeremiedecock/144c83f74e46b171ab3a426230d40848/raw/4a9ea99dd18504baff404a074a4e7541d98a50c5/archives_ngc3576.png>`_)
 2. In your system terminal, from the directory that contains the sample image, type::
   
     pywi-mrtransform -t 256,256,256,0 --plot archives_ngc3576.png
