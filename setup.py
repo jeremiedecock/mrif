@@ -95,10 +95,8 @@ SCRIPTS = []
 #   }
 ENTRY_POINTS = {
   'console_scripts': [
-      'dp-simtel-count = pywi.io.simtel:main_count_simtel_events',
-      'dp-simtel-ls = pywi.io.simtel:main_list_simtel_content',
-      'dp-simtel-show = pywi.io.simtel:main_show_image',
-      'dp-simtel-show-pe = pywi.io.simtel:main_show_pe_image',
+      'pywi-mrtransform = pywi.denoising.wavelets_mrtransform:main',
+      'pywi-mrfilter = pywi.denoising.wavelets_mrfilter:main',
   ],
 }
 
