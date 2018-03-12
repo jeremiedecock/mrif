@@ -160,8 +160,10 @@ Example
 2. In your system terminal, from the directory that contains the sample image, type::
   
     pywi-mrtransform -t 256,256,256,0 --plot archives_ngc3576.png
+    pywi-mrfilter -t 256,256,256,0 --plot archives_ngc3576.png
 
-3. Use the ``-h`` option for more options
+3. Type ``pywi-mrtransform -h`` or ``pywi-mrfilter -h`` to display the list of
+   available options and their documentation.
 
 .. A "benchmark mode" can also be used to clean images and assess cleaning
 .. algorithms (it's still a bit experimental): use the additional option ``-b all``
