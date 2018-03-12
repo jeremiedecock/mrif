@@ -87,17 +87,20 @@ MacOSX and Gnu/Linux
 
 You can install PyWI using the following command (in a terminal)::
 
-    pip install --user pywi
+    pip install pywi
 
 .. python -m pip install --user numpy scipy matplotlib pandas
 
-It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
-which can cause problems) to install packages in your local user space instead
-of the shared system directories.
+.. It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
+.. which can cause problems) to install packages in your local user space instead
+.. of the shared system directories.
+.. TODO: the --user flag has an issue (bug?): console scripts (pywi-mrfilter, ...)
+.. are not directly (i.e. without updating the PATH variable) available anymore (at
+.. least on MacOSX/Anaconda).
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    python3 setup.py --user install
+    python3 setup.py install
 
 .. There's also a package for Debian/Ubuntu::
 .. 
@@ -105,7 +108,7 @@ As an alternative, you can install PyWI from the downloaded source code::
 
 If PyWI is already installed on your system you can upgrade it with this command::
 
-    pip install --user --upgrade pywi
+    pip install --upgrade pywi
 
 To uninstall PyWI, type::
 
@@ -122,19 +125,22 @@ Windows
 
 You can install PyWI using the following command (in a `command prompt`_)::
 
-    py -m pip install --user pywi
+    py -m pip install pywi
 
-It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
-which can cause problems) to install packages in your local user space instead
-of the shared system directories.
+.. It is recommended to use the --user flag to ``pip`` (note: do not use sudo pip,
+.. which can cause problems) to install packages in your local user space instead
+.. of the shared system directories.
+.. TODO: the --user flag has an issue (bug?): console scripts (pywi-mrfilter, ...)
+.. are not directly (i.e. without updating the PATH variable) available anymore (at
+.. least on MacOSX/Anaconda).
 
 As an alternative, you can install PyWI from the downloaded source code::
 
-    py setup.py install --user
+    py setup.py install
 
 If PyWI is already installed on your system you can upgrade it with this command::
 
-    py -m pip install --user --upgrade pywi
+    py -m pip install --upgrade pywi
 
 To uninstall PyWI, type::
 
