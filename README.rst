@@ -247,6 +247,14 @@ Example
 .. algorithms (it's still a bit experimental): use the additional option ``-b all``
 .. in each command (and put several fits files in input e.g. ``\*.fits``)
 
+IPython/Jupyter Notebooks
+=========================
+
+PyWI provide some Jupyter notebooks that can be used as examples or tutorials.
+
+* PyWI Notebooks on GitHub: https://github.com/jeremiedecock/pywi-notebooks
+* PyWI Notebooks on Anaconda Cloud: https://anaconda.org/jdhp/notebooksExample
+
 Bug reports
 ===========
 
