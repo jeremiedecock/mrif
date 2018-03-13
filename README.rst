@@ -253,7 +253,7 @@ IPython/Jupyter Notebooks
 PyWI provide some Jupyter notebooks that can be used as examples or tutorials.
 
 * PyWI Notebooks on GitHub: https://github.com/jeremiedecock/pywi-notebooks
-* PyWI Notebooks on Anaconda Cloud: https://anaconda.org/jdhp/notebooksExample
+* PyWI Notebooks on Anaconda Cloud: https://anaconda.org/jdhp/notebooks
 
 Bug reports
 ===========
