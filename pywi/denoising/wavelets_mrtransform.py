@@ -20,7 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['filter_planes',
+__all__ = ['MrTransformError',
+           'WrongDimensionError',
+           'wavelet_transform',
+           'filter_planes',
            'inverse_wavelet_transform',
            'WaveletTransform']
 
