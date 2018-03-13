@@ -11,6 +11,7 @@ all: help
 		 clean \
 		 conda \
 		 doc \
+		 doc-publish \
 		 doc-publish-github \
 		 doc-publish-jdhp \
 		 doc-show \
@@ -77,6 +78,8 @@ doc:
 
 doc-show:
 	$(PYTHON) setup.py build_sphinx --open-docs-in-browser
+
+doc-publish: doc-publish-github
 
 doc-publish-github: doc
 	# See https://github.com/davisp/ghp-import
