@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>denoising.wavelets_mrtransform &mdash; Python Wavelet Imaging 0.1.dev11 documentation</title>
+  <title>denoising.wavelets_mrtransform &mdash; Python Wavelet Imaging 0.1.dev12 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev11 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev12 documentation" href="index.html"/>
         <link rel="up" title="SAp CTA data pipeline API" href="api.html"/>
         <link rel="next" title="denoising.abstract_cleaning_algorithm" href="api_filter_abstract_cleaning_algorithm.html"/>
         <link rel="prev" title="denoising.wavelets_mrfilter" href="api_filter_wavelet_mrfilter.html"/> 
@@ -174,6 +174,59 @@
             
   <div class="section" id="module-pywi.denoising.wavelets_mrtransform">
 <span id="denoising-wavelets-mrtransform"></span><h1>denoising.wavelets_mrtransform<a class="headerlink" href="#module-pywi.denoising.wavelets_mrtransform" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="pywi.denoising.wavelets_mrtransform.MrTransformError">
+<em class="property">exception </em><code class="descclassname">pywi.denoising.wavelets_mrtransform.</code><code class="descname">MrTransformError</code><a class="reference internal" href="_modules/pywi/denoising/wavelets_mrtransform.html#MrTransformError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.denoising.wavelets_mrtransform.MrTransformError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common <cite>wavelet_mrtransform</cite> module’s error.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pywi.denoising.wavelets_mrtransform.WrongDimensionError">
+<em class="property">exception </em><code class="descclassname">pywi.denoising.wavelets_mrtransform.</code><code class="descname">WrongDimensionError</code><span class="sig-paren">(</span><em>msg=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/denoising/wavelets_mrtransform.html#WrongDimensionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.denoising.wavelets_mrtransform.WrongDimensionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when data having a wrong number of dimensions is given.</p>
+<dl class="attribute">
+<dt id="pywi.denoising.wavelets_mrtransform.WrongDimensionError.msg">
+<code class="descname">msg</code><a class="headerlink" href="#pywi.denoising.wavelets_mrtransform.WrongDimensionError.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Explanation of the error.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.denoising.wavelets_mrtransform.wavelet_transform">
+<code class="descclassname">pywi.denoising.wavelets_mrtransform.</code><code class="descname">wavelet_transform</code><span class="sig-paren">(</span><em>input_image</em>, <em>number_of_scales=4</em>, <em>tmp_files_directory='.'</em>, <em>noise_distribution=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/denoising/wavelets_mrtransform.html#wavelet_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.denoising.wavelets_mrtransform.wavelet_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the wavelet transform of <cite>input_image</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_image</strong> (<em>array_like</em>) – The input image to transform.</li>
+<li><strong>number_of_scales</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – The number of scales used to transform <cite>input_image</cite> or in other words
+the number of wavelet planes returned.</li>
+<li><strong>tmp_files_directory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em>, </em><em>optional</em>) – The path of the directory used to store mr_transform temporary data.
+The default is the current directory, but it may be more appropriate to
+specify here the path of a directory mounted in a ramdisk to speedup
+I/Os (“/Volumes/ramdisk” on MacOSX or “/dev/shm” on Linux).</li>
+<li><strong>noise_distribution</strong> (<cite>EmpiricalDistribution</cite>, optional) – The noise distribution used to fill ‘empty’ NaN pixels with the
+appropriate random noise distribution. If none, NaN pixels are fill
+with zeros (which may add unwanted harmonics in wavelet planes).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Return a list containing the <cite>number_of_scales</cite> wavelet planes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)">list</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#pywi.denoising.wavelets_mrtransform.WrongDimensionError" title="pywi.denoising.wavelets_mrtransform.WrongDimensionError"><code class="xref py py-exc docutils literal"><span class="pre">WrongDimensionError</span></code></a> – If <cite>input_image</cite> is not a 2D array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="pywi.denoising.wavelets_mrtransform.filter_planes">
 <code class="descclassname">pywi.denoising.wavelets_mrtransform.</code><code class="descname">filter_planes</code><span class="sig-paren">(</span><em>wavelet_planes, method='hard_filtering', thresholds=[0.0, 0.0], detect_only_positive_structures=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/denoising/wavelets_mrtransform.html#filter_planes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.denoising.wavelets_mrtransform.filter_planes" title="Permalink to this definition">¶</a></dt>
@@ -315,7 +368,7 @@ with a NaN value).</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev11',
+            VERSION:'0.1.dev12',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

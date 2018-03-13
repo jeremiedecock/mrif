@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.denoising.wavelets_mrtransform &mdash; Python Wavelet Imaging 0.1.dev11 documentation</title>
+  <title>pywi.denoising.wavelets_mrtransform &mdash; Python Wavelet Imaging 0.1.dev12 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev11 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev12 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -179,7 +179,10 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;filter_planes&#39;</span><span class="p">,</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MrTransformError&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;WrongDimensionError&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;wavelet_transform&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;filter_planes&#39;</span><span class="p">,</span>
            <span class="s1">&#39;inverse_wavelet_transform&#39;</span><span class="p">,</span>
            <span class="s1">&#39;WaveletTransform&#39;</span><span class="p">]</span>
 
@@ -287,11 +290,11 @@
 
 <span class="c1"># EXCEPTIONS #################################################################</span>
 
-<span class="k">class</span> <span class="nc">MrTransformError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="MrTransformError"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#pywi.denoising.wavelets_mrtransform.MrTransformError">[docs]</a><span class="k">class</span> <span class="nc">MrTransformError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Common `wavelet_mrtransform` module&#39;s error.&quot;&quot;&quot;</span>
-    <span class="k">pass</span>
+    <span class="k">pass</span></div>
 
-<span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrTransformError</span><span class="p">):</span>
+<div class="viewcode-block" id="WrongDimensionError"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#pywi.denoising.wavelets_mrtransform.WrongDimensionError">[docs]</a><span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrTransformError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raised when data having a wrong number of dimensions is given.</span>
 
 <span class="sd">    Attributes</span>
@@ -302,12 +305,12 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The data has a wrong number of dimension.&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The data has a wrong number of dimension.&quot;</span></div>
 
 
 <span class="c1">##############################################################################</span>
 
-<span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
+<div class="viewcode-block" id="wavelet_transform"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#pywi.denoising.wavelets_mrtransform.wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
                       <span class="n">number_of_scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                       <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                       <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -401,7 +404,7 @@
         <span class="k">for</span> <span class="n">plane</span> <span class="ow">in</span> <span class="n">wavelet_planes_list</span><span class="p">:</span>
             <span class="n">plane</span><span class="p">[</span><span class="n">nan_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="k">return</span> <span class="n">wavelet_planes_list</span>
+    <span class="k">return</span> <span class="n">wavelet_planes_list</span></div>
 
 
 <div class="viewcode-block" id="filter_planes"><a class="viewcode-back" href="../../../api_filter_wavelet_mrtransform.html#pywi.denoising.wavelets_mrtransform.filter_planes">[docs]</a><span class="k">def</span> <span class="nf">filter_planes</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
@@ -867,7 +870,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev11',
+            VERSION:'0.1.dev12',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
