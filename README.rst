@@ -8,6 +8,7 @@ Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 * Source code: https://github.com/jeremiedecock/pywi
 * Issue tracker: https://github.com/jeremiedecock/pywi/issues
 * PyWI on PyPI: https://pypi.org/project/pywi/
+* PyWI on Anaconda Cloud: https://anaconda.org/jdhp/pywi
 
 .. Former documentation: http://sap-cta-data-pipeline.readthedocs.io/en/latest/
 
@@ -199,7 +200,12 @@ To uninstall PyWI, type::
 Using conda
 -----------
 
-The Anaconda package will be available soon.
+To install this package with conda run in a terminal::
+
+    conda install -c jdhp pywi
+
+So far, the PyWI Anaconda package is only available for MacOSX.
+A package for Linux and Windows will be available soon.
 
 .. note::
 
