@@ -219,6 +219,12 @@ Cosmostat iSAP Sparce2D installation
     cd sparse2d
     compile the content of this directory
 
+An automated compilation and installation script for Linux is available
+`there <https://github.com/tino-michael/tino_cta/blob/master/grid/compile_mrfilter_pilot.sh>`_
+(author: `Tino Michael <https://github.com/tino-michael>`_).
+
+.. Also available in `utils/compile_isap_sparce2d.sh`
+
 Example
 =======
 
