@@ -27,7 +27,7 @@ __all__ = ['MrTransformError',
            'inverse_wavelet_transform',
            'WaveletTransform']
 
-"""Denoise FITS and PNG images with Wavelet Transform.
+"""Denoise images with Wavelet Transform.
 
 This script use mr_transform -- a program written CEA/CosmoStat
 (www.cosmostat.org) -- to make Wavelet Transform.
@@ -76,15 +76,6 @@ Usage
       --tmp-dir DIRECTORY   The directory where temporary files are written.
       --verbose, -v         Verbose mode
       --debug               Debug mode
-      --max-images INTEGER  The maximum number of images to process
-      --telid INTEGER       Only process images from the specified telescope
-      --eventid INTEGER     Only process images from the specified event
-      --camid STRING        Only process images from the specified camera
-      --benchmark STRING, -b STRING
-                            The benchmark method to use to assess the algorithm
-                            for thegiven images
-      --label STRING, -l STRING
-                            The label attached to the produced results
       --plot                Plot images
       --saveplot FILE       The output file where to save plotted images
       --output FILE, -o FILE
@@ -177,7 +168,7 @@ def wavelet_transform(input_image,
     Returns
     -------
     list
-        Return a list containing the `number_of_scales` wavelet planes.
+        Return a list containing the wavelet planes.
 
     Raises
     ------
