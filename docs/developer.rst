@@ -36,6 +36,10 @@ All contributions should at least comply with the following PEPs_:
 All contribution should be properly documented and tested with unittest_
 and/or doctest_.
 
+The inline documentation (a.k.a. `docstrings <https://docs.python.org/3/glossary.html#term-docstring>`_)
+should follow the `Numpy style <https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt>`_
+(check examples `here <http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html>`_).
+
 pylint_, `pep8 <https://github.com/PyCQA/pep8>`__ and pyflakes_ should also be
 used to check the quality of each module.
 
