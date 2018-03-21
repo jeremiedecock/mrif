@@ -86,6 +86,9 @@ Note:
 
 __version__ = '0.1.dev15'
 
+def get_version():
+    return __version__
+
 from . import benchmark
 from . import filtering
 from . import image
@@ -100,4 +103,5 @@ __all__ = ['benchmark',
            'io',
            'optimization',
            'transform',
-           'ui']
+           'ui',
+           'get_version']
