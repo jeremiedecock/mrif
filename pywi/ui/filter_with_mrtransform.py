@@ -96,8 +96,8 @@ import os
 #from pywi.ui.commons import AbstractCleaningAlgorithm
 from pywi.io import images
 
-from pywi.filter import hard_filter
-from pywi.filter.hard_filter import filter_planes
+from pywi.filtering import hard_filter
+from pywi.filtering.hard_filter import filter_planes
 
 from pywi.transform import mrtransform_wrapper
 from pywi.transform.mrtransform_wrapper import wavelet_transform

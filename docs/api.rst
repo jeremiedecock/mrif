@@ -22,7 +22,7 @@ Filter package:
 .. toctree::
    :maxdepth: 1
 
-   pywi.filter.hard_filter <api_filter_hard_filter>
+   pywi.filtering.hard_filter <api_filtering_hard_filter>
 
 Image package:
 
