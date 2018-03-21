@@ -95,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_assess.html">pywi.benchmark.assess</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_filter_hard_filter.html">pywi.filter.hard_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_filtering_hard_filter.html">pywi.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_image_pixel_clusters.html">pywi.image.pixel_clusters</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
@@ -212,7 +212,7 @@ is defined by the instruction <cite>np.isnan(image)</cite>.</p>
 <p><cite>NaN</cite> values are replaced <strong>in-place</strong> in the provided <cite>image</cite>
 parameter.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">6</span><span class="p">],[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fill_nan_pixels</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 <span class="gp">... </span>
@@ -344,8 +344,8 @@ images stored in different HDU)</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">WrongHDUError</span></code> – If <cite>input_file_path</cite> doesn’t contain the HDU <cite>hdu_index</cite></li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotAnImageError</span></code> – If <cite>input_file_path</cite> doesn’t contain a valid image in the HDU
+<li><code class="xref py py-exc docutils literal"><span class="pre">WrongHDUError</span></code> – If <cite>input_file_path</cite> doesn’t contain the HDU <cite>hdu_index</cite></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotAnImageError</span></code> – If <cite>input_file_path</cite> doesn’t contain a valid image in the HDU
 <cite>hdu_index</cite></li>
 </ul>
 </td>
@@ -380,7 +380,7 @@ images stored in different HDU)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">WrongDimensionError</span></code> – If <cite>img</cite> has more than 3 dimensions or less than 2 dimensions.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">WrongDimensionError</span></code> – If <cite>img</cite> has more than 3 dimensions or less than 2 dimensions.</p>
 </td>
 </tr>
 </tbody>

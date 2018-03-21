@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>optimization.objectivefunc.wavelets_mrfilter_delta_psi &mdash; Python Wavelet Imaging 0.1.dev14 documentation</title>
+  <title>filtering.hard_filter &mdash; Python Wavelet Imaging 0.1.dev14 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Python Wavelet Imaging 0.1.dev14 documentation" href="index.html"/>
         <link rel="up" title="PyWI API" href="api.html"/>
-        <link rel="next" title="transform.mrtransform_wrapper" href="api_transform_mrtransform.html"/>
-        <link rel="prev" title="optimization.bruteforce" href="api_optimization_saes.html"/> 
+        <link rel="next" title="image.pixel_clusters" href="api_image_pixel_clusters.html"/>
+        <link rel="prev" title="benchmark.assess" href="api_benchmark_assess.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -95,13 +95,13 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_assess.html">pywi.benchmark.assess</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_filtering_hard_filter.html">pywi.filtering.hard_filter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_image_pixel_clusters.html">pywi.image.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_transform_mrtransform.html">pywi.transform.mrtransform_wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
@@ -155,13 +155,13 @@
         
           <li><a href="api.html">PyWI API</a> &raquo;</li>
         
-      <li>optimization.objectivefunc.wavelets_mrfilter_delta_psi</li>
+      <li>filtering.hard_filter</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/api_filtering_hard_filter.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,8 +174,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi">
-<span id="optimization-objectivefunc-wavelets-mrfilter-delta-psi"></span><h1>optimization.objectivefunc.wavelets_mrfilter_delta_psi<a class="headerlink" href="#module-pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pywi.filtering.hard_filter">
+<span id="filtering-hard-filter"></span><h1>filtering.hard_filter<a class="headerlink" href="#module-pywi.filtering.hard_filter" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pywi.filtering.hard_filter.filter_planes">
+<code class="descclassname">pywi.filtering.hard_filter.</code><code class="descname">filter_planes</code><span class="sig-paren">(</span><em>wavelet_planes, method='hard_filtering', thresholds=[0.0, 0.0], detect_only_positive_structures=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/filtering/hard_filter.html#filter_planes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.filtering.hard_filter.filter_planes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter the wavelet planes.</p>
+<p>The last plane (called residuals) is kept unmodified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>wavelet_planes</strong> (<em>list of array_like</em>) – The wavelet planes to filter, including the last <em>residual</em> plane.</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a><em>, </em><em>optional</em>) – The filtering method to use. So far, only the ‘hard_filtering’ and
+‘ksigma_hard_filtering’ methods are implemented.</li>
+<li><strong>thresholds</strong> (<em>list of float</em>) – Thresholds used for the plane filtering.</li>
+<li><strong>detect_only_positive_structures</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Detect only positive structures.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Return a list containing the filtered wavelet planes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.6)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -188,10 +216,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_transform_mrtransform.html" class="btn btn-neutral float-right" title="transform.mrtransform_wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api_image_pixel_clusters.html" class="btn btn-neutral float-right" title="image.pixel_clusters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_optimization_saes.html" class="btn btn-neutral" title="optimization.bruteforce" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_benchmark_assess.html" class="btn btn-neutral" title="benchmark.assess" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

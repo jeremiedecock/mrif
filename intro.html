@@ -265,63 +265,63 @@ for Anaconda install (see <a class="reference internal" href="#using-conda">Usin
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You will need a C compiler (e.g. <code class="docutils literal notranslate"><span class="pre">gcc</span></code> or <code class="docutils literal notranslate"><span class="pre">clang</span></code>) to be installed to
+<p class="last">You will need a C compiler (e.g. <code class="docutils literal"><span class="pre">gcc</span></code> or <code class="docutils literal"><span class="pre">clang</span></code>) to be installed to
 install some dependencies (e.g. Numpy).</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The <code class="docutils literal notranslate"><span class="pre">--no-deps</span></code> flag is optional, but highly recommended if you already
+<p class="last">The <code class="docutils literal"><span class="pre">--no-deps</span></code> flag is optional, but highly recommended if you already
 have Numpy installed, since otherwise pip will sometimes try to “help” you
 by upgrading your Numpy installation, which may not always be desired.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>If you get a <code class="docutils literal notranslate"><span class="pre">PermissionError</span></code> this means that you do not have the
+<p>If you get a <code class="docutils literal"><span class="pre">PermissionError</span></code> this means that you do not have the
 required administrative access to install new packages to your Python
-installation.  In this case you may consider using the <code class="docutils literal notranslate"><span class="pre">--user</span></code> option
+installation.  In this case you may consider using the <code class="docutils literal"><span class="pre">--user</span></code> option
 to install the package into your home directory. You can read more
 about how to do this in the <a class="reference external" href="https://pip.pypa.io/en/stable/user_guide/#user-installs">pip documentation</a>.</p>
 <p>Alternatively, if you intend to do development on other software that uses
 PyWI, such as an affiliated package, consider installing PyWI into a
 <a class="reference external" href="http://docs.astropy.org/en/stable/development/workflow/virtualenv_detail.html#using-virtualenv">virtualenv</a>.</p>
-<p class="last">Do <strong>not</strong> install PyWI or other third-party packages using <code class="docutils literal notranslate"><span class="pre">sudo</span></code>
+<p class="last">Do <strong>not</strong> install PyWI or other third-party packages using <code class="docutils literal"><span class="pre">sudo</span></code>
 unless you are fully aware of the risks.</p>
 </div>
 <div class="section" id="on-macosx-and-gnu-linux">
 <h4>On MacOSX and Gnu/Linux<a class="headerlink" href="#on-macosx-and-gnu-linux" title="Permalink to this headline">¶</a></h4>
 <p>You can install PyWI using the following command (in a terminal):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>As an alternative, you can install PyWI from the downloaded source code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>If PyWI is already installed on your system you can upgrade it with this command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 <p>To uninstall PyWI, type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="on-windows">
 <h4>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h4>
 <p>You can install PyWI using the following command (in a <a class="reference external" href="https://en.wikipedia.org/wiki/Cmd.exe">command prompt</a>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pywi</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>As an alternative, you can install PyWI from the downloaded source code:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">deps</span>
 </pre></div>
 </div>
 <p>If PyWI is already installed on your system you can upgrade it with this command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 <p>To uninstall PyWI, type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">uninstall</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="o">-</span><span class="n">m</span> <span class="n">uninstall</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 </div>
@@ -329,7 +329,7 @@ unless you are fully aware of the risks.</p>
 <div class="section" id="using-conda">
 <span id="anaconda-install"></span><h3>Using conda<a class="headerlink" href="#using-conda" title="Permalink to this headline">¶</a></h3>
 <p>To install this package with conda run in a terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">jdhp</span> <span class="n">pywi</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">jdhp</span> <span class="n">pywi</span>
 </pre></div>
 </div>
 <p>So far, the PyWI Anaconda package is only available for MacOSX.
@@ -347,8 +347,8 @@ in a corrupted installation.</p>
 <li><p class="first">Download <a class="reference external" href="http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz">http://www.cosmostat.org/wp-content/uploads/2014/12/ISAP_V3.1.tgz</a> (see <a class="reference external" href="http://www.cosmostat.org/software/isap/">http://www.cosmostat.org/software/isap/</a>)</p>
 </li>
 <li><p class="first">Unzip this archive, go to the “sparse2d” directory and compile the sparse2d
-library. It should generate two executables named <code class="docutils literal notranslate"><span class="pre">mr_transform</span></code> and <code class="docutils literal notranslate"><span class="pre">mr_filter</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">ISAP_V3</span><span class="o">.</span><span class="mf">1.</span><span class="n">tgz</span>
+library. It should generate two executables named <code class="docutils literal"><span class="pre">mr_transform</span></code> and <code class="docutils literal"><span class="pre">mr_filter</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">ISAP_V3</span><span class="o">.</span><span class="mf">1.</span><span class="n">tgz</span>
 <span class="n">cd</span> <span class="n">ISAP_V3</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">cxx</span>
 <span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">sparse2d_V1</span><span class="o">.</span><span class="mf">1.</span><span class="n">tgz</span>
 <span class="n">cd</span> <span class="n">sparse2d</span>
@@ -367,12 +367,12 @@ library. It should generate two executables named <code class="docutils literal 
 <li><p class="first">Download a sample image (e.g. <a class="reference external" href="https://gist.githubusercontent.com/jeremiedecock/144c83f74e46b171ab3a426230d40848/raw/4a9ea99dd18504baff404a074a4e7541d98a50c5/archives_ngc3576.png">archives_ngc3576.png</a>)</p>
 </li>
 <li><p class="first">In your system terminal, from the directory that contains the sample image, type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pywi</span><span class="o">-</span><span class="n">mrtransform</span> <span class="o">-</span><span class="n">t</span> <span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">0</span> <span class="o">--</span><span class="n">plot</span> <span class="n">archives_ngc3576</span><span class="o">.</span><span class="n">png</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pywi</span><span class="o">-</span><span class="n">mrtransform</span> <span class="o">-</span><span class="n">t</span> <span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">0</span> <span class="o">--</span><span class="n">plot</span> <span class="n">archives_ngc3576</span><span class="o">.</span><span class="n">png</span>
 <span class="n">pywi</span><span class="o">-</span><span class="n">mrfilter</span> <span class="o">-</span><span class="n">s</span> <span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">0</span> <span class="o">--</span><span class="n">plot</span> <span class="n">archives_ngc3576</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Type <code class="docutils literal notranslate"><span class="pre">pywi-mrtransform</span> <span class="pre">-h</span></code> or <code class="docutils literal notranslate"><span class="pre">pywi-mrfilter</span> <span class="pre">-h</span></code> to display the list of
+<li><p class="first">Type <code class="docutils literal"><span class="pre">pywi-mrtransform</span> <span class="pre">-h</span></code> or <code class="docutils literal"><span class="pre">pywi-mrfilter</span> <span class="pre">-h</span></code> to display the list of
 available options and their documentation.</p>
 </li>
 </ol>
