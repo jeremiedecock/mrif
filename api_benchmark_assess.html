@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>benchmark.assess &mdash; Python Wavelet Imaging 0.1.dev12 documentation</title>
+  <title>benchmark.assess &mdash; Python Wavelet Imaging 0.1.dev14 documentation</title>
   
 
   
@@ -35,10 +35,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev12 documentation" href="index.html"/>
-        <link rel="up" title="SAp CTA data pipeline API" href="api.html"/>
-        <link rel="next" title="denoising.wavelets_mrfilter" href="api_filter_wavelet_mrfilter.html"/>
-        <link rel="prev" title="SAp CTA data pipeline API" href="api.html"/> 
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev14 documentation" href="index.html"/>
+        <link rel="up" title="PyWI API" href="api.html"/>
+        <link rel="next" title="filter.hard_filter" href="api_filter_hard_filter.html"/>
+        <link rel="prev" title="PyWI API" href="api.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -95,15 +95,17 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.benchmark.assess</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_filter_wavelet_mrfilter.html">pywi.denoising.wavelets_mrfilter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_filter_wavelet_mrtransform.html">pywi.denoising.wavelets_mrtransform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_filter_abstract_cleaning_algorithm.html">pywi.denoising.abstract_cleaning_algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_filter_hard_filter.html">pywi.filter.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_image_pixel_clusters.html">pywi.image.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_transform_mrtransform.html">pywi.transform.mrtransform_wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrtransform.html">pywi.ui.filter_with_mrtransform</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="developer.html">Developer’s notes</a></li>
@@ -151,7 +153,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="api.html">SAp CTA data pipeline API</a> &raquo;</li>
+          <li><a href="api.html">PyWI API</a> &raquo;</li>
         
       <li>benchmark.assess</li>
     
@@ -180,9 +182,9 @@
 <dd><p>Normalize the given image such that its pixels value fit between 0.0
 and 1.0.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[\text{normalize}(\boldsymbol{S}) = \frac{ \boldsymbol{S} - \text{min}(\boldsymbol{S}) }{ \text{max}(\boldsymbol{S}) - \text{min}(\boldsymbol{S}) }\]</div>
-<p>where <span class="math">\(\boldsymbol{S}\)</span> is the input array (an image).</p>
+<p>where <span class="math notranslate">\(\boldsymbol{S}\)</span> is the input array (an image).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -201,21 +203,21 @@ and shape)</td>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric_mse">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric_mse</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric_mse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric_mse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
 with the <em>Mean-Squared Error</em> (MSE) metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[\text{MSE}(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \left\langle \left( \hat{\boldsymbol{S}} - \boldsymbol{S}^* \right)^{\circ 2} \right\rangle\]</div>
 <p>with:</p>
 <ul class="simple">
-<li><span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
+<li><span class="math notranslate">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
 <em>cleaned</em> image);</li>
-<li><span class="math">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
-<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
-<span class="math">\(\boldsymbol{S}\)</span>;</li>
-<li><span class="math">\(\boldsymbol{S}^{\circ 2}\)</span> the
+<li><span class="math notranslate">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
+<li><span class="math notranslate">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math notranslate">\(\boldsymbol{S}\)</span>;</li>
+<li><span class="math notranslate">\(\boldsymbol{S}^{\circ 2}\)</span> the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)#Analogous_operations">Hadamar power</a>
-(i.e. the element wise square) of matrix <span class="math">\(\boldsymbol{S}\)</span>.</li>
+(i.e. the element wise square) of matrix <span class="math notranslate">\(\boldsymbol{S}\)</span>.</li>
 </ul>
 <p>See <a class="reference external" href="http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-mse">http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-mse</a>
 for more information.</p>
@@ -250,19 +252,19 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric_nrmse">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric_nrmse</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric_nrmse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric_nrmse" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
 with the <em>Normalized Root Mean-Squared Error</em> (NRMSE) metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[\text{NRMSE}(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \frac{\sqrt{\text{MSE}}}{\sqrt{ \left\langle \hat{\boldsymbol{S}} \circ \boldsymbol{S}^* \right\rangle }}\]</div>
 <p>with:</p>
 <ul class="simple">
-<li><span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
+<li><span class="math notranslate">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
 <em>cleaned</em> image);</li>
-<li><span class="math">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
-<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
-<span class="math">\(\boldsymbol{S}\)</span>;</li>
-<li><span class="math">\(\circ\)</span> the
+<li><span class="math notranslate">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
+<li><span class="math notranslate">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math notranslate">\(\boldsymbol{S}\)</span>;</li>
+<li><span class="math notranslate">\(\circ\)</span> the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamar product</a>
 (i.e. the element wise product operator).</li>
 </ul>
@@ -294,25 +296,25 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric1">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric1</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
 with a (unusually) normalized version of the <em>Root Mean-Squared Error</em>
 (RMSE) metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[\text{uNRMSE}(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \left\langle \left( \left( \hat{\boldsymbol{S}}_n - \boldsymbol{S}^*_n \right)^{\circ 2} \right)^{\circ \frac{1}{2}} \right\rangle\]</div>
 <p>with:</p>
 <ul class="simple">
-<li><span class="math">\(\hat{\boldsymbol{S}}_n\)</span>
+<li><span class="math notranslate">\(\hat{\boldsymbol{S}}_n\)</span>
 the algorithm’s normalized output image (i.e. the <em>cleaned</em> image),
-(using <a class="reference internal" href="#pywi.benchmark.assess.normalize_array" title="pywi.benchmark.assess.normalize_array"><code class="xref py py-func docutils literal"><span class="pre">normalize_array()</span></code></a>);</li>
-<li><span class="math">\(\boldsymbol{S}^*_n\)</span>
+(using <a class="reference internal" href="#pywi.benchmark.assess.normalize_array" title="pywi.benchmark.assess.normalize_array"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalize_array()</span></code></a>);</li>
+<li><span class="math notranslate">\(\boldsymbol{S}^*_n\)</span>
 the normalized reference image (i.e. the <em>clean</em> image)
-(using <a class="reference internal" href="#pywi.benchmark.assess.normalize_array" title="pywi.benchmark.assess.normalize_array"><code class="xref py py-func docutils literal"><span class="pre">normalize_array()</span></code></a>);</li>
-<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
-<span class="math">\(\boldsymbol{S}\)</span>;</li>
-<li><span class="math">\(\boldsymbol{S}^{\circ 2}\)</span> the
+(using <a class="reference internal" href="#pywi.benchmark.assess.normalize_array" title="pywi.benchmark.assess.normalize_array"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalize_array()</span></code></a>);</li>
+<li><span class="math notranslate">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math notranslate">\(\boldsymbol{S}\)</span>;</li>
+<li><span class="math notranslate">\(\boldsymbol{S}^{\circ 2}\)</span> the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)#Analogous_operations">Hadamar power</a>
-(i.e. the element wise square) of matrix <span class="math">\(\boldsymbol{S}\)</span>.</li>
+(i.e. the element wise square) of matrix <span class="math notranslate">\(\boldsymbol{S}\)</span>.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -344,18 +346,18 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric2">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric2</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
-with the <span class="math">\(\mathcal{E}_{\text{shape}}\)</span> metric.</p>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
+with the <span class="math notranslate">\(\mathcal{E}_{\text{shape}}\)</span> metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[f(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \left\langle \text{abs} \left( \frac{\hat{\boldsymbol{S}}}{\sum_i \hat{\boldsymbol{S}}_i} - \frac{\boldsymbol{S}^*}{\sum_i \boldsymbol{S}^*_i} \right) \right\rangle\]</div>
 <p>with:</p>
 <ul class="simple">
-<li><span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
+<li><span class="math notranslate">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
 (i.e. the <em>cleaned</em> image);</li>
-<li><span class="math">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
-<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
-<span class="math">\(\boldsymbol{S}\)</span>.</li>
+<li><span class="math notranslate">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
+<li><span class="math notranslate">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math notranslate">\(\boldsymbol{S}\)</span>.</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -383,15 +385,15 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric3">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric3</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
-with the <span class="math">\(\mathcal{E}^+_{\text{energy}}\)</span>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
+with the <span class="math notranslate">\(\mathcal{E}^+_{\text{energy}}\)</span>
 (a.k.a. <em>relative total counts difference</em>) metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[f(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \frac{ \text{abs} \left( \sum_i \hat{\boldsymbol{S}}_i - \sum_i \boldsymbol{S}^*_i \right) }{ \sum_i \boldsymbol{S}^*_i }\]</div>
-<p>with <span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
+<p>with <span class="math notranslate">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
 (i.e. the <em>cleaned</em> image)
-and <span class="math">\(\boldsymbol{S}^*\)</span> the reference image
+and <span class="math notranslate">\(\boldsymbol{S}^*\)</span> the reference image
 (i.e. the <em>clean</em> image).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -419,15 +421,15 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric4">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric4</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
-with the <span class="math">\(\mathcal{E}_{\text{energy}}\)</span>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
+with the <span class="math notranslate">\(\mathcal{E}_{\text{energy}}\)</span>
 (a.k.a. <em>signed relative total counts difference</em>) metric.</p>
 <p>It applies</p>
-<div class="math">
+<div class="math notranslate">
 \[f(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \frac{ \sum_i \hat{\boldsymbol{S}}_i - \sum_i \boldsymbol{S}^*_i }{ \sum_i \boldsymbol{S}^*_i }\]</div>
-<p>with <span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
+<p>with <span class="math notranslate">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image
 (i.e. the <em>cleaned</em> image)
-and <span class="math">\(\boldsymbol{S}^*\)</span> the reference image
+and <span class="math notranslate">\(\boldsymbol{S}^*\)</span> the reference image
 (i.e. the <em>clean</em> image).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -455,27 +457,27 @@ image cleaning algorithm).</li>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric_ssim">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric_ssim</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric_ssim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric_ssim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
 with the <em>Structural Similarity Index Measure</em> (SSIM) metric.</p>
 <p>See <a class="footnote-reference" href="#id6" id="id2">[1]</a>, <a class="footnote-reference" href="#id7" id="id3">[2]</a>, <a class="footnote-reference" href="#id8" id="id4">[3]</a> and <a class="footnote-reference" href="#id9" id="id5">[4]</a> for more information.</p>
 <p>The SSIM index is calculated on various windows of an image.
-The measure between two windows <span class="math">\(x\)</span> and <span class="math">\(y\)</span> of common size
-<span class="math">\(N.N\)</span> is:</p>
-<div class="math">
+The measure between two windows <span class="math notranslate">\(x\)</span> and <span class="math notranslate">\(y\)</span> of common size
+<span class="math notranslate">\(N.N\)</span> is:</p>
+<div class="math notranslate">
 \[\hbox{SSIM}(x,y) = \frac{(2\mu_x\mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}\]</div>
 <p>with:</p>
 <ul class="simple">
-<li><span class="math">\(\scriptstyle\mu_x\)</span> the average of <span class="math">\(\scriptstyle x\)</span>;</li>
-<li><span class="math">\(\scriptstyle\mu_y\)</span> the average of <span class="math">\(\scriptstyle y\)</span>;</li>
-<li><span class="math">\(\scriptstyle\sigma_x^2\)</span> the variance of <span class="math">\(\scriptstyle x\)</span>;</li>
-<li><span class="math">\(\scriptstyle\sigma_y^2\)</span> the variance of <span class="math">\(\scriptstyle y\)</span>;</li>
-<li><span class="math">\(\scriptstyle \sigma_{xy}\)</span> the covariance of <span class="math">\(\scriptstyle x\)</span> and <span class="math">\(\scriptstyle y\)</span>;</li>
-<li><span class="math">\(\scriptstyle c_1 = (k_1L)^2\)</span>, <span class="math">\(\scriptstyle c_2 = (k_2L)^2\)</span> two variables to stabilize the division with weak denominator;</li>
-<li><span class="math">\(\scriptstyle L\)</span> the dynamic range of the pixel-values (typically this is <span class="math">\(\scriptstyle 2^{\#bits\ per\ pixel}-1\)</span>);</li>
-<li><span class="math">\(\scriptstyle k_1 = 0.01\)</span> and <span class="math">\(\scriptstyle k_2 = 0.03\)</span> by default.</li>
+<li><span class="math notranslate">\(\scriptstyle\mu_x\)</span> the average of <span class="math notranslate">\(\scriptstyle x\)</span>;</li>
+<li><span class="math notranslate">\(\scriptstyle\mu_y\)</span> the average of <span class="math notranslate">\(\scriptstyle y\)</span>;</li>
+<li><span class="math notranslate">\(\scriptstyle\sigma_x^2\)</span> the variance of <span class="math notranslate">\(\scriptstyle x\)</span>;</li>
+<li><span class="math notranslate">\(\scriptstyle\sigma_y^2\)</span> the variance of <span class="math notranslate">\(\scriptstyle y\)</span>;</li>
+<li><span class="math notranslate">\(\scriptstyle \sigma_{xy}\)</span> the covariance of <span class="math notranslate">\(\scriptstyle x\)</span> and <span class="math notranslate">\(\scriptstyle y\)</span>;</li>
+<li><span class="math notranslate">\(\scriptstyle c_1 = (k_1L)^2\)</span>, <span class="math notranslate">\(\scriptstyle c_2 = (k_2L)^2\)</span> two variables to stabilize the division with weak denominator;</li>
+<li><span class="math notranslate">\(\scriptstyle L\)</span> the dynamic range of the pixel-values (typically this is <span class="math notranslate">\(\scriptstyle 2^{\#bits\ per\ pixel}-1\)</span>);</li>
+<li><span class="math notranslate">\(\scriptstyle k_1 = 0.01\)</span> and <span class="math notranslate">\(\scriptstyle k_2 = 0.03\)</span> by default.</li>
 </ul>
 <p>The SSIM index satisfies the condition of symmetry:</p>
-<div class="math">
+<div class="math notranslate">
 \[\text{SSIM}(x, y) = \text{SSIM}(y, x)\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -536,7 +538,7 @@ DOI:10.1007/s10043-009-0119-z</td></tr>
 <dl class="function">
 <dt id="pywi.benchmark.assess.metric_psnr">
 <code class="descclassname">pywi.benchmark.assess.</code><code class="descname">metric_psnr</code><span class="sig-paren">(</span><em>input_img</em>, <em>output_image</em>, <em>reference_image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/assess.html#metric_psnr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.assess.metric_psnr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the score of <code class="docutils literal"><span class="pre">output_image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+<dd><p>Compute the score of <code class="docutils literal notranslate"><span class="pre">output_image</span></code> regarding <code class="docutils literal notranslate"><span class="pre">reference_image</span></code>
 with the <em>Peak Signal-to-Noise Ratio</em> (PSNR) metric.</p>
 <p>See <a class="footnote-reference" href="#id12" id="id10">[5]</a> and <a class="footnote-reference" href="#id13" id="id11">[6]</a> for more information.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -581,17 +583,17 @@ image cleaning algorithm).</li>
 <dd><p>Compute the score of <cite>output_image</cite> regarding <cite>reference_image</cite>
 with the <cite>benchmark_method</cite> metrics:</p>
 <ul class="simple">
-<li>“mse”:                  <a class="reference internal" href="#pywi.benchmark.assess.metric_mse" title="pywi.benchmark.assess.metric_mse"><code class="xref py py-func docutils literal"><span class="pre">metric_mse()</span></code></a></li>
-<li>“nrmse”:                <a class="reference internal" href="#pywi.benchmark.assess.metric_nrmse" title="pywi.benchmark.assess.metric_nrmse"><code class="xref py py-func docutils literal"><span class="pre">metric_nrmse()</span></code></a></li>
-<li>“unrmse”:               <a class="reference internal" href="#pywi.benchmark.assess.metric1" title="pywi.benchmark.assess.metric1"><code class="xref py py-func docutils literal"><span class="pre">metric1()</span></code></a></li>
-<li>“e_shape”:              <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal"><span class="pre">metric2()</span></code></a></li>
-<li>“e_energy”:             <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal"><span class="pre">metric3()</span></code></a></li>
-<li>“mpdspd”:               <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal"><span class="pre">metric2()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal"><span class="pre">metric3()</span></code></a></li>
-<li>“sspd”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric4" title="pywi.benchmark.assess.metric4"><code class="xref py py-func docutils literal"><span class="pre">metric4()</span></code></a></li>
-<li>“ssim”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric_ssim" title="pywi.benchmark.assess.metric_ssim"><code class="xref py py-func docutils literal"><span class="pre">metric_ssim()</span></code></a></li>
-<li>“psnr”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric_psnr" title="pywi.benchmark.assess.metric_psnr"><code class="xref py py-func docutils literal"><span class="pre">metric_psnr()</span></code></a></li>
-<li>“kill_isolated_pixels”: <code class="xref py py-func docutils literal"><span class="pre">metric_kill_isolated_pixels()</span></code></li>
-<li>“all”:                  <a class="reference internal" href="#pywi.benchmark.assess.metric_mse" title="pywi.benchmark.assess.metric_mse"><code class="xref py py-func docutils literal"><span class="pre">metric_mse()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_nrmse" title="pywi.benchmark.assess.metric_nrmse"><code class="xref py py-func docutils literal"><span class="pre">metric_nrmse()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal"><span class="pre">metric2()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal"><span class="pre">metric3()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric4" title="pywi.benchmark.assess.metric4"><code class="xref py py-func docutils literal"><span class="pre">metric4()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_ssim" title="pywi.benchmark.assess.metric_ssim"><code class="xref py py-func docutils literal"><span class="pre">metric_ssim()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_psnr" title="pywi.benchmark.assess.metric_psnr"><code class="xref py py-func docutils literal"><span class="pre">metric_psnr()</span></code></a>, <code class="xref py py-func docutils literal"><span class="pre">metric_kill_isolated_pixels()</span></code></li>
+<li>“mse”:                  <a class="reference internal" href="#pywi.benchmark.assess.metric_mse" title="pywi.benchmark.assess.metric_mse"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_mse()</span></code></a></li>
+<li>“nrmse”:                <a class="reference internal" href="#pywi.benchmark.assess.metric_nrmse" title="pywi.benchmark.assess.metric_nrmse"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_nrmse()</span></code></a></li>
+<li>“unrmse”:               <a class="reference internal" href="#pywi.benchmark.assess.metric1" title="pywi.benchmark.assess.metric1"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric1()</span></code></a></li>
+<li>“e_shape”:              <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric2()</span></code></a></li>
+<li>“e_energy”:             <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric3()</span></code></a></li>
+<li>“mpdspd”:               <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric2()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric3()</span></code></a></li>
+<li>“sspd”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric4" title="pywi.benchmark.assess.metric4"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric4()</span></code></a></li>
+<li>“ssim”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric_ssim" title="pywi.benchmark.assess.metric_ssim"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_ssim()</span></code></a></li>
+<li>“psnr”:                 <a class="reference internal" href="#pywi.benchmark.assess.metric_psnr" title="pywi.benchmark.assess.metric_psnr"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_psnr()</span></code></a></li>
+<li>“kill_isolated_pixels”: <code class="xref py py-func docutils literal notranslate"><span class="pre">metric_kill_isolated_pixels()</span></code></li>
+<li>“all”:                  <a class="reference internal" href="#pywi.benchmark.assess.metric_mse" title="pywi.benchmark.assess.metric_mse"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_mse()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_nrmse" title="pywi.benchmark.assess.metric_nrmse"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_nrmse()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric2" title="pywi.benchmark.assess.metric2"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric2()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric3" title="pywi.benchmark.assess.metric3"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric3()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric4" title="pywi.benchmark.assess.metric4"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric4()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_ssim" title="pywi.benchmark.assess.metric_ssim"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_ssim()</span></code></a>, <a class="reference internal" href="#pywi.benchmark.assess.metric_psnr" title="pywi.benchmark.assess.metric_psnr"><code class="xref py py-func docutils literal notranslate"><span class="pre">metric_psnr()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">metric_kill_isolated_pixels()</span></code></li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -628,10 +630,10 @@ image cleaning algorithm).</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_filter_wavelet_mrfilter.html" class="btn btn-neutral float-right" title="denoising.wavelets_mrfilter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api_filter_hard_filter.html" class="btn btn-neutral float-right" title="filter.hard_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api.html" class="btn btn-neutral" title="SAp CTA data pipeline API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral" title="PyWI API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -662,7 +664,7 @@ image cleaning algorithm).</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.dev12',
+            VERSION:'0.1.dev14',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

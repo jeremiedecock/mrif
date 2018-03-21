@@ -1,5 +1,7 @@
 .. currentmodule:: pywi
 
+.. _introduction_section:
+
 ============
 Introduction
 ============

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyWI API &mdash; Python Wavelet Imaging 0.1.dev14 documentation</title>
+  <title>pywi.ui.filter_with_mrtransform &mdash; Python Wavelet Imaging 0.1.dev14 documentation</title>
   
 
   
@@ -36,8 +36,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Python Wavelet Imaging 0.1.dev14 documentation" href="index.html"/>
-        <link rel="next" title="benchmark.assess" href="api_benchmark_assess.html"/>
-        <link rel="prev" title="Introduction" href="intro.html"/> 
+        <link rel="up" title="PyWI API" href="api.html"/>
+        <link rel="next" title="Developer’s notes" href="developer.html"/>
+        <link rel="prev" title="ui.filter_with_mrfilter" href="api_ui_filter_with_mrfilter.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,7 +93,7 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_assess.html">pywi.benchmark.assess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_filter_hard_filter.html">pywi.filter.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_image_pixel_clusters.html">pywi.image.pixel_clusters</a></li>
@@ -104,7 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="api_transform_mrtransform.html">pywi.transform.mrtransform_wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrtransform.html">pywi.ui.filter_with_mrtransform</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.ui.filter_with_mrtransform</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="developer.html">Developer’s notes</a></li>
@@ -152,13 +153,15 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>PyWI API</li>
+          <li><a href="api.html">PyWI API</a> &raquo;</li>
+        
+      <li>pywi.ui.filter_with_mrtransform</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/api_ui_filter_with_mrtransform.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,60 +174,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi">
-<span id="pywi-api"></span><h1>PyWI API<a class="headerlink" href="#module-pywi" title="Permalink to this headline">¶</a></h1>
-<p>The library provides classes which are usable by third party tools.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This project is still in <em>beta</em> stage, so the API is not finalized yet.</p>
-</div>
-<p>Benchmark package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_benchmark_assess.html">pywi.benchmark.assess</a></li>
+  <div class="section" id="module-pywi.ui.filter_with_mrtransform">
+<span id="pywi-ui-filter-with-mrtransform"></span><h1>pywi.ui.filter_with_mrtransform<a class="headerlink" href="#module-pywi.ui.filter_with_mrtransform" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pywi.ui.filter_with_mrtransform.WaveletTransform">
+<em class="property">class </em><code class="descclassname">pywi.ui.filter_with_mrtransform.</code><code class="descname">WaveletTransform</code><a class="reference internal" href="_modules/pywi/ui/filter_with_mrtransform.html#WaveletTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.filter_with_mrtransform.WaveletTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wavelet transform wrapper.</p>
+<dl class="method">
+<dt id="pywi.ui.filter_with_mrtransform.WaveletTransform.clean_image">
+<code class="descname">clean_image</code><span class="sig-paren">(</span><em>input_image, type_of_filtering='hard_filtering', filter_thresholds=[0.0, 0.0], last_scale_treatment='mask', detect_only_positive_structures=False, kill_isolated_pixels=False, noise_distribution=None, tmp_files_directory='.', output_data_dict=None, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/ui/filter_with_mrtransform.html#WaveletTransform.clean_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.filter_with_mrtransform.WaveletTransform.clean_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean the <cite>input_image</cite> image.</p>
+<p>Apply the wavelet transform, filter planes and return the reverse
+transformed image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_image</strong> (<em>array_like</em>) – The image to clean.</li>
+<li><strong>type_of_filtering</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – Type of filtering: ‘hard_filtering’ or ‘ksigma_hard_filtering’.</li>
+<li><strong>filter_thresholds</strong> (<em>list of float</em>) – Thresholds used for the plane filtering.</li>
+<li><strong>last_scale_treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – Last plane treatment: ‘keep’, ‘drop’ or ‘mask’.</li>
+<li><strong>detect_only_positive_structures</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Detect only positive structures.</li>
+<li><strong>kill_isolated_pixels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – Suppress isolated pixels in the support.</li>
+<li><strong>noise_distribution</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.6)"><em>bool</em></a>) – The JSON file containing the Cumulated Distribution Function of the
+noise model used to inject artificial noise in blank pixels (those
+with a NaN value).</li>
+<li><strong>tmp_files_directory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The path of the directory where temporary files are written.</li>
+<li><strong>output_data_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)"><em>dict</em></a>) – A dictionary used to return results and intermediate results.</li>
 </ul>
-</div>
-<p>Filter package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_filter_hard_filter.html">pywi.filter.hard_filter</a></li>
-</ul>
-</div>
-<p>Image package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_image_pixel_clusters.html">pywi.image.pixel_clusters</a></li>
-</ul>
-</div>
-<p>I/O package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
-</ul>
-</div>
-<p>Optimization package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
-</ul>
-</div>
-<p>Transform package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_transform_mrtransform.html">pywi.transform.mrtransform_wrapper</a></li>
-</ul>
-</div>
-<p>User interface package (UI):</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_filter_with_mrtransform.html">pywi.ui.filter_with_mrtransform</a></li>
-</ul>
-</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Return the cleaned image.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -237,10 +229,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_benchmark_assess.html" class="btn btn-neutral float-right" title="benchmark.assess" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="developer.html" class="btn btn-neutral float-right" title="Developer’s notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="intro.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_ui_filter_with_mrfilter.html" class="btn btn-neutral" title="ui.filter_with_mrfilter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
