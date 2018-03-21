@@ -1,4 +1,5 @@
 # Makefile with some convenient quick ways to do common things
+# This file is mostly inspired by https://github.com/cta-observatory/ctapipe/blob/master/Makefile
 
 include meta.make
 
@@ -39,6 +40,7 @@ PYTHON=python3
 #	@echo '  help                Print this help message (the default)'
 #	@echo '  init                Import submodules'
 #	@echo '  clean               Remove generated files'
+#   @echo '  env                 Create a conda environment for ctapipe development'
 #	@echo '  develop             Make symlinks to this package in python install dir'
 #	@echo '  test                Run tests'
 #	@echo '  doc                 Generate Sphinx docs'
@@ -65,6 +67,14 @@ list:
 
 analyze:
 	@pyflakes $(PYTHON_PACKAGE_NAME) examples
+
+dev-env:
+	conda env create -n pywi-dev -f environment.yml
+	source activate pywi-dev
+
+env:
+	conda env create -n pywi -f environment.yml
+	source activate pywi
 
 init:
 	git submodule init
@@ -116,9 +126,6 @@ test:
 trailing-spaces:
 	find $(PYTHON_PACKAGE_NAME) examples docs -name "*.py" -exec perl -pi -e 's/[ \t]*$$//' {} \;
 
-init-skeleton:
-	./init-skeleton.sh
-
 
 ## PUBLISH ####################################################################
 
@@ -130,10 +137,9 @@ pypi:
 
 ## CLEAN ######################################################################
 
-init: clean
-
 clean:
 	@echo "Remove generated files"
+	$(PYTHON) setup.py $@ --all
 	@find . -type d -iname "__pycache__" -exec rm -rfv {} \;
 	@find . -type f -iname "*.pyc" -exec rm -v {} \;
 	@find . -type f -iname "*.pyo" -exec rm -v {} \;

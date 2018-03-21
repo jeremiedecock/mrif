@@ -1,6 +1,20 @@
 # TODO
 
 - [ ] Add the package "pipeline" (or another name) in witch parts of the "ui" package will migrate
+- [ ] Improve the Makefile. see: python3 setup.py --help-commands. Among the interesting options:
+    - [ ] python3 setup.py clean --help
+    - [ ] python3 setup.py install_data --help
+    - [ ] python3 setup.py bdist_rpm --help
+    - [ ] python3 setup.py bdist_wininst --help
+    - [ ] python3 setup.py check --help
+    - [ ] python3 setup.py upload --help
+    - [ ] python3 setup.py develop --help
+    - [ ] python3 setup.py dist_info --help
+    - [ ] python3 setup.py saveopts --help
+    - [ ] python3 setup.py test --help
+    - [ ] python3 setup.py upload_docs --help
+    - [ ] python3 setup.py ptr --help
+    - [ ] python3 setup.py pytest --help
 - [ ] Finish the refactoring from the former "datapipe" project
     - [ ] grep -ri denoising .
     - [ ] grep -r wavelets_mrfilter .

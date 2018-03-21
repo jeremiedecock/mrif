@@ -24,6 +24,88 @@ Getting Started For Developers
 This guide assumes you are using the *Anaconda* Python distribution,
 installed locally (*miniconda* should also work).
 
+.. The following guidline is mostly taken from https://cta-observatory.github.io/ctapipe/_sources/getting_started/index.rst.txt
+
+Step 1: Set up your package environment
++++++++++++++++++++++++++++++++++++++++
+
+.. TODO: make a short introduction to explain what is a virtual environment and why it is recommanded to use it
+
+.. TODO: explain the same things with the native venv alternative
+
+In your terminal, change to the directory where you cloned `pywi`, and type::
+
+    conda env create -f environment.yml
+
+This will create a conda virtual environment called `pywi-dev` with all
+the PyWI dependencies and a few useful packages for development and
+interaction.
+
+If you want to give a different name to this environment, replace the previous
+command by::
+
+    conda env create -n NAME_OF_THE_ENVIROMENT -f environment.yml
+
+and don't forget to adapt the following commands.
+
+You can check the virtual environment has been successfully
+created with the following command::
+
+    conda env list
+
+Next, switch to this new virtual environment:
+
+* On Windows, in your Anaconda Prompt, run ``activate pywi-dev``
+* On MacOSX and Linux, in your Terminal, run ``source activate pywi-dev``
+
+You will need to type that last command any time you open a new
+terminal to activate the virtual environment (you can of course
+install everything into the base Anaconda environment without creating
+a virtual environment, but then you may have trouble if you want to
+install other packages with different requirements on the
+dependencies).
+
+If you want to see the list of packages installed in the virtual environment,
+type::
+
+    conda list -n pywi-dev
+
+If later you want to leave the `pywi-dev` virtual environment:
+
+* On Windows, in your Anaconda Prompt, run ``deactivate``
+* On MacOSX and Linux, in your Terminal, run ``source deactivate``
+
+Also if you want to completely remove this environment from your system, you
+can type::
+
+    conda remove --name pywi-dev --all
+
+See https://conda.io/docs/user-guide/tasks/manage-environments.html for more
+information on Anaconda virtual environments.
+
+Step 2: Setup PyWI for development
+++++++++++++++++++++++++++++++++++
+
+Now setup this cloned version for development. The following command
+will make symlinks in your python library directory to your PyWI
+installation (it creates a `.pth` file, there is no need to set
+PYTHONPATH, in fact it should be blank to avoid other problems). From
+then on, all the PyWI binaries and the library itself will be
+usable from anywhere.
+
+For Linux/MacOSX users, type::
+
+    python3 setup.py develop
+
+or as a shorter alternative::
+
+    make develop
+
+For Windows users, type::
+
+    py setup.py develop
+
+If you want to remove the
 
 Bug reports
 ~~~~~~~~~~~
@@ -31,8 +113,6 @@ Bug reports
 To search for bugs or report them, please use the Bug Tracker at:
 
     https://github.com/jeremiedecock/pywi/issues
-
-
 
 Contribute
 ~~~~~~~~~~

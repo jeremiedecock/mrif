@@ -1,0 +1,12 @@
+name: pywi-dev
+channels:
+  - jdhp
+  - conda-forge
+dependencies:
+  - numpy
+  - scipy
+  - scikit-image
+  - pillow
+  - astropy
+  - pandas
+  - matplotlib

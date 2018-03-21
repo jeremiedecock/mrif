@@ -77,8 +77,8 @@ PyWI also depends on other packages for optional features:
 * `Scikit-image <http://scikit-image.org/>`_
 * `Pillow (a.k.a. PIL) <https://pillow.readthedocs.io/en/latest/>`_ to read and write many image formats (PNG, JPEG, TIFF, ...)
 * `Astropy <http://www.astropy.org/>`_ to provide Fits file format
-* `Matplotlib <http://matplotlib.org/>`_ 1.5 or later to provide plotting functionality
 * `Pandas <http://pandas.pydata.org/>`_
+* `Matplotlib <http://matplotlib.org/>`_ 1.5 or later to provide plotting functionality
 * `Cosmostat iSAP Sparce2D <http://www.cosmostat.org/software/isap/>`_
 
 However, note that these only need to be installed if those particular features
