@@ -49,7 +49,7 @@ import numpy as np
 import time
 
 import pywi.denoising
-from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+from pywi.ui.commons import AbstractCleaningAlgorithm
 from pywi.benchmark import assess
 from pywi.io import images
 

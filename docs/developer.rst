@@ -11,12 +11,26 @@ The source code is currently `available on GitHub`_ under the terms and
 conditions of the `MIT license`_. Fork away!
 
 
+Getting Started For Developers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+   the following guide is used only if you want to *develop* the
+   `pywi` package. If you just want to write code that uses it
+   externally, you should rather install it as explained
+   :ref:`there <introduction_section>`.
+
+This guide assumes you are using the *Anaconda* Python distribution,
+installed locally (*miniconda* should also work).
+
+
 Bug reports
 ~~~~~~~~~~~
 
 To search for bugs or report them, please use the Bug Tracker at:
 
-    https://github.com/jdhp-sap/sap-cta-data-pipeline/issues
+    https://github.com/jeremiedecock/pywi/issues
 
 
 
@@ -51,7 +65,7 @@ Changes
    :start-line: 2
 
 .. _MIT license: https://opensource.org/licenses/MIT
-.. _available on GitHub: https://github.com/jdhp-sap/sap-cta-data-pipeline
+.. _available on GitHub: https://github.com/jeremiedecock/pywi
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _PEP257: https://www.python.org/dev/peps/pep-0257/
 .. _PEP287: https://www.python.org/dev/peps/pep-0287/
@@ -60,4 +74,4 @@ Changes
 .. _doctest: https://docs.python.org/3/library/doctest.html
 .. _pylint: http://www.pylint.org/
 .. _pyflakes: https://pypi.python.org/pypi/pyflakes
-.. _TODO.md: https://github.com/jdhp-sap/sap-cta-data-pipeline/blob/master/TODO.md
+.. _TODO.md: https://github.com/jeremiedecock/pywi/blob/master/TODO.md

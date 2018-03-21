@@ -20,8 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['abstract_cleaning_algorithm',
-           'fft',
-           'wavelets_mrfilter',
-           'wavelets_mrtransform']
+__all__ = ['mrtransform_wrapper']
 

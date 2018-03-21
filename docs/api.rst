@@ -1,6 +1,6 @@
-=========================
-SAp CTA data pipeline API
-=========================
+========
+PyWI API
+========
 
 .. module:: pywi
 
@@ -17,14 +17,12 @@ Benchmark package:
 
    pywi.benchmark.assess <api_benchmark_assess>
 
-Denoising package:
+Filter package:
 
 .. toctree::
    :maxdepth: 1
 
-   pywi.denoising.wavelets_mrfilter <api_filter_wavelet_mrfilter>
-   pywi.denoising.wavelets_mrtransform <api_filter_wavelet_mrtransform>
-   pywi.denoising.abstract_cleaning_algorithm <api_filter_abstract_cleaning_algorithm>
+   pywi.filter.hard_filter <api_filter_hard_filter>
 
 Image package:
 
@@ -49,4 +47,20 @@ Optimization package:
    pywi.optimization.differential_evolution <api_optimization_differential_evolution>
    pywi.optimization.saes <api_optimization_saes>
    pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi <api_optimization_objectivefunc_wavelets_mrfilter_delta_psi>
+
+Transform package:
+
+.. toctree::
+   :maxdepth: 1
+
+   pywi.transform.mrtransform_wrapper <api_transform_mrtransform>
+
+User interface package (UI):
+
+.. toctree::
+   :maxdepth: 1
+
+   pywi.ui.commons <api_ui_commons>
+   pywi.ui.filter_with_mrfilter <api_ui_filter_with_mrfilter>
+   pywi.ui.filter_with_mrtransform <api_ui_filter_with_mrtransform>
 

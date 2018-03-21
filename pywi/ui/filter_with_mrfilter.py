@@ -31,40 +31,40 @@ Usage
 
 ::
 
-    wavelets_mrfilter.py [-h] [--type-of-filtering INTEGER]
-                              [--coef-detection-method INTEGER]
-                              [--type-of-multiresolution-transform INTEGER]
-                              [--type-of-filters INTEGER]
-                              [--type-of-non-orthog-filters INTEGER]
-                              [--noise-model INTEGER]
-                              [--number-of-scales integer]
-                              [--k-sigma-noise-threshold FLOAT]
-                              [--number-of-iterations integer] [--epsilon FLOAT]
-                              [--support-file-name FILE]
-                              [--suppress-isolated-pixels]
-                              [--kill-isolated-pixels] [--suppress-last-scale]
-                              [--detect-only-positive-structure]
-                              [--precision FLOAT]
-                              [--first-detection-scale INTEGER]
-                              [--suppress-positivity-constraint]
-                              [--maximum-level-constraint]
-                              [--mask-file-path MASK_FILE_NAME]
-                              [--offset-after-calibration FLOAT]
-                              [--correction-offset]
-                              [--input-image-scale INPUT_IMAGE_SCALE]
-                              [--noise-cdf-file FILE] [--tmp-dir DIRECTORY]
-                              [--verbose] [--debug] [--max-images INTEGER]
-                              [--telid INTEGER] [--eventid INTEGER]
-                              [--camid STRING] [--benchmark STRING]
-                              [--label STRING] [--plot] [--saveplot FILE]
-                              [--output FILE]
-                              FILE [FILE ...]
+    filter_with_mrfilter.py [-h] [--type-of-filtering INTEGER]
+                                 [--coef-detection-method INTEGER]
+                                 [--type-of-multiresolution-transform INTEGER]
+                                 [--type-of-filters INTEGER]
+                                 [--type-of-non-orthog-filters INTEGER]
+                                 [--noise-model INTEGER]
+                                 [--number-of-scales integer]
+                                 [--k-sigma-noise-threshold FLOAT]
+                                 [--number-of-iterations integer] [--epsilon FLOAT]
+                                 [--support-file-name FILE]
+                                 [--suppress-isolated-pixels]
+                                 [--kill-isolated-pixels] [--suppress-last-scale]
+                                 [--detect-only-positive-structure]
+                                 [--precision FLOAT]
+                                 [--first-detection-scale INTEGER]
+                                 [--suppress-positivity-constraint]
+                                 [--maximum-level-constraint]
+                                 [--mask-file-path MASK_FILE_NAME]
+                                 [--offset-after-calibration FLOAT]
+                                 [--correction-offset]
+                                 [--input-image-scale INPUT_IMAGE_SCALE]
+                                 [--noise-cdf-file FILE] [--tmp-dir DIRECTORY]
+                                 [--verbose] [--debug] [--max-images INTEGER]
+                                 [--telid INTEGER] [--eventid INTEGER]
+                                 [--camid STRING] [--benchmark STRING]
+                                 [--label STRING] [--plot] [--saveplot FILE]
+                                 [--output FILE]
+                                 FILE [FILE ...]
     
-    Denoise FITS images with Wavelet Transform.
+    Denoise images with Wavelet Transform.
     
     positional arguments:
-      FILE                  The files image to process (FITS).If fileargs is a
-                            directory,all FITS files it contains are processed.
+      FILE                  The files image to process. If fileargs is a
+                            directory, all files it contains are processed.
     
     optional arguments:
       -h, --help            show this help message and exit
@@ -205,9 +205,9 @@ Usage
 
 Examples
 --------
-  ./wavelets_mrfilter.py -h
-  ./wavelets_mrfilter.py ./test.fits
-  ipython3 -- ./wavelets_mrfilter.py -n4 ./test.fits
+  ./filter_with_mrfilter.py -h
+  ./filter_with_mrfilter.py ./test.fits
+  ipython3 -- ./filter_with_mrfilter.py -n4 ./test.fits
 
 Notes
 -----
@@ -222,7 +222,7 @@ import numpy as np
 import os
 import time
 
-#from pywi.denoising.abstract_cleaning_algorithm import AbstractCleaningAlgorithm
+#from pywi.ui.commons import AbstractCleaningAlgorithm
 from pywi.io import images
 
 from pywi.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels

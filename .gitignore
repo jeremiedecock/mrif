@@ -5,6 +5,8 @@ xps
 *.pdf
 *.json
 *.fits
+archives_ngc3576-out.png
+archives_ngc3576.png
 
 # PYTHON ######################################################################
 

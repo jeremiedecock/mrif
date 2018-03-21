@@ -101,8 +101,8 @@ SCRIPTS = []
 #   }
 ENTRY_POINTS = {
   'console_scripts': [
-      'pywi-mrtransform = pywi.denoising.wavelets_mrtransform:main',
-      'pywi-mrfilter = pywi.denoising.wavelets_mrfilter:main',
+      'pywi-mrtransform = pywi.ui.filter_with_mrtransform:main',
+      'pywi-mrfilter = pywi.ui.filter_with_mrfilter:main',
   ],
 }
 

@@ -45,7 +45,7 @@ from matplotlib.backends.backend_gtk3cairo import FigureCanvasGTK3Cairo as Figur
 
 from pywi.io import images
 from pywi.denoising import tailcut as tailcut_mod
-from pywi.denoising import wavelets_mrfilter as wavelets_mod
+from pywi.ui.filter_with_mrfilter import wavelets_mrfilter as wavelets_mod
 from pywi.benchmark import assess as assess_mod
 
 from ctapipe.utils import linalg

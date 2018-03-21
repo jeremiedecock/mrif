@@ -5,7 +5,7 @@ PROJECT_RELEASE=$(python -c "import sys ; sys.path.append('..') ; print('.'.join
 
 sphinx-quickstart \
     --sep \
-    --project="SAp CTA data pipeline" \
+    --project="PyWI" \
     --author="Jérémie DECOCK" \
     -v "${PROJECT_VERSION}" \             # The short X.Y version.
     --release="${PROJECT_RELEASE}" \      # The full version, including alpha/beta/rc tags.

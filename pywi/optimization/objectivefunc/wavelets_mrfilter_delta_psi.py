@@ -24,7 +24,7 @@ __all__ = ['ObjectiveFunction']
 
 import numpy as np
 
-from pywi.denoising.wavelets_mrfilter import WaveletTransform
+from pywi.ui.filter_with_mrfilter import WaveletTransform
 from pywi.benchmark import assess
 
 
