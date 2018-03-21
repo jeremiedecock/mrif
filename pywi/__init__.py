@@ -84,7 +84,7 @@ Note:
     This project is in beta stage.
 """
 
-__version__ = '0.1.dev14'
+__version__ = '0.1.dev15'
 
 from . import benchmark
 from . import filtering
