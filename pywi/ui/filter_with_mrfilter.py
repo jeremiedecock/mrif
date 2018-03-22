@@ -215,7 +215,8 @@ This script requires the mr_filter program
 (http://www.cosmostat.org/software/isap/).
 """
 
-__all__ = ['WaveletTransform']
+__all__ = ['WaveletTransform',
+           'add_arguments']
 
 import argparse
 import numpy as np
@@ -511,17 +512,23 @@ class WaveletTransform:
         return cleaned_img
 
 
-def main():
-    """The main module execution function.
+def add_arguments(parser):
+    """Populate the given argparse.ArgumentParser with arguments.
 
-    Contains the instructions executed when the module is not imported but
-    directly called from the system command line.
+    This function can be used to make the definition these argparse arguments
+    reusable in other modules and avoid the duplication of these definitions
+    among the executable scripts.
+
+    Parameters
+    ----------
+    parser : argparse.ArgumentParser
+        The parser to populate.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        Return the populated ArgumentParser object.
     """
-
-    # PARSE OPTIONS ###########################################################
-
-    parser = argparse.ArgumentParser(description="Denoise FITS images with Wavelet Transform.")
-
 
     parser.add_argument("--type-of-filtering", "-f", type=int, metavar="INTEGER",
                         help="""Type of filtering:
@@ -728,6 +735,21 @@ def main():
     parser.add_argument("--tmp-dir", default=".", metavar="DIRECTORY",
                         help="The directory where temporary files are written.")
 
+    return parser
+
+
+def main():
+    """The main module execution function.
+
+    Contains the instructions executed when the module is not imported but
+    directly called from the system command line.
+    """
+
+    # PARSE OPTIONS ###########################################################
+
+    parser = argparse.ArgumentParser(description="Denoise images with Wavelet Transform.")
+
+    parser = add_arguments(parser)
     parser = add_common_arguments(parser)
 
     args = parser.parse_args()
@@ -780,52 +802,6 @@ def main():
     ##else:
     ##    noise_distribution = None
     noise_distribution = None
-
-    #cleaning_function_params = {
-    #            "type_of_multiresolution_transform": type_of_multiresolution_transform,
-    #            "type_of_filters": type_of_filters,
-    #            "type_of_non_orthog_filters": type_of_non_orthog_filters,
-    #            "number_of_scales": number_of_scales,
-    #            "suppress_last_scale": suppress_last_scale,
-    #            "suppress_isolated_pixels": suppress_isolated_pixels,
-    #            "kill_isolated_pixels": kill_isolated_pixels,
-    #            "coef_detection_method": coef_detection_method,
-    #            "k_sigma_noise_threshold": k_sigma_noise_threshold,
-    #            "noise_model": noise_model,
-    #            "detect_only_positive_structure": detect_only_positive_structure,
-    #            "suppress_positivity_constraint": suppress_positivity_constraint,
-    #            "type_of_filtering": type_of_filtering,
-    #            "first_detection_scale": first_detection_scale,
-    #            "number_of_iterations": number_of_iterations,
-    #            "epsilon": epsilon,
-    #            "support_file_name": support_file_name,
-    #            "precision": precision,
-    #            "mask_file_path": mask_file_path,
-    #            "offset_after_calibration": offset_after_calibration,
-    #            "correction_offset": correction_offset,
-    #            "input_image_scale": input_image_scale,
-    #            "noise_distribution": noise_distribution,
-    #            "verbose": verbose,
-    #            "tmp_files_directory": tmp_dir,
-    #            #"mrfilter_directory": "/Volumes/ramdisk"
-    #        }
-
-    #cleaning_algorithm = WaveletTransform()
-
-    #if verbose:
-    #    cleaning_algorithm.verbose = True
-
-    #if label is not None:
-    #    cleaning_algorithm.label = label
-
-    #output_dict = cleaning_algorithm.run(cleaning_function_params,
-    #                                     input_file_or_dir_path_list,
-    #                                     benchmark_method,
-    #                                     output_file_path,
-    #                                     plot=plot,
-    #                                     saveplot=saveplot,
-    #                                     max_num_img=max_images,
-    #                                     debug=debug)
 
     # CLEAN THE INPUT IMAGE ###################################
 

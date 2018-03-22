@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-def add_common_arguments(parser):
+def add_common_arguments(parser, nargs=1):
     """Populate the given argparse.ArgumentParser with arguments.
 
     This function can be used to centralize the definition of commons argparse
@@ -29,11 +29,11 @@ def add_common_arguments(parser):
 
     The following arguments are added to the parser:
 
-    - verbose (boolean): verbose mode
-    - debug (boolean): debug mode
-    - plot (boolean): plot images
-    - saveplot (string): the output file where to save plotted images
-    - fileargs (file paths): the files image to process
+    - **verbose** (boolean): verbose mode
+    - **debug** (boolean): debug mode
+    - **plot** (boolean): plot images
+    - **saveplot** (string): the output file where to save plotted images
+    - **fileargs** (file paths): the files image to process
 
     Parameters
     ----------
@@ -74,7 +74,7 @@ def add_common_arguments(parser):
 #                        help="The output file path (JSON)")
 
 #    parser.add_argument("fileargs", nargs="+", metavar="FILE",
-    parser.add_argument("fileargs", nargs=1, metavar="FILE",
+    parser.add_argument("fileargs", nargs=nargs, metavar="FILE",
                         help="The files image to process.")
 #                             "If fileargs is a directory,"
 #                             "all FITS files it contains are processed.")
