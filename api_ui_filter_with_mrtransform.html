@@ -227,43 +227,16 @@ reusable in other modules and avoid the duplication of these definitions
 among the executable scripts.</p>
 <p>The following arguments are added to the parser:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt><strong>type-of-filtering</strong> (string)</dt>
-<dd>type of filtering</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>filter-thresholds</strong> (float list)</dt>
-<dd>thresholds used for the plane filtering.</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>last-scale</strong> (string)</dt>
-<dd>last plane treatment</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>detect-only-positive-structures</strong> (boolean)</dt>
-<dd>detect only positive structures.</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>kill-isolated-pixels</strong> (boolean)</dt>
-<dd>suppress isolated pixels in the support (scipy implementation)</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>noise-cdf-file</strong> (path)</dt>
-<dd>the JSON file containing the Cumulated Distribution Function of the noise
-model used to inject artificial noise in blank pixels (those with a NaN
-value)</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><strong>tmp-dir</strong> (path)</dt>
-<dd>the directory where temporary files are written</dd>
-</dl>
-</li>
+<li><em>type-of-filtering</em> (string): type of filtering</li>
+<li><em>filter-thresholds</em> (float list): thresholds used for the plane filtering.</li>
+<li><em>last-scale</em> (string): last plane treatment</li>
+<li><em>detect-only-positive-structures</em> (boolean): detect only positive structures.</li>
+<li><em>kill-isolated-pixels</em> (boolean): suppress isolated pixels in the support
+(scipy implementation)</li>
+<li><em>noise-cdf-file</em> (path): the JSON file containing the Cumulated
+Distribution Function of the noise model used to inject artificial noise
+in blank pixels (those with a NaN value)</li>
+<li><em>tmp-dir</em> (path): the directory where temporary files are written</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
