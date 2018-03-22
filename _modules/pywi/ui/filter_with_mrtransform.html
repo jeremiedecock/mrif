@@ -179,7 +179,8 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WaveletTransform&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WaveletTransform&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
 
 <span class="sd">&quot;&quot;&quot;Denoise images with Wavelet Transform.</span>
 
@@ -383,7 +384,7 @@
         <span class="k">return</span> <span class="n">cleaned_image</span>
 
 
-<span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../api_ui_filter_with_mrtransform.html#pywi.ui.filter_with_mrtransform.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Populate the given argparse.ArgumentParser with arguments.</span>
 
 <span class="sd">    This function can be used to make the definition these argparse arguments</span>
@@ -446,7 +447,7 @@
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
-
+</div>
     <span class="k">return</span> <span class="n">parser</span>
 
 

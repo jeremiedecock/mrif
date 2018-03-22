@@ -218,6 +218,46 @@ with a NaN value).</li>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="pywi.ui.filter_with_mrtransform.add_arguments">
+<code class="descclassname">pywi.ui.filter_with_mrtransform.</code><code class="descname">add_arguments</code><span class="sig-paren">(</span><em>parser</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/ui/filter_with_mrtransform.html#add_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.filter_with_mrtransform.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate the given argparse.ArgumentParser with arguments.</p>
+<p>This function can be used to make the definition these argparse arguments
+reusable in other modules and avoid the duplication of these definitions
+among the executable scripts.</p>
+<p>The following arguments are added to the parser:</p>
+<dl class="docutils">
+<dt><strong>type-of-filtering</strong> (string)</dt>
+<dd>type of filtering</dd>
+<dt><strong>filter-thresholds</strong> (float list)</dt>
+<dd>thresholds used for the plane filtering.</dd>
+<dt><strong>last-scale</strong> (string)</dt>
+<dd>last plane treatment</dd>
+<dt><strong>detect-only-positive-structures</strong> (boolean)</dt>
+<dd>detect only positive structures.</dd>
+<dt><strong>kill-isolated-pixels</strong> (boolean)</dt>
+<dd>suppress isolated pixels in the support (scipy implementation)</dd>
+<dt><strong>noise-cdf-file</strong> (path)</dt>
+<dd>the JSON file containing the Cumulated Distribution Function of the noise
+model used to inject artificial noise in blank pixels (those with a NaN
+value)</dd>
+<dt><strong>tmp-dir</strong> (path)</dt>
+<dd>the directory where temporary files are written</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parser</strong> (<a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.6)"><em>argparse.ArgumentParser</em></a>) – The parser to populate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Return the populated ArgumentParser object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser" title="(in Python v3.6)">argparse.ArgumentParser</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
