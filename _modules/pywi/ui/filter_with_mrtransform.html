@@ -252,19 +252,21 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="c1">#from pywi.ui.commons import AbstractCleaningAlgorithm</span>
-<span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
-
 <span class="kn">from</span> <span class="nn">pywi.filtering</span> <span class="k">import</span> <span class="n">hard_filter</span>
 <span class="kn">from</span> <span class="nn">pywi.filtering.hard_filter</span> <span class="k">import</span> <span class="n">filter_planes</span>
+
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+
+<span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
 
 <span class="kn">from</span> <span class="nn">pywi.transform</span> <span class="k">import</span> <span class="n">mrtransform_wrapper</span>
 <span class="kn">from</span> <span class="nn">pywi.transform.mrtransform_wrapper</span> <span class="k">import</span> <span class="n">wavelet_transform</span>
 <span class="kn">from</span> <span class="nn">pywi.transform.mrtransform_wrapper</span> <span class="k">import</span> <span class="n">inverse_wavelet_transform</span>
 
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">pywi.ui.argparse_commons</span> <span class="k">import</span> <span class="n">add_common_arguments</span>
+<span class="c1">#from pywi.ui.commons import AbstractCleaningAlgorithm</span>
 
 <span class="c1"># CONSTANTS ##################################################################</span>
 
@@ -377,8 +379,8 @@
             <span class="n">cleaned_image</span> <span class="o">=</span> <span class="n">scipy_kill_isolated_pixels</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
                 <span class="n">images</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">,</span> <span class="s2">&quot;Cleaned image after island kill&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">cleaned_image</span></div></div>
+</div></div>
+        <span class="k">return</span> <span class="n">cleaned_image</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -390,7 +392,7 @@
 
     <span class="c1"># PARSE OPTIONS ###########################################################</span>
 
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Denoise FITS images with Wavelet Transform.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filter images with Wavelet Transform.&quot;</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-filtering&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;STRING&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">DEFAULT_TYPE_OF_FILTERING</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Type of filtering: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">AVAILABLE_TYPE_OF_FILTERING</span><span class="p">)))</span>
@@ -413,40 +415,7 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
 
-    <span class="c1"># COMMON OPTIONS</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verbose mode&quot;</span><span class="p">)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--debug&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Debug mode&quot;</span><span class="p">)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--max-images&quot;, type=int, metavar=&quot;INTEGER&quot;, </span>
-<span class="c1">#                        help=&quot;The maximum number of images to process&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--benchmark&quot;, &quot;-b&quot;, metavar=&quot;STRING&quot;, </span>
-<span class="c1">#                        help=&quot;The benchmark method to use to assess the algorithm for the&quot;</span>
-<span class="c1">#                             &quot;given images&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--label&quot;, &quot;-l&quot;, default=None,</span>
-<span class="c1">#                        metavar=&quot;STRING&quot;,</span>
-<span class="c1">#                        help=&quot;The label attached to the produced results&quot;)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--plot&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Plot images&quot;</span><span class="p">)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--saveplot&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The output file where to save plotted images&quot;</span><span class="p">)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--output&quot;, &quot;-o&quot;, default=None,</span>
-<span class="c1">#                        metavar=&quot;FILE&quot;,</span>
-<span class="c1">#                        help=&quot;The output file path (JSON)&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;fileargs&quot;, nargs=&quot;+&quot;, metavar=&quot;FILE&quot;,</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;fileargs&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The files image to process.&quot;</span><span class="p">)</span>
-<span class="c1">#                             &quot;If fileargs is a directory,&quot;</span>
-<span class="c1">#                             &quot;all FITS files it contains are processed.&quot;)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 

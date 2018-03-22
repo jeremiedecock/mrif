@@ -60,6 +60,7 @@ User interface package (UI):
 .. toctree::
    :maxdepth: 1
 
+   pywi.ui.argparse_commons <api_ui_argparse>
    pywi.ui.commons <api_ui_commons>
    pywi.ui.filter_with_mrfilter <api_ui_filter_with_mrfilter>
    pywi.ui.filter_with_mrtransform <api_ui_filter_with_mrtransform>
