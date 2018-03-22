@@ -18,9 +18,9 @@ Description
 PyWI is an image filtering library aimed at removing additive background noise
 from raster graphics images.
 
-* Input: a FITS file containing the raster graphics to clean (i.e. an image
+* Input: an image file containing the raster graphics to clean (i.e. an image
   defined as a classic rectangular lattice of square pixels).
-* Output: a FITS file containing the cleaned raster graphics.
+* Output: an image file containing the cleaned raster graphics.
 
 The image filter relies on multiresolution analysis methods (Wavelet
 transforms) that remove some scales (frequencies) locally in space. These
