@@ -222,12 +222,14 @@ import numpy as np
 import os
 import time
 
-#from pywi.ui.commons import AbstractCleaningAlgorithm
-from pywi.io import images
-
 from pywi.image.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
 from pywi.image.pixel_clusters import kill_isolated_pixels_stats
 from pywi.image.pixel_clusters import number_of_islands
+
+from pywi.io import images
+
+from pywi.ui.argparse_commons import add_common_arguments
+#from pywi.ui.commons import AbstractCleaningAlgorithm
 
 # CONSTANTS ##################################################################
 
@@ -726,40 +728,7 @@ def main():
     parser.add_argument("--tmp-dir", default=".", metavar="DIRECTORY",
                         help="The directory where temporary files are written.")
 
-    # COMMON OPTIONS
-
-    parser.add_argument("--verbose", "-v", action="store_true",
-                        help="Verbose mode")
-
-    parser.add_argument("--debug", action="store_true",
-                        help="Debug mode")
-
-#    parser.add_argument("--max-images", type=int, metavar="INTEGER", 
-#                        help="The maximum number of images to process")
-#
-#    parser.add_argument("--benchmark", "-b", metavar="STRING",
-#                        help="The benchmark method to use to assess the algorithm for the"
-#                             "given images")
-#
-#    parser.add_argument("--label", "-l", default=None,
-#                        metavar="STRING",
-#                        help="The label attached to the produced results")
-
-    parser.add_argument("--plot", action="store_true",
-                        help="Plot images")
-
-    parser.add_argument("--saveplot", metavar="FILE",
-                        help="The output file where to save plotted images")
-
-#    parser.add_argument("--output", "-o", metavar="FILE",
-#                        help="The output file path (JSON)")
-
-#    parser.add_argument("fileargs", nargs="+", metavar="FILE",
-#                        help="The files image to process (FITS)."
-#                             "If fileargs is a directory,"
-#                             "all FITS files it contains are processed.")
-    parser.add_argument("fileargs", nargs=1, metavar="FILE",
-                        help="The files image to process.")
+    parser = add_common_arguments(parser)
 
     args = parser.parse_args()
 
