@@ -1,0 +1,1090 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pywi.ui.filter_with_mrfilter &mdash; Python Wavelet Imaging 0.1.dev16 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.1.dev16 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Python Wavelet Imaging
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer.html">Developer’s notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Python Wavelet Imaging</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pywi.ui.filter_with_mrfilter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pywi.ui.filter_with_mrfilter</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Copyright (c) 2016 Jérémie DECOCK (http://www.jdhp.org)</span>
+
+<span class="c1"># This script is provided under the terms and conditions of the MIT license:</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1"># of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1"># in the Software without restriction, including without limitation the rights</span>
+<span class="c1"># to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1"># copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1"># furnished to do so, subject to the following conditions:</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included in</span>
+<span class="c1"># all copies or substantial portions of the Software.</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1"># IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1"># FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1"># AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1"># LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
+<span class="c1"># THE SOFTWARE.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Denoise FITS images with Wavelet Transform.</span>
+
+<span class="sd">This script use mr_filter -- a program written CEA/CosmoStat</span>
+<span class="sd">(www.cosmostat.org) -- to make Wavelet Transform.</span>
+
+<span class="sd">Usage</span>
+<span class="sd">-----</span>
+
+<span class="sd">::</span>
+
+<span class="sd">    filter_with_mrfilter.py [-h] [--type-of-filtering INTEGER]</span>
+<span class="sd">                                 [--coef-detection-method INTEGER]</span>
+<span class="sd">                                 [--type-of-multiresolution-transform INTEGER]</span>
+<span class="sd">                                 [--type-of-filters INTEGER]</span>
+<span class="sd">                                 [--type-of-non-orthog-filters INTEGER]</span>
+<span class="sd">                                 [--noise-model INTEGER]</span>
+<span class="sd">                                 [--number-of-scales integer]</span>
+<span class="sd">                                 [--k-sigma-noise-threshold FLOAT]</span>
+<span class="sd">                                 [--number-of-iterations integer] [--epsilon FLOAT]</span>
+<span class="sd">                                 [--support-file-name FILE]</span>
+<span class="sd">                                 [--suppress-isolated-pixels]</span>
+<span class="sd">                                 [--kill-isolated-pixels] [--suppress-last-scale]</span>
+<span class="sd">                                 [--detect-only-positive-structure]</span>
+<span class="sd">                                 [--precision FLOAT]</span>
+<span class="sd">                                 [--first-detection-scale INTEGER]</span>
+<span class="sd">                                 [--suppress-positivity-constraint]</span>
+<span class="sd">                                 [--maximum-level-constraint]</span>
+<span class="sd">                                 [--mask-file-path MASK_FILE_NAME]</span>
+<span class="sd">                                 [--offset-after-calibration FLOAT]</span>
+<span class="sd">                                 [--correction-offset]</span>
+<span class="sd">                                 [--input-image-scale INPUT_IMAGE_SCALE]</span>
+<span class="sd">                                 [--noise-cdf-file FILE] [--tmp-dir DIRECTORY]</span>
+<span class="sd">                                 [--verbose] [--debug] [--max-images INTEGER]</span>
+<span class="sd">                                 [--telid INTEGER] [--eventid INTEGER]</span>
+<span class="sd">                                 [--camid STRING] [--benchmark STRING]</span>
+<span class="sd">                                 [--label STRING] [--plot] [--saveplot FILE]</span>
+<span class="sd">                                 [--output FILE]</span>
+<span class="sd">                                 FILE [FILE ...]</span>
+<span class="sd">    </span>
+<span class="sd">    Denoise images with Wavelet Transform.</span>
+<span class="sd">    </span>
+<span class="sd">    positional arguments:</span>
+<span class="sd">      FILE                  The files image to process. If fileargs is a</span>
+<span class="sd">                            directory, all files it contains are processed.</span>
+<span class="sd">    </span>
+<span class="sd">    optional arguments:</span>
+<span class="sd">      -h, --help            show this help message and exit</span>
+<span class="sd">      --type-of-filtering INTEGER, -f INTEGER</span>
+<span class="sd">                            Type of filtering: 1: Multiresolution Hard K-Sigma</span>
+<span class="sd">                            Thresholding 2: Multiresolution Soft K-Sigma</span>
+<span class="sd">                            Thresholding 3: Iterative Multiresolution Thresholding</span>
+<span class="sd">                            4: Adjoint operator applied to the multiresolution</span>
+<span class="sd">                            support 5: Bivariate Shrinkage 6: Multiresolution</span>
+<span class="sd">                            Wiener Filtering 7: Total Variation + Wavelet</span>
+<span class="sd">                            Constraint 8: Wavelet Constraint Iterative Methods 9:</span>
+<span class="sd">                            Median Absolute Deviation (MAD) Hard Thesholding 10:</span>
+<span class="sd">                            Median Absolute Deviation (MAD) Soft Thesholding.</span>
+<span class="sd">                            Default=1.</span>
+<span class="sd">      --coef-detection-method INTEGER, -C INTEGER</span>
+<span class="sd">                            Coef_Detection_Method: 1: K-SigmaNoise Threshold 2:</span>
+<span class="sd">                            False Discovery Rate (FDR) Theshold 3: Universal</span>
+<span class="sd">                            Threshold 4: SURE Threshold 5: Multiscale SURE</span>
+<span class="sd">                            Threshold. Default=1.</span>
+<span class="sd">      --type-of-multiresolution-transform INTEGER, -t INTEGER</span>
+<span class="sd">                            Type of multiresolution transform: 1: linear wavelet</span>
+<span class="sd">                            transform: a trous algorithm 2: bspline wavelet</span>
+<span class="sd">                            transform: a trous algorithm 3: wavelet transform in</span>
+<span class="sd">                            Fourier space 4: morphological median transform 5:</span>
+<span class="sd">                            morphological minmax transform 6: pyramidal linear</span>
+<span class="sd">                            wavelet transform 7: pyramidal bspline wavelet</span>
+<span class="sd">                            transform 8: pyramidal wavelet transform in Fourier</span>
+<span class="sd">                            space: algo 1 (diff. between two resolutions) 9:</span>
+<span class="sd">                            Meyer&#39;s wavelets (compact support in Fourier space)</span>
+<span class="sd">                            10: pyramidal median transform (PMT) 11: pyramidal</span>
+<span class="sd">                            laplacian 12: morphological pyramidal minmax transform</span>
+<span class="sd">                            13: decomposition on scaling function 14: Mallat&#39;s</span>
+<span class="sd">                            wavelet transform (7/9 filters) 15: Feauveau&#39;s wavelet</span>
+<span class="sd">                            transform 16: Feauveau&#39;s wavelet transform without</span>
+<span class="sd">                            undersampling 17: Line Column Wavelet Transform</span>
+<span class="sd">                            (1D+1D) 18: Haar&#39;s wavelet transform 19: half-</span>
+<span class="sd">                            pyramidal transform 20: mixed Half-pyramidal WT and</span>
+<span class="sd">                            Median method (WT-HPMT) 21: undecimated diadic wavelet</span>
+<span class="sd">                            transform (two bands per scale) 22: mixed WT and PMT</span>
+<span class="sd">                            method (WT-PMT) 23: undecimated Haar transform: a</span>
+<span class="sd">                            trous algorithm (one band per scale) 24: undecimated</span>
+<span class="sd">                            (bi-) orthogonal transform (three bands per scale) 25:</span>
+<span class="sd">                            non orthogonal undecimated transform (three bands per</span>
+<span class="sd">                            scale) 26: Isotropic and compact support wavelet in</span>
+<span class="sd">                            Fourier space 27: pyramidal wavelet transform in</span>
+<span class="sd">                            Fourier space: algo 2 (diff. between the square of two</span>
+<span class="sd">                            resolutions) 28: Fast Curvelet Transform. Default=2.</span>
+<span class="sd">      --type-of-filters INTEGER, -T INTEGER</span>
+<span class="sd">                            Type of filters: 1: Biorthogonal 7/9 filters 2:</span>
+<span class="sd">                            Daubechies filter 4 3: Biorthogonal 2/6 Haar filters</span>
+<span class="sd">                            4: Biorthogonal 2/10 Haar filters 5: Odegard 9/7</span>
+<span class="sd">                            filters 6: 5/3 filter 7: Battle-Lemarie filters (2</span>
+<span class="sd">                            vanishing moments) 8: Battle-Lemarie filters (4</span>
+<span class="sd">                            vanishing moments) 9: Battle-Lemarie filters (6</span>
+<span class="sd">                            vanishing moments) 10: User&#39;s filters 11: Haar filter</span>
+<span class="sd">                            12: 3/5 filter 13: 4/4 Linar spline filters 14:</span>
+<span class="sd">                            Undefined sub-band filters. Default=1.</span>
+<span class="sd">      --type-of-non-orthog-filters INTEGER, -U INTEGER</span>
+<span class="sd">                            Type of non-orthogonal filters: 1: SplineB3-Id+H:</span>
+<span class="sd">                            H=[1,4,6,4,1]/16, Ht=H, G=Id-H, Gt=Id+H 2:</span>
+<span class="sd">                            SplineB3-Id: H=[1,4,6,4,1]/16, Ht=H, G=Id-H*H, Gt=Id</span>
+<span class="sd">                            3: SplineB2-Id: H=4[1,2,1]/4, Ht=H, G=Id-H*H, Gt=Id 4:</span>
+<span class="sd">                            Harr/Spline POS:</span>
+<span class="sd">                            H=Haar,G=[-1/4,1/2,-1/4],Ht=[1,3,3,1]/8,Gt=[1,6,1]/4.</span>
+<span class="sd">                            Default=2.</span>
+<span class="sd">      --noise-model INTEGER, -m INTEGER</span>
+<span class="sd">                            Noise model: 1: Gaussian noise 2: Poisson noise 3:</span>
+<span class="sd">                            Poisson noise + Gaussian noise 4: Multiplicative noise</span>
+<span class="sd">                            5: Non-stationary additive noise 6: Non-stationary</span>
+<span class="sd">                            multiplicative noise 7: Undefined stationary noise 8:</span>
+<span class="sd">                            Undefined noise 9: Stationary correlated noise 10:</span>
+<span class="sd">                            Poisson noise with few events. Default=1.</span>
+<span class="sd">      --number-of-scales integer, -n integer</span>
+<span class="sd">                            Number of scales used in the multiresolution</span>
+<span class="sd">                            transform. Default=4.</span>
+<span class="sd">      --k-sigma-noise-threshold FLOAT, -s FLOAT</span>
+<span class="sd">                            Thresholding at nsigma * SigmaNoise. Default=3.</span>
+<span class="sd">      --number-of-iterations integer, -i integer</span>
+<span class="sd">                            Maximum number of iterations. Default=10.</span>
+<span class="sd">      --epsilon FLOAT, -e FLOAT</span>
+<span class="sd">                            Convergence parameter. Default=0.001000 or 0.000010 in</span>
+<span class="sd">                            case of poisson noise with few events.</span>
+<span class="sd">      --support-file-name FILE, -w FILE</span>
+<span class="sd">                            Creates an image from the multiresolution support and</span>
+<span class="sd">                            save to disk.</span>
+<span class="sd">      --suppress-isolated-pixels, -k</span>
+<span class="sd">                            Suppress isolated pixels in the support</span>
+<span class="sd">      --kill-isolated-pixels</span>
+<span class="sd">                            Suppress isolated pixels in the support (scipy</span>
+<span class="sd">                            implementation)</span>
+<span class="sd">      --suppress-last-scale, -K</span>
+<span class="sd">                            Suppress the last scale (to have background pixels =</span>
+<span class="sd">                            0)</span>
+<span class="sd">      --detect-only-positive-structure, -p</span>
+<span class="sd">                            Detect only positive structure</span>
+<span class="sd">      --precision FLOAT, -E FLOAT</span>
+<span class="sd">                            Epsilon = precision for computing thresholds (only</span>
+<span class="sd">                            used in case of poisson noise with few events).</span>
+<span class="sd">                            Default=1.00e-03.</span>
+<span class="sd">      --first-detection-scale INTEGER, -F INTEGER</span>
+<span class="sd">                            First scale used for the detection. Default=1.</span>
+<span class="sd">      --suppress-positivity-constraint, -P</span>
+<span class="sd">                            Suppress positivity constraint</span>
+<span class="sd">      --maximum-level-constraint</span>
+<span class="sd">                            Add the maximum level constraint. Max value is 255.</span>
+<span class="sd">      --mask-file-path MASK_FILE_NAME</span>
+<span class="sd">                            Filename of the mask containing the bad data</span>
+<span class="sd">                            (Mask[i,j]=1 for good pixels and 0 otherwise. Default</span>
+<span class="sd">                            is none.</span>
+<span class="sd">      --offset-after-calibration FLOAT</span>
+<span class="sd">                            Value added to all pixels of the input image after</span>
+<span class="sd">                            calibration. Default=0.</span>
+<span class="sd">      --correction-offset   Apply a correction offset to the output image.</span>
+<span class="sd">      --input-image-scale INPUT_IMAGE_SCALE</span>
+<span class="sd">                            Use a different scale for the input image (&#39;linear&#39;,</span>
+<span class="sd">                            &#39;log&#39; or &#39;sqrt&#39;). Default=&#39;linear&#39;.</span>
+<span class="sd">      --noise-cdf-file FILE</span>
+<span class="sd">                            The JSON file containing the Cumulated Distribution</span>
+<span class="sd">                            Function of the noise model used to inject artificial</span>
+<span class="sd">                            noise in blank pixels (those with a NaN value).</span>
+<span class="sd">                            Default=None.</span>
+<span class="sd">      --tmp-dir DIRECTORY   The directory where temporary files are written.</span>
+<span class="sd">      --verbose, -v         Verbose mode</span>
+<span class="sd">      --debug               Debug mode</span>
+<span class="sd">      --max-images INTEGER  The maximum number of images to process</span>
+<span class="sd">      --telid INTEGER       Only process images from the specified telescope</span>
+<span class="sd">      --eventid INTEGER     Only process images from the specified event</span>
+<span class="sd">      --camid STRING        Only process images from the specified camera</span>
+<span class="sd">      --benchmark STRING, -b STRING</span>
+<span class="sd">                            The benchmark method to use to assess the algorithm</span>
+<span class="sd">                            for thegiven images</span>
+<span class="sd">      --label STRING, -l STRING</span>
+<span class="sd">                            The label attached to the produced results</span>
+<span class="sd">      --plot                Plot images</span>
+<span class="sd">      --saveplot FILE       The output file where to save plotted images</span>
+<span class="sd">      --output FILE, -o FILE</span>
+<span class="sd">                            The output file path (JSON)</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">  ./filter_with_mrfilter.py -h</span>
+<span class="sd">  ./filter_with_mrfilter.py ./test.fits</span>
+<span class="sd">  ipython3 -- ./filter_with_mrfilter.py -n4 ./test.fits</span>
+
+<span class="sd">Notes</span>
+<span class="sd">-----</span>
+<span class="sd">This script requires the mr_filter program</span>
+<span class="sd">(http://www.cosmostat.org/software/isap/).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WaveletTransform&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
+<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+
+<span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
+
+<span class="kn">from</span> <span class="nn">pywi.ui.argparse_commons</span> <span class="k">import</span> <span class="n">add_common_arguments</span>
+<span class="c1">#from pywi.ui.commons import AbstractCleaningAlgorithm</span>
+
+<span class="c1"># CONSTANTS ##################################################################</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># EXCEPTIONS #################################################################</span>
+
+<span class="k">class</span> <span class="nc">MrFilterError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrFilterError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when trying to save a FITS with more than 3 dimensions</span>
+<span class="sd">    or less than 2 dimensions.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        message -- explanation of the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">WrongDimensionError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Unexpected error: the output FITS file should contain a 2D array.&quot;</span><span class="p">)</span>
+
+
+<span class="c1">##############################################################################</span>
+
+<span class="c1">#class WaveletTransform(AbstractCleaningAlgorithm):</span>
+<span class="k">class</span> <span class="nc">WaveletTransform</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">WaveletTransform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;WT (mr_filter)&quot;</span>  <span class="c1"># Name to show in plots</span>
+
+    <span class="k">def</span> <span class="nf">clean_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">input_img</span><span class="p">,</span>
+                    <span class="n">type_of_multiresolution_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">type_of_filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">type_of_non_orthog_filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">number_of_scales</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">suppress_last_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">suppress_isolated_pixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">coef_detection_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">k_sigma_noise_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">noise_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">detect_only_positive_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">suppress_positivity_constraint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">type_of_filtering</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">first_detection_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">number_of_iterations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">epsilon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">support_file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">precision</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">mask_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">offset_after_calibration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">correction_offset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">input_image_scale</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                    <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">raw_option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>       <span class="c1"># &quot;/Volumes/ramdisk&quot;</span>
+                    <span class="n">mrfilter_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>       <span class="c1"># &quot;/Volumes/ramdisk&quot;</span>
+                    <span class="n">output_data_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clean the `input_img` image.</span>
+
+<span class="sd">        Apply the wavelet transform, filter planes and return the reverse</span>
+<span class="sd">        transformed image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_img : array_like</span>
+<span class="sd">            The input image to transform.</span>
+<span class="sd">        number_of_scales : int</span>
+<span class="sd">            The number of scales used to transform `input_image` or in other words</span>
+<span class="sd">            the number of wavelet planes returned.</span>
+<span class="sd">        tmp_files_directory : str</span>
+<span class="sd">            The path of the directory used to store mr_transform temporary data.</span>
+<span class="sd">            The default is the current directory, but it may be more appropriate to</span>
+<span class="sd">            specify here the path of a directory mounted in a ramdisk to speedup</span>
+<span class="sd">            I/Os (&quot;/Volumes/ramdisk&quot; on MacOSX or &quot;/dev/shm&quot; on Linux).</span>
+<span class="sd">        noise_distribution : EmpiricalDistribution</span>
+<span class="sd">            The noise distribution used to fill &#39;empty&#39; NaN pixels with the</span>
+<span class="sd">            appropriate random noise distribution. If none, NaN pixels are fill</span>
+<span class="sd">            with zeros (which may add unwanted harmonics in wavelet planes).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        array_like</span>
+<span class="sd">            Return the cleaned image.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        WrongDimensionError</span>
+<span class="sd">            If `cleaned_img` is not a 2D array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">input_img</span> <span class="o">=</span> <span class="n">input_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">input_img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
+
+        <span class="n">input_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_files_directory</span><span class="p">,</span> <span class="s2">&quot;.tmp_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_in.fits&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+        <span class="n">mr_output_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_files_directory</span><span class="p">,</span> <span class="s2">&quot;.tmp_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_out.fits&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+
+        <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_input_tmp_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_file_path</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_output_tmp_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mr_output_file_path</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">mask_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_mask_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask_file_path</span>
+
+        <span class="c1"># INJECT NOISE IN NAN ##################################</span>
+
+        <span class="c1"># See https://stackoverflow.com/questions/29365194/replacing-missing-values-with-random-in-a-numpy-array</span>
+
+        <span class="n">nan_mask</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">fill_nan_pixels</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">noise_distribution</span><span class="p">)</span>
+
+        <span class="c1"># APPLY AN OFFSET ######################################</span>
+
+        <span class="k">if</span> <span class="n">offset_after_calibration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply an offset after calibration:&quot;</span><span class="p">,</span> <span class="n">offset_after_calibration</span><span class="p">)</span>
+            <span class="n">input_img</span> <span class="o">=</span> <span class="n">input_img</span> <span class="o">+</span> <span class="n">offset_after_calibration</span>
+
+        <span class="c1"># CHANGE THE SCALE #####################################</span>
+
+        <span class="k">if</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply log scale&quot;</span><span class="p">)</span>
+            <span class="c1">#images.plot(input_img)</span>
+            <span class="n">input_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>  <span class="c1"># TODO: it creates NaN values where pixels &lt;= 0</span>
+            <span class="c1">#images.plot(input_img)</span>
+        <span class="k">elif</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply sqrt scale&quot;</span><span class="p">)</span>
+            <span class="c1">#images.plot(input_img)</span>
+            <span class="n">input_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>   <span class="c1"># TODO: it creates NaN values where pixels &lt; 0</span>
+            <span class="c1">#images.plot(input_img)</span>
+
+        <span class="c1"># WRITE THE INPUT FILE (FITS) ##########################</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">save_fits</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
+            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
+            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;save_tmp_file_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on input FITS file:&quot;</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># EXECUTE MR_FILTER ####################################</span>
+
+        <span class="c1"># TODO: improve the following lines</span>
+        <span class="k">if</span> <span class="n">mrfilter_directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;mr_filter&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrfilter_directory</span><span class="p">,</span> <span class="s1">&#39;mr_filter&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">raw_option_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_multiresolution_transform</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_multiresolution_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -T</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_filters</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -U</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_non_orthog_filters</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_non_orthog_filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_scales</span><span class="p">)</span> <span class="k">if</span> <span class="n">number_of_scales</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -K&#39;</span> <span class="k">if</span> <span class="n">suppress_last_scale</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -k&#39;</span> <span class="k">if</span> <span class="n">suppress_isolated_pixels</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>      <span class="c1"># You should use scipy implementation instead (pywi/denoising/kill_isolated_pixels.py); it&#39;s much more efficient</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -C</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coef_detection_method</span><span class="p">)</span> <span class="k">if</span> <span class="n">coef_detection_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -s</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k_sigma_noise_threshold</span><span class="p">)</span> <span class="k">if</span> <span class="n">k_sigma_noise_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -m</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noise_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">noise_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -p&#39;</span> <span class="k">if</span> <span class="n">detect_only_positive_structure</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -P&#39;</span> <span class="k">if</span> <span class="n">suppress_positivity_constraint</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -f</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_filtering</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_filtering</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -F</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_detection_scale</span><span class="p">)</span> <span class="k">if</span> <span class="n">first_detection_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -i</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_iterations</span><span class="p">)</span> <span class="k">if</span> <span class="n">number_of_iterations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -e</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span> <span class="k">if</span> <span class="n">epsilon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -w</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">support_file_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">support_file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -E</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span> <span class="k">if</span> <span class="n">precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -I </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mask_file_path</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -v&#39;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">raw_option_string</span>
+
+        <span class="c1">#self.label = &quot;WT ({})&quot;.format(cmd)  # Name to show in plots</span>
+        <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &quot;</span><span class="si">{}</span><span class="s1">&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">mr_output_file_path</span><span class="p">)</span>
+
+        <span class="c1">#cmd = &#39;mr_filter -K -k -C1 -s3 -m3 -n{} &quot;{}&quot; {}&#39;.format(number_of_scales, input_file_path, mr_output_file_path)</span>
+        <span class="c1">#cmd = &#39;mr_filter -K -k -C1 -s3 -m2 -p -P -n{} &quot;{}&quot; {}&#39;.format(number_of_scales, input_file_path, mr_output_file_path)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &gt; /dev/null&#39;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
+            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mrfilter_cmd_exec_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on command:&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># READ THE MR_FILTER OUTPUT FILE #######################</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">load_fits</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
+            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;load_tmp_file_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on output FITS file:&quot;</span><span class="p">,</span> <span class="n">mr_output_file_path</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># REMOVE FITS FILES ####################################</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">)</span>
+
+        <span class="c1"># CHECK RESULT #########################################</span>
+
+        <span class="k">if</span> <span class="n">cleaned_img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
+
+        <span class="c1"># INJECT NOISE IN NAN: PUT BACK NAN VALUES #############</span>
+
+        <span class="n">cleaned_img</span><span class="p">[</span><span class="n">nan_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># CHANGE THE SCALE #####################################</span>
+
+        <span class="k">if</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invert log scale&quot;</span><span class="p">)</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="n">cleaned_img</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invert sqrt scale&quot;</span><span class="p">)</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">cleaned_img</span><span class="p">)</span>
+
+        <span class="c1"># INVERT THE OFFSET ####################################</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">offset_after_calibration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">suppress_last_scale</span><span class="p">):</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">cleaned_img</span> <span class="o">-</span> <span class="n">offset_after_calibration</span>
+
+        <span class="c1"># CORRECTION OFFSET ####################################</span>
+
+        <span class="k">if</span> <span class="n">correction_offset</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply a correction offset after cleaning&quot;</span><span class="p">)</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">cleaned_img</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
+            <span class="n">cleaned_img</span><span class="p">[</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cleaned_img</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>   <span class="c1"># May genereate warnings on NaN values</span>
+
+        <span class="c1"># KILL ISOLATED PIXELS #################################</span>
+
+        <span class="n">img_cleaned_islands_delta_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_abs_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_num_pixels</span> <span class="o">=</span> <span class="n">kill_isolated_pixels_stats</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
+        <span class="n">img_cleaned_num_islands</span> <span class="o">=</span> <span class="n">number_of_islands</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_pe</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_abs_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_abs_pe</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_num_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_num_pixels</span>
+            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_num_islands&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_num_islands</span>
+
+        <span class="k">if</span> <span class="n">kill_isolated_pixels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kill isolated pixels&quot;</span><span class="p">)</span>
+            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">scipy_kill_isolated_pixels</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
+            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
+            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;scipy_kill_isolated_pixels_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
+
+        <span class="c1">#print(cleaned_img)</span>
+        <span class="c1">#images.plot_hist(cleaned_img)</span>
+        <span class="c1">#images.plot_hist(cleaned_img, num_bins=500, x_max=5)</span>
+
+        <span class="k">return</span> <span class="n">cleaned_img</span>
+
+
+<div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../api_ui_filter_with_mrfilter.html#pywi.ui.filter_with_mrfilter.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Populate the given argparse.ArgumentParser with arguments.</span>
+
+<span class="sd">    This function can be used to make the definition these argparse arguments</span>
+<span class="sd">    reusable in other modules and avoid the duplication of these definitions</span>
+<span class="sd">    among the executable scripts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parser : argparse.ArgumentParser</span>
+<span class="sd">        The parser to populate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    argparse.ArgumentParser</span>
+<span class="sd">        Return the populated ArgumentParser object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-filtering&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Type of filtering:</span>
+<span class="s2">                            1: Multiresolution Hard K-Sigma Thresholding</span>
+<span class="s2">                            2: Multiresolution Soft K-Sigma Thresholding</span>
+<span class="s2">                            3: Iterative Multiresolution Thresholding</span>
+<span class="s2">                            4: Adjoint operator applied to the multiresolution support</span>
+<span class="s2">                            5: Bivariate Shrinkage</span>
+<span class="s2">                            6: Multiresolution Wiener Filtering</span>
+<span class="s2">                            7: Total Variation + Wavelet Constraint</span>
+<span class="s2">                            8: Wavelet Constraint Iterative Methods</span>
+<span class="s2">                            9: Median Absolute Deviation (MAD) Hard Thesholding</span>
+<span class="s2">                            10: Median Absolute Deviation (MAD) Soft Thesholding.</span>
+<span class="s2">                            Default=1.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--coef-detection-method&quot;</span><span class="p">,</span> <span class="s2">&quot;-C&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Coef_Detection_Method:</span>
+<span class="s2">                            1: K-SigmaNoise Threshold</span>
+<span class="s2">                            2: False Discovery Rate (FDR) Theshold</span>
+<span class="s2">                            3: Universal Threshold</span>
+<span class="s2">                            4: SURE Threshold</span>
+<span class="s2">                            5: Multiscale SURE Threshold.</span>
+<span class="s2">                            Default=1.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-multiresolution-transform&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Type of multiresolution transform:</span>
+<span class="s2">                            1: linear wavelet transform: a trous algorithm</span>
+<span class="s2">                            2: bspline wavelet transform: a trous algorithm</span>
+<span class="s2">                            3: wavelet transform in Fourier space</span>
+<span class="s2">                            4: morphological median transform</span>
+<span class="s2">                            5: morphological minmax transform</span>
+<span class="s2">                            6: pyramidal linear wavelet transform</span>
+<span class="s2">                            7: pyramidal bspline wavelet transform</span>
+<span class="s2">                            8: pyramidal wavelet transform in Fourier space: algo 1 (diff. between two resolutions)</span>
+<span class="s2">                            9: Meyer&#39;s wavelets (compact support in Fourier space)</span>
+<span class="s2">                            10: pyramidal median transform (PMT)</span>
+<span class="s2">                            11: pyramidal laplacian</span>
+<span class="s2">                            12: morphological pyramidal minmax transform</span>
+<span class="s2">                            13: decomposition on scaling function</span>
+<span class="s2">                            14: Mallat&#39;s wavelet transform (7/9 filters)</span>
+<span class="s2">                            15: Feauveau&#39;s wavelet transform</span>
+<span class="s2">                            16: Feauveau&#39;s wavelet transform without undersampling</span>
+<span class="s2">                            17: Line Column Wavelet Transform (1D+1D)</span>
+<span class="s2">                            18: Haar&#39;s wavelet transform</span>
+<span class="s2">                            19: half-pyramidal transform</span>
+<span class="s2">                            20: mixed Half-pyramidal WT and Median method (WT-HPMT)</span>
+<span class="s2">                            21: undecimated diadic wavelet transform (two bands per scale)</span>
+<span class="s2">                            22: mixed WT and PMT method (WT-PMT)</span>
+<span class="s2">                            23: undecimated Haar transform: a trous algorithm (one band per scale)</span>
+<span class="s2">                            24: undecimated (bi-) orthogonal transform (three bands per scale)</span>
+<span class="s2">                            25: non orthogonal undecimated transform (three bands per scale)</span>
+<span class="s2">                            26: Isotropic and compact support wavelet in Fourier space</span>
+<span class="s2">                            27: pyramidal wavelet transform in Fourier space: algo 2 (diff. between the square of two resolutions)</span>
+<span class="s2">                            28: Fast Curvelet Transform.</span>
+<span class="s2">                            Default=2.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-filters&quot;</span><span class="p">,</span> <span class="s2">&quot;-T&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Type of filters:</span>
+<span class="s2">                            1: Biorthogonal 7/9 filters</span>
+<span class="s2">                            2: Daubechies filter 4</span>
+<span class="s2">                            3: Biorthogonal 2/6 Haar filters</span>
+<span class="s2">                            4: Biorthogonal 2/10 Haar filters</span>
+<span class="s2">                            5: Odegard 9/7 filters</span>
+<span class="s2">                            6: 5/3 filter</span>
+<span class="s2">                            7: Battle-Lemarie filters (2 vanishing moments)</span>
+<span class="s2">                            8: Battle-Lemarie filters (4 vanishing moments)</span>
+<span class="s2">                            9: Battle-Lemarie filters (6 vanishing moments)</span>
+<span class="s2">                            10: User&#39;s filters</span>
+<span class="s2">                            11: Haar filter</span>
+<span class="s2">                            12: 3/5 filter</span>
+<span class="s2">                            13: 4/4 Linar spline filters</span>
+<span class="s2">                            14: Undefined sub-band filters.</span>
+<span class="s2">                            Default=1.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-non-orthog-filters&quot;</span><span class="p">,</span> <span class="s2">&quot;-U&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Type of non-orthogonal filters:</span>
+<span class="s2">                            1: SplineB3-Id+H:  H=[1,4,6,4,1]/16, Ht=H, G=Id-H, Gt=Id+H</span>
+<span class="s2">                            2: SplineB3-Id:  H=[1,4,6,4,1]/16, Ht=H, G=Id-H*H, Gt=Id</span>
+<span class="s2">                            3: SplineB2-Id: H=4[1,2,1]/4, Ht=H, G=Id-H*H, Gt=Id</span>
+<span class="s2">                            4: Harr/Spline POS: H=Haar,G=[-1/4,1/2,-1/4],Ht=[1,3,3,1]/8,Gt=[1,6,1]/4.</span>
+<span class="s2">                            Default=2.&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1">#         [-u number_of_undecimated_scales]</span>
+<span class="c1">#             Number of undecimated scales used in the Undecimated Wavelet Transform</span>
+<span class="c1">#             Default is all scale.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-g sigma]</span>
+<span class="c1">#             sigma = noise standard deviation</span>
+<span class="c1">#             default is automatically estimated.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-c gain,sigma,mean]</span>
+<span class="c1">#             Poisson + readout noise, with:</span>
+<span class="c1">#                 gain = gain of the CCD</span>
+<span class="c1">#                 sigma = read-out noise standard deviation</span>
+<span class="c1">#                 mean = read-out noise mean</span>
+<span class="c1">#             default is no (Gaussian).</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--noise-model&quot;</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Noise model:</span>
+<span class="s2">                            1: Gaussian noise</span>
+<span class="s2">                            2: Poisson noise</span>
+<span class="s2">                            3: Poisson noise + Gaussian noise</span>
+<span class="s2">                            4: Multiplicative noise</span>
+<span class="s2">                            5: Non-stationary additive noise</span>
+<span class="s2">                            6: Non-stationary multiplicative noise</span>
+<span class="s2">                            7: Undefined stationary noise</span>
+<span class="s2">                            8: Undefined noise</span>
+<span class="s2">                            9: Stationary correlated noise</span>
+<span class="s2">                            10: Poisson noise with few events. Default=1.&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--number-of-scales&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of scales used in the multiresolution transform. Default=4.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--k-sigma-noise-threshold&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Thresholding at nsigma * SigmaNoise. Default=3.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--number-of-iterations&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Maximum number of iterations. Default=10.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--epsilon&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Convergence parameter. Default=0.001000 or 0.000010 in case of poisson noise with few events.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--support-file-name&quot;</span><span class="p">,</span> <span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Creates an image from the multiresolution support and save to disk.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--suppress-isolated-pixels&quot;</span><span class="p">,</span> <span class="s2">&quot;-k&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Suppress isolated pixels in the support&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--kill-isolated-pixels&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Suppress isolated pixels in the support (scipy implementation)&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--suppress-last-scale&quot;</span><span class="p">,</span> <span class="s2">&quot;-K&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Suppress the last scale (to have background pixels = 0)&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--detect-only-positive-structure&quot;</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Detect only positive structure&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--precision&quot;</span><span class="p">,</span> <span class="s2">&quot;-E&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Epsilon = precision for computing thresholds (only used in case of poisson noise with few events). Default=1.00e-03.&quot;</span><span class="p">)</span>
+
+<span class="c1">#         [-S SizeBlock]</span>
+<span class="c1">#             Size of the  blocks used for local variance estimation.</span>
+<span class="c1">#             default is 7.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-N NiterSigmaClip]</span>
+<span class="c1">#             Iteration number used for local variance estimation.</span>
+<span class="c1">#             default is 1.</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--first-detection-scale&quot;</span><span class="p">,</span> <span class="s2">&quot;-F&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;INTEGER&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;First scale used for the detection. Default=1.&quot;</span><span class="p">)</span>
+
+<span class="c1">#         [-R RMS_Map_File_Name]</span>
+<span class="c1">#              RMS Map (only used with -m 5 and -m 9 options).</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--suppress-positivity-constraint&quot;</span><span class="p">,</span> <span class="s2">&quot;-P&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Suppress positivity constraint&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--maximum-level-constraint&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Add the maximum level constraint. Max value is 255.&quot;</span><span class="p">)</span>
+
+<span class="c1">#         [-B BackgroundModelImage]</span>
+<span class="c1">#             Background Model Image: the background image is</span>
+<span class="c1">#             subtracted during the filtering.</span>
+<span class="c1">#             Default is no.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-M Flat_Image]</span>
+<span class="c1">#             Flat Image: The solution is corrected from the flat (i.e. Sol = Input / Flat)</span>
+<span class="c1">#             Default is no.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-h]</span>
+<span class="c1">#             write info used for computing the probability map.</span>
+<span class="c1">#             Default is no.</span>
+<span class="c1">#</span>
+<span class="c1">#         [-G RegulParam]</span>
+<span class="c1">#              Regularization parameter for the TV method.</span>
+<span class="c1">#              default is 0.100000</span>
+<span class="c1">#</span>
+<span class="c1">#         [-z]</span>
+<span class="c1">#             Use virtual memory.</span>
+<span class="c1">#                default limit size: 4</span>
+<span class="c1">#                default directory: .</span>
+<span class="c1">#</span>
+<span class="c1">#         [-Z VMSize:VMDIR]</span>
+<span class="c1">#             Use virtual memory.</span>
+<span class="c1">#                VMSize = limit size (megabytes)</span>
+<span class="c1">#                VMDIR = directory name</span>
+<span class="c1">#</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mask-file-path&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;MASK_FILE_NAME&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Filename of the mask containing the bad data (Mask[i,j]=1 for good pixels and 0 otherwise. Default is none.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--offset-after-calibration&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Value added to all pixels of the input image after calibration. Default=0.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--correction-offset&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Apply a correction offset to the output image.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--input-image-scale&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Use a different scale for the input image (&#39;linear&#39;, &#39;log&#39; or &#39;sqrt&#39;). Default=&#39;linear&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--noise-cdf-file&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The JSON file containing the Cumulated Distribution Function of the noise model used to inject artificial noise in blank pixels (those with a NaN value). Default=None.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
+</div>
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;The main module execution function.</span>
+
+<span class="sd">    Contains the instructions executed when the module is not imported but</span>
+<span class="sd">    directly called from the system command line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># PARSE OPTIONS ###########################################################</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Denoise images with Wavelet Transform.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">type_of_multiresolution_transform</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">type_of_multiresolution_transform</span>
+    <span class="n">type_of_filters</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">type_of_filters</span>
+    <span class="n">type_of_non_orthog_filters</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">type_of_non_orthog_filters</span>
+    <span class="n">number_of_scales</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">number_of_scales</span>
+    <span class="n">suppress_last_scale</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">suppress_last_scale</span>
+    <span class="n">suppress_isolated_pixels</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">suppress_isolated_pixels</span>
+    <span class="n">kill_isolated_pixels</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">kill_isolated_pixels</span>
+    <span class="n">coef_detection_method</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">coef_detection_method</span>
+    <span class="n">k_sigma_noise_threshold</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">k_sigma_noise_threshold</span>
+    <span class="n">noise_model</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">noise_model</span>
+    <span class="n">detect_only_positive_structure</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">detect_only_positive_structure</span>
+    <span class="n">suppress_positivity_constraint</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">suppress_positivity_constraint</span>
+    <span class="n">type_of_filtering</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">type_of_filtering</span>
+    <span class="n">first_detection_scale</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">first_detection_scale</span>
+    <span class="n">number_of_iterations</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">number_of_iterations</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">epsilon</span>
+    <span class="n">support_file_name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">support_file_name</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">precision</span>
+    <span class="n">mask_file_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">mask_file_path</span>
+    <span class="n">offset_after_calibration</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">offset_after_calibration</span>
+    <span class="n">correction_offset</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">correction_offset</span>
+    <span class="n">input_image_scale</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">input_image_scale</span>
+    <span class="n">noise_cdf_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">noise_cdf_file</span>
+    <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">tmp_dir</span>
+
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">debug</span>
+<span class="c1">#    max_images = args.max_images</span>
+<span class="c1">#    benchmark_method = args.benchmark</span>
+<span class="c1">#    label = args.label</span>
+    <span class="n">plot</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">plot</span>
+    <span class="n">saveplot</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">saveplot</span>
+
+<span class="c1">#    input_file_or_dir_path_list = args.fileargs</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">fileargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#############################################</span>
+
+    <span class="c1">#if args.output is None:</span>
+    <span class="c1">#    output_file_path = &quot;score_wavelets_benchmark_{}.json&quot;.format(benchmark_method)</span>
+    <span class="c1">#else:</span>
+    <span class="c1">#    output_file_path = args.output</span>
+
+    <span class="c1">##if noise_cdf_file is not None:</span>
+    <span class="c1">##    noise_distribution = EmpiricalDistribution(noise_cdf_file)</span>
+    <span class="c1">##else:</span>
+    <span class="c1">##    noise_distribution = None</span>
+    <span class="n">noise_distribution</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># CLEAN THE INPUT IMAGE ###################################</span>
+
+    <span class="n">img_filter</span> <span class="o">=</span> <span class="n">WaveletTransform</span><span class="p">()</span>
+    <span class="n">input_img</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">load_image</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+
+    <span class="c1"># Copy the image (otherwise some cleaning functions may change it)</span>
+    <span class="n">input_img_copy</span> <span class="o">=</span> <span class="n">input_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">img_filter</span><span class="o">.</span><span class="n">clean_image</span><span class="p">(</span><span class="n">input_img_copy</span><span class="p">,</span>
+                                         <span class="n">type_of_multiresolution_transform</span><span class="o">=</span><span class="n">type_of_multiresolution_transform</span><span class="p">,</span>
+                                         <span class="n">type_of_filters</span><span class="o">=</span><span class="n">type_of_filters</span><span class="p">,</span>
+                                         <span class="n">type_of_non_orthog_filters</span><span class="o">=</span><span class="n">type_of_non_orthog_filters</span><span class="p">,</span>
+                                         <span class="n">number_of_scales</span><span class="o">=</span><span class="n">number_of_scales</span><span class="p">,</span>
+                                         <span class="n">suppress_last_scale</span><span class="o">=</span><span class="n">suppress_last_scale</span><span class="p">,</span>
+                                         <span class="n">suppress_isolated_pixels</span><span class="o">=</span><span class="n">suppress_isolated_pixels</span><span class="p">,</span>
+                                         <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="n">kill_isolated_pixels</span><span class="p">,</span>
+                                         <span class="n">coef_detection_method</span><span class="o">=</span><span class="n">coef_detection_method</span><span class="p">,</span>
+                                         <span class="n">k_sigma_noise_threshold</span><span class="o">=</span><span class="n">k_sigma_noise_threshold</span><span class="p">,</span>
+                                         <span class="n">noise_model</span><span class="o">=</span><span class="n">noise_model</span><span class="p">,</span>
+                                         <span class="n">detect_only_positive_structure</span><span class="o">=</span><span class="n">detect_only_positive_structure</span><span class="p">,</span>
+                                         <span class="n">suppress_positivity_constraint</span><span class="o">=</span><span class="n">suppress_positivity_constraint</span><span class="p">,</span>
+                                         <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
+                                         <span class="n">first_detection_scale</span><span class="o">=</span><span class="n">first_detection_scale</span><span class="p">,</span>
+                                         <span class="n">number_of_iterations</span><span class="o">=</span><span class="n">number_of_iterations</span><span class="p">,</span>
+                                         <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span>
+                                         <span class="n">support_file_name</span><span class="o">=</span><span class="n">support_file_name</span><span class="p">,</span>
+                                         <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+                                         <span class="n">mask_file_path</span><span class="o">=</span><span class="n">mask_file_path</span><span class="p">,</span>
+                                         <span class="n">offset_after_calibration</span><span class="o">=</span><span class="n">offset_after_calibration</span><span class="p">,</span>
+                                         <span class="n">correction_offset</span><span class="o">=</span><span class="n">correction_offset</span><span class="p">,</span>
+                                         <span class="n">input_image_scale</span><span class="o">=</span><span class="n">input_image_scale</span><span class="p">,</span>
+                                         <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">,</span>
+                                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                                         <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_dir</span><span class="p">)</span>
+
+    <span class="c1"># PLOT IMAGES #########################################################</span>
+
+    <span class="k">if</span> <span class="n">plot</span> <span class="ow">or</span> <span class="p">(</span><span class="n">saveplot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">image_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_img</span><span class="p">,</span> <span class="n">cleaned_img</span><span class="p">]</span> 
+        <span class="n">title_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Input image&quot;</span><span class="p">,</span> <span class="s2">&quot;Filtered image&quot;</span><span class="p">]</span> 
+
+        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">plot_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span> <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">saveplot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plot_file_path</span> <span class="o">=</span> <span class="n">saveplot</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">plot_file_path</span><span class="p">))</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">mpl_save_list</span><span class="p">(</span><span class="n">image_list</span><span class="p">,</span>
+                                 <span class="n">output_file_path</span><span class="o">=</span><span class="n">plot_file_path</span><span class="p">,</span>
+                                 <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">)</span>
+
+    <span class="c1"># SAVE IMAGE ##########################################################</span>
+
+    <span class="n">basename</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+    <span class="n">output_file_path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">-out</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span>
+    <span class="n">images</span><span class="o">.</span><span class="n">save_image</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Jérémie Decock.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.dev16',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

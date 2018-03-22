@@ -179,7 +179,7 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<div class="viewcode-block" id="add_common_arguments"><a class="viewcode-back" href="../../../api_ui_argparse.html#pywi.ui.argparse_commons.add_common_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+<div class="viewcode-block" id="add_common_arguments"><a class="viewcode-back" href="../../../api_ui_argparse.html#pywi.ui.argparse_commons.add_common_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Populate the given argparse.ArgumentParser with arguments.</span>
 
 <span class="sd">    This function can be used to centralize the definition of commons argparse</span>
@@ -233,7 +233,7 @@
 <span class="c1">#                        help=&quot;The output file path (JSON)&quot;)</span>
 
 <span class="c1">#    parser.add_argument(&quot;fileargs&quot;, nargs=&quot;+&quot;, metavar=&quot;FILE&quot;,</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;fileargs&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;fileargs&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="n">nargs</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The files image to process.&quot;</span><span class="p">)</span>
 <span class="c1">#                             &quot;If fileargs is a directory,&quot;</span>
 <span class="c1">#                             &quot;all FITS files it contains are processed.&quot;)</span>

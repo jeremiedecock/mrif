@@ -180,7 +180,7 @@
 <dl class="class">
 <dt id="pywi.ui.filter_with_mrtransform.WaveletTransform">
 <em class="property">class </em><code class="descclassname">pywi.ui.filter_with_mrtransform.</code><code class="descname">WaveletTransform</code><a class="reference internal" href="_modules/pywi/ui/filter_with_mrtransform.html#WaveletTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.filter_with_mrtransform.WaveletTransform" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wavelet transform wrapper.</p>
+<dd><p>A wavelet filter based on mr_transform.</p>
 <dl class="method">
 <dt id="pywi.ui.filter_with_mrtransform.WaveletTransform.clean_image">
 <code class="descname">clean_image</code><span class="sig-paren">(</span><em>input_image, type_of_filtering='hard_filtering', filter_thresholds=[0.0, 0.0], last_scale_treatment='mask', detect_only_positive_structures=False, kill_isolated_pixels=False, noise_distribution=None, tmp_files_directory='.', output_data_dict=None, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/ui/filter_with_mrtransform.html#WaveletTransform.clean_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.filter_with_mrtransform.WaveletTransform.clean_image" title="Permalink to this definition">¶</a></dt>
@@ -227,16 +227,16 @@ reusable in other modules and avoid the duplication of these definitions
 among the executable scripts.</p>
 <p>The following arguments are added to the parser:</p>
 <ul class="simple">
-<li><em>type-of-filtering</em> (string): type of filtering</li>
-<li><em>filter-thresholds</em> (float list): thresholds used for the plane filtering.</li>
-<li><em>last-scale</em> (string): last plane treatment</li>
-<li><em>detect-only-positive-structures</em> (boolean): detect only positive structures.</li>
-<li><em>kill-isolated-pixels</em> (boolean): suppress isolated pixels in the support
+<li><strong>type-of-filtering</strong> (string): type of filtering</li>
+<li><strong>filter-thresholds</strong> (float list): thresholds used for the plane filtering.</li>
+<li><strong>last-scale</strong> (string): last plane treatment</li>
+<li><strong>detect-only-positive-structures</strong> (boolean): detect only positive structures.</li>
+<li><strong>kill-isolated-pixels</strong> (boolean): suppress isolated pixels in the support
 (scipy implementation)</li>
-<li><em>noise-cdf-file</em> (path): the JSON file containing the Cumulated
+<li><strong>noise-cdf-file</strong> (path): the JSON file containing the Cumulated
 Distribution Function of the noise model used to inject artificial noise
 in blank pixels (those with a NaN value)</li>
-<li><em>tmp-dir</em> (path): the directory where temporary files are written</li>
+<li><strong>tmp-dir</strong> (path): the directory where temporary files are written</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
