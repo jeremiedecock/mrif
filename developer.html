@@ -188,7 +188,7 @@ installed locally (<em>miniconda</em> should also work).</p>
 <div class="section" id="step-1-set-up-your-package-environment">
 <h3>Step 1: Set up your package environment<a class="headerlink" href="#step-1-set-up-your-package-environment" title="Permalink to this headline">¶</a></h3>
 <p>In your terminal, change to the directory where you cloned <cite>pywi</cite>, and type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
 </pre></div>
 </div>
 <p>This will create a conda virtual environment called <cite>pywi-dev</cite> with all
@@ -196,19 +196,19 @@ the PyWI dependencies and a few useful packages for development and
 interaction.</p>
 <p>If you want to give a different name to this environment, replace the previous
 command by:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">NAME_OF_THE_ENVIROMENT</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">NAME_OF_THE_ENVIROMENT</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
 </pre></div>
 </div>
 <p>and don’t forget to adapt the following commands.</p>
 <p>You can check the virtual environment has been successfully
 created with the following command:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="nb">list</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="nb">list</span>
 </pre></div>
 </div>
 <p>Next, switch to this new virtual environment:</p>
 <ul class="simple">
-<li>On Windows, in your Anaconda Prompt, run <code class="docutils literal"><span class="pre">activate</span> <span class="pre">pywi-dev</span></code></li>
-<li>On MacOSX and Linux, in your Terminal, run <code class="docutils literal"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">pywi-dev</span></code></li>
+<li>On Windows, in your Anaconda Prompt, run <code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">pywi-dev</span></code></li>
+<li>On MacOSX and Linux, in your Terminal, run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">pywi-dev</span></code></li>
 </ul>
 <p>You will need to type that last command any time you open a new
 terminal to activate the virtual environment (you can of course
@@ -218,17 +218,17 @@ install other packages with different requirements on the
 dependencies).</p>
 <p>If you want to see the list of packages installed in the virtual environment,
 type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="nb">list</span> <span class="o">-</span><span class="n">n</span> <span class="n">pywi</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="nb">list</span> <span class="o">-</span><span class="n">n</span> <span class="n">pywi</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 </div>
 <p>If later you want to leave the <cite>pywi-dev</cite> virtual environment:</p>
 <ul class="simple">
-<li>On Windows, in your Anaconda Prompt, run <code class="docutils literal"><span class="pre">deactivate</span></code></li>
-<li>On MacOSX and Linux, in your Terminal, run <code class="docutils literal"><span class="pre">source</span> <span class="pre">deactivate</span></code></li>
+<li>On Windows, in your Anaconda Prompt, run <code class="docutils literal notranslate"><span class="pre">deactivate</span></code></li>
+<li>On MacOSX and Linux, in your Terminal, run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">deactivate</span></code></li>
 </ul>
 <p>Also if you want to completely remove this environment from your system, you
 can type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">remove</span> <span class="o">--</span><span class="n">name</span> <span class="n">pywi</span><span class="o">-</span><span class="n">dev</span> <span class="o">--</span><span class="nb">all</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">remove</span> <span class="o">--</span><span class="n">name</span> <span class="n">pywi</span><span class="o">-</span><span class="n">dev</span> <span class="o">--</span><span class="nb">all</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://conda.io/docs/user-guide/tasks/manage-environments.html">https://conda.io/docs/user-guide/tasks/manage-environments.html</a> for more
@@ -243,15 +243,15 @@ PYTHONPATH, in fact it should be blank to avoid other problems). From
 then on, all the PyWI binaries and the library itself will be
 usable from anywhere.</p>
 <p>For Linux/MacOSX users, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
 </div>
 <p>or as a shorter alternative:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">develop</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">develop</span>
 </pre></div>
 </div>
 <p>For Windows users, type:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">py</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
 </pre></div>
 </div>
 <p>If you want to remove the</p>
