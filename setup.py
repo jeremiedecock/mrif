@@ -44,7 +44,9 @@ except ImportError:
 
 # SETUP VARIABLES #############################################################
 
-from pywi import __version__ as VERSION
+from pywi import get_version
+
+VERSION = get_version()
 
 AUTHOR_NAME = 'Jeremie DECOCK'
 AUTHOR_EMAIL = 'jd.jdhp@gmail.com'
