@@ -383,16 +383,48 @@
         <span class="k">return</span> <span class="n">cleaned_image</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;The main module execution function.</span>
+<span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Populate the given argparse.ArgumentParser with arguments.</span>
 
-<span class="sd">    Contains the instructions executed when the module is not imported but</span>
-<span class="sd">    directly called from the system command line.</span>
+<span class="sd">    This function can be used to make the definition these argparse arguments</span>
+<span class="sd">    reusable in other modules and avoid the duplication of these definitions</span>
+<span class="sd">    among the executable scripts.</span>
+
+<span class="sd">    The following arguments are added to the parser:</span>
+
+<span class="sd">    **type-of-filtering** (string)</span>
+<span class="sd">      type of filtering</span>
+
+<span class="sd">    **filter-thresholds** (float list)</span>
+<span class="sd">      thresholds used for the plane filtering.</span>
+
+<span class="sd">    **last-scale** (string)</span>
+<span class="sd">      last plane treatment</span>
+
+<span class="sd">    **detect-only-positive-structures** (boolean)</span>
+<span class="sd">      detect only positive structures.</span>
+
+<span class="sd">    **kill-isolated-pixels** (boolean)</span>
+<span class="sd">      suppress isolated pixels in the support (scipy implementation)</span>
+
+<span class="sd">    **noise-cdf-file** (path)</span>
+<span class="sd">      the JSON file containing the Cumulated Distribution Function of the noise</span>
+<span class="sd">      model used to inject artificial noise in blank pixels (those with a NaN</span>
+<span class="sd">      value)</span>
+
+<span class="sd">    **tmp-dir** (path)</span>
+<span class="sd">      the directory where temporary files are written</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parser : argparse.ArgumentParser</span>
+<span class="sd">        The parser to populate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    argparse.ArgumentParser</span>
+<span class="sd">        Return the populated ArgumentParser object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># PARSE OPTIONS ###########################################################</span>
-
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filter images with Wavelet Transform.&quot;</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--type-of-filtering&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;STRING&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">DEFAULT_TYPE_OF_FILTERING</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Type of filtering: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">AVAILABLE_TYPE_OF_FILTERING</span><span class="p">)))</span>
@@ -415,6 +447,21 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;The main module execution function.</span>
+
+<span class="sd">    Contains the instructions executed when the module is not imported but</span>
+<span class="sd">    directly called from the system command line.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># PARSE OPTIONS ###########################################################</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filter images with Wavelet Transform.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
