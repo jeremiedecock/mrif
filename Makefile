@@ -132,7 +132,10 @@ trailing-spaces:
 publish: pypi
 
 pypi:
+	# Upload the package to pypi.org
 	python3 setup.py sdist upload
+	# Check the README file to prevent formatting issues on the pypi.org project page
+	python3 setup.py check --restructuredtext
 
 
 ## CLEAN ######################################################################
