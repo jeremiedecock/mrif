@@ -1,9 +1,9 @@
+.. image:: https://travis-ci.org/jeremiedecock/pywi.svg?branch=master
+    :target: https://travis-ci.org/jeremiedecock/pywi
+
 =============================
 PyWI - Python Wavelet Imaging
 =============================
-
-.. image:: https://travis-ci.org/jeremiedecock/pywi.svg?branch=master
-    :target: https://travis-ci.org/jeremiedecock/pywi
 
 Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 
