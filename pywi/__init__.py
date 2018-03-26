@@ -70,15 +70,16 @@ docstring) and ``pywi.transform??<ENTER>`` (to view the source code).
 # Dev branch marker is: 'X.Y.dev' or 'X.Y.devN' where N is an integer.
 # 'X.Y.dev0' is the canonical version of 'X.Y.dev'
 
-__version__ = '0.1.dev17'
+__version__ = '0.1.dev18'
 
 def get_version():
     return __version__
 
-from . import benchmark
-from . import filtering
-from . import image
-from . import io
-from . import optimization
-from . import transform
-from . import ui
+# The following lines are temporary commented to avoid BUG#2 (c.f. BUGS.md)
+#from . import benchmark
+#from . import filtering
+#from . import image
+#from . import io
+#from . import optimization
+#from . import transform
+#from . import ui
