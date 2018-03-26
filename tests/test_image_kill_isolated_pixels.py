@@ -24,8 +24,8 @@
 This module contains unit tests for the "image.kill_isolated_pixels" module.
 """
 
-from pywi.image.kill_isolated_pixels import kill_isolated_pixels
-from pywi.image.kill_isolated_pixels import kill_isolated_pixels_stats
+from pywi.image.pixel_clusters import kill_isolated_pixels
+from pywi.image.pixel_clusters import kill_isolated_pixels_stats
 
 import numpy as np
 
