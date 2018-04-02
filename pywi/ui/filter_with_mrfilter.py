@@ -220,7 +220,7 @@ __all__ = ['add_arguments']
 import argparse
 import os
 
-from pywi.processing.compositing.filter_with_mrfilter import WaveletTransform
+from pywi.processing.compositing.filter_with_mrfilter import clean_image
 
 from pywi.io.images import load_image, save_image
 from pywi.io.plot import plot_list, mpl_save_list
@@ -521,38 +521,37 @@ def main():
 
     # CLEAN THE INPUT IMAGE ###################################
 
-    img_filter = WaveletTransform()
     input_img = load_image(input_file)
 
     # Copy the image (otherwise some cleaning functions may change it)
     input_img_copy = input_img.astype('float64', copy=True)
 
-    cleaned_img = img_filter.clean_image(input_img_copy,
-                                         type_of_multiresolution_transform=type_of_multiresolution_transform,
-                                         type_of_filters=type_of_filters,
-                                         type_of_non_orthog_filters=type_of_non_orthog_filters,
-                                         number_of_scales=number_of_scales,
-                                         suppress_last_scale=suppress_last_scale,
-                                         suppress_isolated_pixels=suppress_isolated_pixels,
-                                         kill_isolated_pixels=kill_isolated_pixels,
-                                         coef_detection_method=coef_detection_method,
-                                         k_sigma_noise_threshold=k_sigma_noise_threshold,
-                                         noise_model=noise_model,
-                                         detect_only_positive_structure=detect_only_positive_structure,
-                                         suppress_positivity_constraint=suppress_positivity_constraint,
-                                         type_of_filtering=type_of_filtering,
-                                         first_detection_scale=first_detection_scale,
-                                         number_of_iterations=number_of_iterations,
-                                         epsilon=epsilon,
-                                         support_file_name=support_file_name,
-                                         precision=precision,
-                                         mask_file_path=mask_file_path,
-                                         offset_after_calibration=offset_after_calibration,
-                                         correction_offset=correction_offset,
-                                         input_image_scale=input_image_scale,
-                                         noise_distribution=noise_distribution,
-                                         verbose=verbose,
-                                         tmp_files_directory=tmp_dir)
+    cleaned_img = clean_image(input_img_copy,
+                              type_of_multiresolution_transform=type_of_multiresolution_transform,
+                              type_of_filters=type_of_filters,
+                              type_of_non_orthog_filters=type_of_non_orthog_filters,
+                              number_of_scales=number_of_scales,
+                              suppress_last_scale=suppress_last_scale,
+                              suppress_isolated_pixels=suppress_isolated_pixels,
+                              kill_isolated_pixels=kill_isolated_pixels,
+                              coef_detection_method=coef_detection_method,
+                              k_sigma_noise_threshold=k_sigma_noise_threshold,
+                              noise_model=noise_model,
+                              detect_only_positive_structure=detect_only_positive_structure,
+                              suppress_positivity_constraint=suppress_positivity_constraint,
+                              type_of_filtering=type_of_filtering,
+                              first_detection_scale=first_detection_scale,
+                              number_of_iterations=number_of_iterations,
+                              epsilon=epsilon,
+                              support_file_name=support_file_name,
+                              precision=precision,
+                              mask_file_path=mask_file_path,
+                              offset_after_calibration=offset_after_calibration,
+                              correction_offset=correction_offset,
+                              input_image_scale=input_image_scale,
+                              noise_distribution=noise_distribution,
+                              verbose=verbose,
+                              tmp_files_directory=tmp_dir)
 
     # PLOT IMAGES #########################################################
 

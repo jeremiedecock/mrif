@@ -93,7 +93,7 @@ It also requires Numpy and Matplotlib Python libraries.
 import argparse
 import os
 
-from pywi.processing.compositing.filter_with_mrtransform import WaveletTransform
+from pywi.processing.compositing.filter_with_mrtransform import clean_image
 from pywi.processing.filtering import hard_filter
 from pywi.processing.transform import mrtransform_wrapper
 
@@ -226,20 +226,19 @@ def main():
 
     # CLEAN THE INPUT IMAGE ###################################
 
-    img_filter = WaveletTransform()
     input_img = load_image(input_file)
 
     # Copy the image (otherwise some cleaning functions may change it)
     input_img_copy = input_img.astype('float64', copy=True)
 
-    cleaned_img = img_filter.clean_image(input_img_copy,
-                                         type_of_filtering=type_of_filtering,
-                                         filter_thresholds=filter_thresholds,
-                                         last_scale_treatment=last_scale_treatment,
-                                         detect_only_positive_structures=detect_only_positive_structures,
-                                         kill_isolated_pixels=kill_isolated_pixels,
-                                         noise_distribution=noise_distribution,
-                                         tmp_files_directory=tmp_dir)
+    cleaned_img = clean_image(input_img_copy,
+                              type_of_filtering=type_of_filtering,
+                              filter_thresholds=filter_thresholds,
+                              last_scale_treatment=last_scale_treatment,
+                              detect_only_positive_structures=detect_only_positive_structures,
+                              kill_isolated_pixels=kill_isolated_pixels,
+                              noise_distribution=noise_distribution,
+                              tmp_files_directory=tmp_dir)
 
     # PLOT IMAGES #########################################################
 

@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['WaveletTransform']
+__all__ = ['clean_image']
 
 """Denoise images with Wavelet Transform.
 
@@ -54,109 +54,101 @@ DEBUG = False
 
 ##############################################################################
 
-class WaveletTransform:
-    """A wavelet filter based on mr_transform."""
+def clean_image(input_image,
+                type_of_filtering=hard_filter.DEFAULT_TYPE_OF_FILTERING,
+                filter_thresholds=hard_filter.DEFAULT_FILTER_THRESHOLDS,
+                last_scale_treatment=mrtransform_wrapper.DEFAULT_LAST_SCALE_TREATMENT,
+                detect_only_positive_structures=False,
+                kill_isolated_pixels=False,
+                noise_distribution=None,
+                tmp_files_directory=".",
+                output_data_dict=None,
+                **kwargs):
+    """Clean the `input_image` image.
 
-    def __init__(self):
-        super().__init__()
-        self.label = "WT (mr_transform)"  # Name to show in plots
+    Apply the wavelet transform, filter planes and return the reverse
+    transformed image.
 
-    def clean_image(self,
-                    input_image,
-                    type_of_filtering=hard_filter.DEFAULT_TYPE_OF_FILTERING,
-                    filter_thresholds=hard_filter.DEFAULT_FILTER_THRESHOLDS,
-                    last_scale_treatment=mrtransform_wrapper.DEFAULT_LAST_SCALE_TREATMENT,
-                    detect_only_positive_structures=False,
-                    kill_isolated_pixels=False,
-                    noise_distribution=None,
-                    tmp_files_directory=".",
-                    output_data_dict=None,
-                    **kwargs):
-        """Clean the `input_image` image.
+    Parameters
+    ----------
+    input_image : array_like
+        The image to clean.
+    type_of_filtering : str
+        Type of filtering: 'hard_filtering' or 'ksigma_hard_filtering'.
+    filter_thresholds : list of float
+        Thresholds used for the plane filtering.
+    last_scale_treatment : str
+        Last plane treatment: 'keep', 'drop' or 'mask'.
+    detect_only_positive_structures : bool
+        Detect only positive structures.
+    kill_isolated_pixels : bool
+        Suppress isolated pixels in the support.
+    noise_distribution : bool
+        The JSON file containing the Cumulated Distribution Function of the
+        noise model used to inject artificial noise in blank pixels (those
+        with a NaN value).
+    tmp_files_directory : str
+        The path of the directory where temporary files are written.
+    output_data_dict : dict
+        A dictionary used to return results and intermediate results.
 
-        Apply the wavelet transform, filter planes and return the reverse
-        transformed image.
+    Returns
+    -------
+        Return the cleaned image.
+    """
 
-        Parameters
-        ----------
-        input_image : array_like
-            The image to clean.
-        type_of_filtering : str
-            Type of filtering: 'hard_filtering' or 'ksigma_hard_filtering'.
-        filter_thresholds : list of float
-            Thresholds used for the plane filtering.
-        last_scale_treatment : str
-            Last plane treatment: 'keep', 'drop' or 'mask'.
-        detect_only_positive_structures : bool
-            Detect only positive structures.
-        kill_isolated_pixels : bool
-            Suppress isolated pixels in the support.
-        noise_distribution : bool
-            The JSON file containing the Cumulated Distribution Function of the
-            noise model used to inject artificial noise in blank pixels (those
-            with a NaN value).
-        tmp_files_directory : str
-            The path of the directory where temporary files are written.
-        output_data_dict : dict
-            A dictionary used to return results and intermediate results.
+    if DEBUG:
+        print("Filter thresholds:", filter_thresholds)
 
-        Returns
-        -------
-            Return the cleaned image.
-        """
+    number_of_scales = len(filter_thresholds) + 1
 
+    if DEBUG:
+        print("Number of scales:", number_of_scales)
+
+    # COMPUTE THE WAVELET TRANSFORM #######################################
+
+    wavelet_planes = wavelet_transform(input_image,
+                                       number_of_scales=number_of_scales,
+                                       tmp_files_directory=tmp_files_directory,
+                                       noise_distribution=noise_distribution)
+
+    if DEBUG:
+        for index, plane in enumerate(wavelet_planes):
+            images.plot(plane, "Plane " + str(index))
+
+    # FILTER WAVELET PLANES ###############################################
+
+    filtered_wavelet_planes = filter_planes(wavelet_planes,
+                                            method=type_of_filtering,
+                                            thresholds=filter_thresholds,
+                                            detect_only_positive_structures=detect_only_positive_structures)
+
+    #if DEBUG:
+    #    for index, plane in enumerate(filtered_wavelet_planes):
+    #        images.plot(plane, "Filtered plane " + str(index))
+
+    # COMPUTE THE INVERSE TRANSFORM #######################################
+
+    cleaned_image = inverse_wavelet_transform(filtered_wavelet_planes,
+                                              last_plane=last_scale_treatment)
+    if DEBUG:
+        images.plot(cleaned_image, "Cleaned image")
+
+    # KILL ISOLATED PIXELS ################################################
+
+    kill_islands = kill_isolated_pixels_stats(cleaned_image)
+    img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = kill_islands
+    img_cleaned_num_islands = number_of_islands(cleaned_image)
+
+    if output_data_dict is not None:
+        output_data_dict["img_cleaned_islands_delta_pe"] = img_cleaned_islands_delta_pe
+        output_data_dict["img_cleaned_islands_delta_abs_pe"] = img_cleaned_islands_delta_abs_pe
+        output_data_dict["img_cleaned_islands_delta_num_pixels"] = img_cleaned_islands_delta_num_pixels
+        output_data_dict["img_cleaned_num_islands"] = img_cleaned_num_islands
+
+    if kill_isolated_pixels:
+        cleaned_image = scipy_kill_isolated_pixels(cleaned_image)
         if DEBUG:
-            print("Filter thresholds:", filter_thresholds)
+            images.plot(cleaned_image, "Cleaned image after island kill")
 
-        number_of_scales = len(filter_thresholds) + 1
-
-        if DEBUG:
-            print("Number of scales:", number_of_scales)
-
-        # COMPUTE THE WAVELET TRANSFORM #######################################
-
-        wavelet_planes = wavelet_transform(input_image,
-                                           number_of_scales=number_of_scales,
-                                           tmp_files_directory=tmp_files_directory,
-                                           noise_distribution=noise_distribution)
-
-        if DEBUG:
-            for index, plane in enumerate(wavelet_planes):
-                images.plot(plane, "Plane " + str(index))
-
-        # FILTER WAVELET PLANES ###############################################
-
-        filtered_wavelet_planes = filter_planes(wavelet_planes,
-                                                method=type_of_filtering,
-                                                thresholds=filter_thresholds,
-                                                detect_only_positive_structures=detect_only_positive_structures)
-
-        #if DEBUG:
-        #    for index, plane in enumerate(filtered_wavelet_planes):
-        #        images.plot(plane, "Filtered plane " + str(index))
-
-        # COMPUTE THE INVERSE TRANSFORM #######################################
-
-        cleaned_image = inverse_wavelet_transform(filtered_wavelet_planes,
-                                                  last_plane=last_scale_treatment)
-        if DEBUG:
-            images.plot(cleaned_image, "Cleaned image")
-
-        # KILL ISOLATED PIXELS ################################################
-
-        kill_islands = kill_isolated_pixels_stats(cleaned_image)
-        img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = kill_islands
-        img_cleaned_num_islands = number_of_islands(cleaned_image)
-
-        if output_data_dict is not None:
-            output_data_dict["img_cleaned_islands_delta_pe"] = img_cleaned_islands_delta_pe
-            output_data_dict["img_cleaned_islands_delta_abs_pe"] = img_cleaned_islands_delta_abs_pe
-            output_data_dict["img_cleaned_islands_delta_num_pixels"] = img_cleaned_islands_delta_num_pixels
-            output_data_dict["img_cleaned_num_islands"] = img_cleaned_num_islands
-
-        if kill_isolated_pixels:
-            cleaned_image = scipy_kill_isolated_pixels(cleaned_image)
-            if DEBUG:
-                images.plot(cleaned_image, "Cleaned image after island kill")
-
-        return cleaned_image
+    return cleaned_image
