@@ -25,7 +25,7 @@ __all__ = ['ObjectiveFunction']
 import numpy as np
 
 from pywi.ui.filter_with_mrfilter import WaveletTransform
-from pywi.benchmark import assess
+from pywi.benchmark.metrics.refbased import mse
 
 
 def norm_angle_diff(angle_in_degrees):

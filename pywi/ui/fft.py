@@ -42,15 +42,9 @@ Additional documentation:
 __all__ = ['FFT']
 
 import argparse
-import datetime
-import json
-import os
 import numpy as np
-import time
 
-import pywi.denoising
 from pywi.ui.commons import AbstractCleaningAlgorithm
-from pywi.benchmark import assess
 from pywi.io import images
 
 class FFT(AbstractCleaningAlgorithm):

@@ -93,7 +93,7 @@ It also requires Numpy and Matplotlib Python libraries.
 import argparse
 import os
 
-from pywi.processing.compositing.filter_with_mrtransform import WaveletTransform
+from pywi.processing.compositing.filter_with_mrfilter import WaveletTransform
 from pywi.processing.filtering import hard_filter
 from pywi.processing.transform import mrtransform_wrapper
 

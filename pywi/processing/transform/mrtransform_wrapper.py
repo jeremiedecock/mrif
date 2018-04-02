@@ -44,6 +44,7 @@ import os
 import time
 
 from pywi.io import images
+from pywi.io import fits
 
 # CONSTANTS ##################################################################
 
@@ -129,7 +130,7 @@ def wavelet_transform(input_image,
     try:
         # WRITE THE INPUT FILE (FITS) ##########################
 
-        images.save_fits(input_image, input_file_path)
+        fits.save_fits_image(input_image, input_file_path)
 
         # EXECUTE MR_TRANSFORM #################################
 
@@ -143,7 +144,7 @@ def wavelet_transform(input_image,
 
         # READ THE MR_TRANSFORM OUTPUT FILE ####################
 
-        wavelet_planes = images.load_fits(mr_output_file_path, 0)
+        wavelet_planes = fits.load_fits_image(mr_output_file_path, 0)
 
         # CHECK RESULT #########################################
 

@@ -21,10 +21,10 @@
 # THE SOFTWARE.
 
 """
-This module contains unit tests for the "benchmark.assess" module.
+This module contains unit tests for the "benchmark.metrics.refbased" module.
 """
 
-from pywi.benchmark import assess
+from pywi.benchmark.metrics import refbased
 
 import numpy as np
 
@@ -32,7 +32,7 @@ import unittest
 
 class TestAssess(unittest.TestCase):
     """
-    Contains unit tests for the "benchmark.assess" module.
+    Contains unit tests for the "benchmark.metrics.refbased" module.
     """
 
     # Test the "normalize" function ###########################################
@@ -54,7 +54,7 @@ class TestAssess(unittest.TestCase):
 
         # Output image ################
 
-        output_img = assess.normalize_array(input_img)
+        output_img = refbased.normalize_array(input_img)
 
         # Test ########################
 
@@ -79,7 +79,7 @@ class TestAssess(unittest.TestCase):
 
         # Output image ################
 
-        output_img = assess.normalize_array(input_img)
+        output_img = refbased.normalize_array(input_img)
 
         # Test ########################
 
@@ -117,7 +117,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric_mse(input_image, output_image, reference_image)
+        mark = refbased.metric_mse(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -179,8 +179,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyOutputImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyOutputImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -211,8 +211,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -243,8 +243,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyOutputImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyOutputImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -275,8 +275,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
     def test_metric2_input_with_nan(self):
@@ -310,8 +310,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyOutputImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyOutputImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -342,8 +342,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -374,8 +374,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyOutputImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyOutputImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -406,8 +406,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric2(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric2(input_image, output_image, reference_image)
 
 
     def test_metric2_output(self):
@@ -439,7 +439,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -472,7 +472,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -505,7 +505,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -538,7 +538,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -569,7 +569,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -600,7 +600,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -631,7 +631,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric2(input_image, output_image, reference_image)
+        mark = refbased.metric2(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -674,8 +674,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric3(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric3(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -706,8 +706,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric3(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric3(input_image, output_image, reference_image)
 
 
     def test_metric3_output(self):
@@ -739,7 +739,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -772,7 +772,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -805,7 +805,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -838,7 +838,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -869,7 +869,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -900,7 +900,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -931,7 +931,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric3(input_image, output_image, reference_image)
+        mark = refbased.metric3(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -975,8 +975,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric4(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric4(input_image, output_image, reference_image)
 
 
         #######################################################################
@@ -1007,8 +1007,8 @@ class TestAssess(unittest.TestCase):
 
         # Test ########################
 
-        with self.assertRaises(assess.EmptyReferenceImageError):
-            mark = assess.metric4(input_image, output_image, reference_image)
+        with self.assertRaises(refbased.EmptyReferenceImageError):
+            mark = refbased.metric4(input_image, output_image, reference_image)
 
 
     def test_metric4_output(self):
@@ -1040,7 +1040,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1073,7 +1073,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1106,7 +1106,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1139,7 +1139,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1170,7 +1170,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1201,7 +1201,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 
@@ -1232,7 +1232,7 @@ class TestAssess(unittest.TestCase):
 
         # Mark ########################
 
-        mark = assess.metric4(input_image, output_image, reference_image)
+        mark = refbased.metric4(input_image, output_image, reference_image)
 
         # Test ########################
 

@@ -25,29 +25,19 @@ __all__ = ['fill_nan_pixels',
            'image_files_in_paths',
            'image_generator',
            'load_image',
-           'load_fits',
            'mpl_save',
            'plot',
-           'save_fits',
            'save_image']
-
-import math
-
-import collections
 
 import numpy as np
 
 import matplotlib.pyplot as plt
 from matplotlib import cm
-from matplotlib.patches import Ellipse
-
-import PIL.Image as pil_image     # PIL.Image is a module not a class...
 
 import os
 
-from astropy.io import fits
-
-import pandas as pd
+from pywi.io.pil import load_pil_image, save_pil_image
+from pywi.io.fits import load_fits_image, save_fits_image
 
 DEBUG = False
 
@@ -375,83 +365,11 @@ def load_image(input_file_path, **kwargs):
     
     if input_file_path.lower().endswith((".fits", ".fit")):
         # FITS FILES
-        image_array = load_fits(input_file_path, **kwargs)
+        image_array = load_fits_image(input_file_path)
     else:
-        pil_img = pil_image.open(input_file_path)
-        pil_img = pil_img.convert('L')
-        image_array = np.array(pil_img)  # It works also with .png, .jpg, tiff, ...
+        image_array = load_pil_image(input_file_path)
 
     return image_array
-
-
-def load_fits(input_file_path, hdu_index=0):
-    """Return the image array contained in the given HDU of the given FITS file.
-
-    Parameters
-    ----------
-    input_file_path : str
-        The path of the FITS file to load
-    hdu_index : int
-        The HDU to load within the FITS file (one FITS file can contain several
-        images stored in different HDU)
-
-    Returns
-    -------
-    ndarray
-        The loaded image
-
-    Raises
-    ------
-    WrongHDUError
-        If `input_file_path` doesn't contain the HDU `hdu_index`
-    NotAnImageError
-        If `input_file_path` doesn't contain a valid image in the HDU
-        `hdu_index`
-    """
-    
-    hdu_list = fits.open(input_file_path)   # open the FITS file
-
-    if not (0 <= hdu_index < len(hdu_list)):
-        hdu_list.close()
-        raise WrongHDUError(input_file_path, hdu_index)
-
-    hdu = hdu_list[hdu_index]
-
-    if not hdu.is_image:
-        hdu_list.close()
-        raise NotAnImageError(input_file_path, hdu_index)
-
-    image_array = hdu.data    # "hdu.data" is a Numpy Array
-
-    hdu_list.close()
-
-    return image_array
-
-
-def normalize(array):
-    """Normalize the values of a Numpy array in the range [0,1].
-
-    Parameters
-    ----------
-    array : array like
-        The array to normalize
-
-    Returns
-    -------
-    ndarray
-        The normalized array
-    """
-    min_value = array.min()
-    max_value = array.max()
-    size = max_value - min_value
-
-    if size > 0:
-        array = array.astype('float64', copy=True)
-        norm_array = (array - min_value)/size
-    else:
-        norm_array = array
-
-    return norm_array
 
 
 def save_image(image_array, output_file_path, **kwargs):
@@ -472,44 +390,9 @@ def save_image(image_array, output_file_path, **kwargs):
     
     if output_file_path.lower().endswith((".fits", ".fit")):
         # FITS FILES
-        save_fits(image_array, output_file_path, **kwargs)
+        save_fits_image(image_array, output_file_path)
     else:
-        mode = "L"              # Grayscale
-        size_y, size_x = image_array.shape
-        pil_img = pil_image.new(mode, (size_x, size_y))
-
-        # Make the data (pixels value in [0;255])
-        # WARNING: nested list and 2D numpy arrays are silently rejected!!!
-        #          data *must* be a list or a 1D numpy array!
-        image_array = normalize(image_array) * 255.
-        image_array = image_array.astype('uint8', copy=True)
-
-        pil_img.putdata(image_array.flatten())
-        pil_img.save(output_file_path)
-
-
-def save_fits(img, output_file_path):
-    """Save the `img` image (array_like) to the `output_file_path` FITS file.
-
-    Parameters
-    ----------
-    img : array_like
-        The image to save (should be a 2D or a 3D numpy array)
-    output_file_path : str
-        The path of the FITS file where to save the `img`
-
-    Raises
-    ------
-    WrongDimensionError
-        If `img` has more than 3 dimensions or less than 2 dimensions.
-    """
-
-    if img.ndim not in (2, 3):
-        raise WrongDimensionError()
-
-    hdu = fits.PrimaryHDU(img)
-
-    hdu.writeto(output_file_path, overwrite=True)  # overwrite=True: overwrite the file if it already exists
+        save_pil_image(image_array, output_file_path)
 
 
 # MATPLOTLIB ##################################################################

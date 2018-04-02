@@ -30,9 +30,9 @@ import sys
 import time
 import traceback
 
-from pywi.benchmark import assess
-from pywi.image.pixel_clusters import kill_isolated_pixels_stats
-from pywi.image.pixel_clusters import number_of_islands
+from pywi.benchmark.metrics.refbased import mse
+from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels_stats
+from pywi.processing.filtering.pixel_clusters import number_of_islands
 from pywi.io.images import image_generator
 import pywi.io.images
 
@@ -195,14 +195,10 @@ class AbstractCleaningAlgorithm(object):
                     # ASSESS THE CLEANING #################################
 
                     kwargs = {}  # TODO GEOM
-                    score_tuple, score_name_tuple = assess.assess_image_cleaning(input_img,
-                                                                                 cleaned_img,
-                                                                                 reference_img,
-                                                                                 benchmark_method,
-                                                                                 **kwargs)
+                    score = mse(cleaned_img, reference_img)
 
-                    image_dict["score"] = score_tuple
-                    image_dict["score_name"] = score_name_tuple
+                    image_dict["score"] = [score]
+                    image_dict["score_name"] = ["mse"]
                     image_dict["full_clean_execution_time_sec"] = full_clean_execution_time_sec
 
                     image_dict["img_cleaned_sum_pe"] = float(np.nansum(cleaned_img))
