@@ -40,6 +40,7 @@ I/O package:
    pywi.io.fits <api_io_fits>
    pywi.io.images <api_io_images>
    pywi.io.pil <api_io_pil>
+   pywi.io.plot <api_io_plot>
 
 Optimization package:
 

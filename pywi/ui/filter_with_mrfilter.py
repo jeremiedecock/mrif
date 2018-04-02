@@ -222,7 +222,8 @@ import os
 
 from pywi.processing.compositing.filter_with_mrfilter import WaveletTransform
 
-from pywi.io import images
+from pywi.io.images import load_image, save_image
+from pywi.io.plot import plot_list, mpl_save_list
 
 from pywi.ui.argparse_commons import add_common_arguments
 
@@ -521,7 +522,7 @@ def main():
     # CLEAN THE INPUT IMAGE ###################################
 
     img_filter = WaveletTransform()
-    input_img = images.load_image(input_file)
+    input_img = load_image(input_file)
 
     # Copy the image (otherwise some cleaning functions may change it)
     input_img_copy = input_img.astype('float64', copy=True)
@@ -560,20 +561,20 @@ def main():
         title_list = ["Input image", "Filtered image"] 
 
         if plot:
-            images.plot_list(image_list, title_list=title_list)
+            plot_list(image_list, title_list=title_list)
 
         if saveplot is not None:
             plot_file_path = saveplot
             print("Saving {}".format(plot_file_path))
-            images.mpl_save_list(image_list,
-                                 output_file_path=plot_file_path,
-                                 title_list=title_list)
+            mpl_save_list(image_list,
+                          output_file_path=plot_file_path,
+                          title_list=title_list)
 
     # SAVE IMAGE ##########################################################
 
     basename, extension = os.path.splitext(input_file)
     output_file_path = "{}-out{}".format(basename, extension)
-    images.save_image(cleaned_img, output_file_path)
+    save_image(cleaned_img, output_file_path)
 
 if __name__ == "__main__":
     main()
