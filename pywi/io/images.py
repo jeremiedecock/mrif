@@ -23,7 +23,6 @@
 __all__ = ['fill_nan_pixels',
            'image_files_in_dir',
            'image_files_in_paths',
-           'image_generator',
            'load_image',
            'save_image']
 
@@ -239,103 +238,7 @@ def image_files_in_paths(path_list, max_num_files=None):
             raise Exception("Wrong item:", path)
 
 
-# LOAD IMAGES ################################################################
-
-def image_generator(path_list,
-                    max_num_images=None,
-                    **kwargs):
-    """Return an iterable sequence all calibrated images in `path_list`.
-
-    Parameters
-    ----------
-    path_list
-        The path of files containing the images to extract. It can contain
-        FITS/Simtel files and directories.
-    max_num_images
-        The maximum number of images to iterate.
-
-    Yields
-    ------
-    Image1D or Image2D
-        The named tuple `Image1D` or `Image1D` of the next FITS or Simtel files
-        in `path_list`.
-    """
-
-    images_counter = 0
-
-    for file_path in image_files_in_paths(path_list):
-        if (max_num_images is not None) and (images_counter >= max_num_images):
-            break
-        else:
-            if file_path.lower().endswith((".fits", ".fit")):
-                # FITS FILES
-                image_dict, fits_metadata_dict = load_benchmark_images(file_path)   # TODO: named tuple
-                images_counter += 1
-                yield Image2D(**image_dict, meta=fits_metadata_dict)
-            else:
-                raise Exception("Wrong item:", file_path)
-
-
 # LOAD AND SAVE FITS FILES ###################################################
-
-def load_benchmark_images(input_file_path):
-    """Return images contained in the given FITS file.
-
-    Parameters
-    ----------
-    input_file_path : str
-        The path of the FITS file to load
-
-    Returns
-    -------
-    dict
-        A dictionary containing the loaded images and their metadata
-
-    Raises
-    ------
-    WrongFitsFileStructure
-        If `input_file_path` doesn't contain a valid structure
-    """
-
-    hdu_list = fits.open(input_file_path)   # open the FITS file
-
-    # METADATA ################################################################
-
-    hdu0 = hdu_list[0]
-
-    metadata_dict = {}
-
-    metadata_dict['version'] = hdu0.header['version']
-    #metadata_dict['cam_id'] = hdu0.header['cam_id']
-
-    # IMAGES ##################################################################
-
-    if metadata_dict['version'] == 1:
-        if (len(hdu_list) != 2) or (not hdu_list[0].is_image) or (not hdu_list[1].is_image):
-            hdu_list.close()
-            raise WrongFitsFileStructure(input_file_path)
-
-        hdu0, hdu1 = hdu_list
-
-        # IMAGES
-
-        images_dict = {}
-
-        images_dict["input_image"] = hdu0.data        # "hdu.data" is a Numpy Array
-        images_dict["reference_image"] = hdu1.data    # "hdu.data" is a Numpy Array
-    else:
-        raise Exception("Unknown version number")
-
-    # METADATA ################################################################
-
-    metadata_dict['npe'] = float(np.nansum(images_dict["reference_image"]))       # np.sum() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-    metadata_dict['min_npe'] = float(np.nanmin(images_dict["reference_image"]))   # np.min() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-    metadata_dict['max_npe'] = float(np.nanmax(images_dict["reference_image"]))   # np.max() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...
-
-    hdu_list.close()
-
-    return images_dict, metadata_dict   # TODO: named tuple
-
 
 def load_image(input_file_path, **kwargs):
     """Return the image array contained in the given image file.

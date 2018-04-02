@@ -22,13 +22,18 @@
 
 __all__ = ['benchmark']
 
-def benchmark(image_generator, processing, metrics, benchmark_writter=None, score_aggregation_method=None):
-    for image in image_generator:
-        output_image = processing(image.input)
-        score = metrics(output_image, image.reference)
+def benchmark(benchmark_image_generator,
+              processing,
+              metrics,
+              benchmark_writter=None,
+              score_aggregation_method=None):
+
+    for benchmark_image in image_generator:
+        output_image = processing(benchmark_image.input_image)
+        score = metrics(output_image, benchmark_image.reference_image)
 
         if benchmark_writter is not None:
-            benchmark_writter.write(image, score)
+            benchmark_writter.write(benchmark_image, score)
         else:
             print(score)
 

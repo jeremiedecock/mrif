@@ -16,6 +16,7 @@ Benchmark package:
    :maxdepth: 1
 
    pywi.benchmark.metrics.refbased <api_benchmark_metrics_refbased>
+   pywi.benchmark.io.refbased.fits <api_benchmark_io_refbased_fits>
 
 Filter package:
 

@@ -20,20 +20,71 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['load_benchmark_images']
+__all__ = ['BenchmarkImage',
+           'benchmark_image_generator',
+           'load_benchmark_images']
 
 from astropy.io import fits
 
+import collections
+
 import numpy as np
+
+from pywi.io.images import image_files_in_paths
+
+
+# IMAGE OBJECT ###############################################################
+
+BenchmarkImage = collections.namedtuple('BenchmarkImage', ('input_image',
+                                                           'reference_image',
+                                                           'metadata'))
+
+
+# IMAGE GENERATOR ############################################################
+
+def benchmark_image_generator(path_list,
+                              max_num_images=None,
+                              **kwargs):
+    """Return an iterable sequence all calibrated images in `path_list`.
+
+    Parameters
+    ----------
+    path_list
+        The path of files containing the images to extract. It can contain
+        FITS/Simtel files and directories.
+    max_num_images
+        The maximum number of images to iterate.
+
+    Yields
+    ------
+    Image1D or Image2D
+        The named tuple `Image1D` or `Image1D` of the next FITS or Simtel files
+        in `path_list`.
+    """
+
+    images_counter = 0
+
+    for file_path in image_files_in_paths(path_list):
+        if (max_num_images is not None) and (images_counter >= max_num_images):
+            break
+        else:
+            if file_path.lower().endswith((".fits", ".fit")):
+                # FITS FILES
+                benchmark_image = load_benchmark_images(file_path)
+                images_counter += 1
+                yield benchmark_image
+            else:
+                raise Exception("Wrong item:", file_path)
+
 
 # LOAD FITS BENCHMARK IMAGE ##################################################
 
-def load_benchmark_images(input_file_path):
+def load_benchmark_images(file_path):
     """Return images contained in the given FITS file.
 
     Parameters
     ----------
-    input_file_path : str
+    file_path : str
         The path of the FITS file to load
 
     Returns
@@ -44,24 +95,26 @@ def load_benchmark_images(input_file_path):
     Raises
     ------
     WrongFitsFileStructure
-        If `input_file_path` doesn't contain a valid structure
+        If `file_path` doesn't contain a valid structure
     """
 
-    hdu_list = fits.open(input_file_path)   # open the FITS file
+    hdu_list = fits.open(file_path)   # open the FITS file
 
     # IMAGES ##################################################################
 
     if (len(hdu_list) != 2) or (not hdu_list[0].is_image) or (not hdu_list[1].is_image):
         hdu_list.close()
-        raise WrongFitsFileStructure(input_file_path)
+        raise WrongFitsFileStructure(file_path)
 
     hdu0, hdu1 = hdu_list
 
-    images_dict = {}
-
-    images_dict["image"] = hdu0.data        # "hdu.data" is a Numpy Array
-    images_dict["reference"] = hdu1.data    # "hdu.data" is a Numpy Array
+    input_image = hdu0.data        # "hdu.data" is a Numpy Array
+    reference_image = hdu1.data    # "hdu.data" is a Numpy Array
 
     hdu_list.close()
 
-    return images_dict
+    benchmark_image = BenchmarkImage(input_image=input_image,
+                                     reference_image=reference_image,
+                                     metadata={})
+
+    return benchmark_image
