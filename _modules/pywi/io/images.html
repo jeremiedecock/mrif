@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.io.images &mdash; Python Wavelet Imaging 0.1.dev16 documentation</title>
+  <title>pywi.io.images &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev16 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -184,29 +184,19 @@
            <span class="s1">&#39;image_files_in_paths&#39;</span><span class="p">,</span>
            <span class="s1">&#39;image_generator&#39;</span><span class="p">,</span>
            <span class="s1">&#39;load_image&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;load_fits&#39;</span><span class="p">,</span>
            <span class="s1">&#39;mpl_save&#39;</span><span class="p">,</span>
            <span class="s1">&#39;plot&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;save_fits&#39;</span><span class="p">,</span>
            <span class="s1">&#39;save_image&#39;</span><span class="p">]</span>
-
-<span class="kn">import</span> <span class="nn">math</span>
-
-<span class="kn">import</span> <span class="nn">collections</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Ellipse</span>
-
-<span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="k">as</span> <span class="nn">pil_image</span>     <span class="c1"># PIL.Image is a module not a class...</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pywi.io.pil</span> <span class="k">import</span> <span class="n">load_pil_image</span><span class="p">,</span> <span class="n">save_pil_image</span>
+<span class="kn">from</span> <span class="nn">pywi.io.fits</span> <span class="k">import</span> <span class="n">load_fits_image</span><span class="p">,</span> <span class="n">save_fits_image</span>
 
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -305,12 +295,12 @@
 <span class="sd">    ... # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    array([[False, False,  True],</span>
 <span class="sd">           [False,  True, False],</span>
-<span class="sd">           [ True, False,  True]], dtype=bool)</span>
+<span class="sd">           [ True, False,  True]])</span>
 <span class="sd">    &gt;&gt;&gt; img</span>
 <span class="sd">    ... # doctest: +NORMALIZE_WHITESPACE</span>
-<span class="sd">    array([[ 1., 2., 0.],</span>
-<span class="sd">           [ 4., 0., 6.],</span>
-<span class="sd">           [ 0., 8., 0.]])</span>
+<span class="sd">    array([[1., 2., 0.],</span>
+<span class="sd">           [4., 0., 6.],</span>
+<span class="sd">           [0., 8., 0.]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># See https://stackoverflow.com/questions/29365194/replacing-missing-values-with-random-in-a-numpy-array</span>
@@ -534,83 +524,11 @@
     
     <span class="k">if</span> <span class="n">input_file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
         <span class="c1"># FITS FILES</span>
-        <span class="n">image_array</span> <span class="o">=</span> <span class="n">load_fits</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">load_fits_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
-        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
-        <span class="n">image_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pil_img</span><span class="p">)</span>  <span class="c1"># It works also with .png, .jpg, tiff, ...</span>
+        <span class="n">image_array</span> <span class="o">=</span> <span class="n">load_pil_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">image_array</span></div>
-
-
-<div class="viewcode-block" id="load_fits"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.load_fits">[docs]</a><span class="k">def</span> <span class="nf">load_fits</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the image array contained in the given HDU of the given FITS file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    input_file_path : str</span>
-<span class="sd">        The path of the FITS file to load</span>
-<span class="sd">    hdu_index : int</span>
-<span class="sd">        The HDU to load within the FITS file (one FITS file can contain several</span>
-<span class="sd">        images stored in different HDU)</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ndarray</span>
-<span class="sd">        The loaded image</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    WrongHDUError</span>
-<span class="sd">        If `input_file_path` doesn&#39;t contain the HDU `hdu_index`</span>
-<span class="sd">    NotAnImageError</span>
-<span class="sd">        If `input_file_path` doesn&#39;t contain a valid image in the HDU</span>
-<span class="sd">        `hdu_index`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">hdu_list</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>   <span class="c1"># open the FITS file</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">hdu_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">hdu_list</span><span class="p">)):</span>
-        <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">raise</span> <span class="n">WrongHDUError</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">)</span>
-
-    <span class="n">hdu</span> <span class="o">=</span> <span class="n">hdu_list</span><span class="p">[</span><span class="n">hdu_index</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">hdu</span><span class="o">.</span><span class="n">is_image</span><span class="p">:</span>
-        <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">raise</span> <span class="n">NotAnImageError</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">)</span>
-
-    <span class="n">image_array</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">data</span>    <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
-
-    <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">image_array</span></div>
-
-
-<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Normalize the values of a Numpy array in the range [0,1].</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    array : array like</span>
-<span class="sd">        The array to normalize</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ndarray</span>
-<span class="sd">        The normalized array</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">min_value</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">max_value</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="n">max_value</span> <span class="o">-</span> <span class="n">min_value</span>
-
-    <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">norm_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">min_value</span><span class="p">)</span><span class="o">/</span><span class="n">size</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">norm_array</span> <span class="o">=</span> <span class="n">array</span>
-
-    <span class="k">return</span> <span class="n">norm_array</span>
 
 
 <div class="viewcode-block" id="save_image"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.save_image">[docs]</a><span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -631,44 +549,9 @@
     
     <span class="k">if</span> <span class="n">output_file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
         <span class="c1"># FITS FILES</span>
-        <span class="n">save_fits</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">save_fits_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;L&quot;</span>              <span class="c1"># Grayscale</span>
-        <span class="n">size_y</span><span class="p">,</span> <span class="n">size_x</span> <span class="o">=</span> <span class="n">image_array</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="p">(</span><span class="n">size_x</span><span class="p">,</span> <span class="n">size_y</span><span class="p">))</span>
-
-        <span class="c1"># Make the data (pixels value in [0;255])</span>
-        <span class="c1"># WARNING: nested list and 2D numpy arrays are silently rejected!!!</span>
-        <span class="c1">#          data *must* be a list or a 1D numpy array!</span>
-        <span class="n">image_array</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">image_array</span><span class="p">)</span> <span class="o">*</span> <span class="mf">255.</span>
-        <span class="n">image_array</span> <span class="o">=</span> <span class="n">image_array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">pil_img</span><span class="o">.</span><span class="n">putdata</span><span class="p">(</span><span class="n">image_array</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
-        <span class="n">pil_img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="save_fits"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.save_fits">[docs]</a><span class="k">def</span> <span class="nf">save_fits</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Save the `img` image (array_like) to the `output_file_path` FITS file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    img : array_like</span>
-<span class="sd">        The image to save (should be a 2D or a 3D numpy array)</span>
-<span class="sd">    output_file_path : str</span>
-<span class="sd">        The path of the FITS file where to save the `img`</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    WrongDimensionError</span>
-<span class="sd">        If `img` has more than 3 dimensions or less than 2 dimensions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
-
-    <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-
-    <span class="n">hdu</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># overwrite=True: overwrite the file if it already exists</span></div>
+        <span class="n">save_pil_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span></div>
 
 
 <span class="c1"># MATPLOTLIB ##################################################################</span>
@@ -895,7 +778,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev16',
+            VERSION:'0.2.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

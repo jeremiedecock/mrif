@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>optimization.bruteforce &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>processing.filtering.pixel_clusters &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="index.html"/>
         <link rel="up" title="PyWI API" href="api.html"/>
-        <link rel="next" title="optimization.bruteforce" href="api_optimization_saes.html"/>
-        <link rel="prev" title="optimization.bruteforce" href="api_optimization_bruteforce.html"/> 
+        <link rel="next" title="processing.transform.mrtransform_wrapper" href="api_processing_transform_mrtransform.html"/>
+        <link rel="prev" title="filtering.hard_filter" href="api_processing_filtering_hard_filter.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -96,13 +96,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_metrics_refbased.html">pywi.benchmark.metrics.refbased</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.processing.filtering.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.optimization.differential_evolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_argparse.html">pywi.ui.argparse_commons</a></li>
@@ -158,13 +158,13 @@
         
           <li><a href="api.html">PyWI API</a> &raquo;</li>
         
-      <li>optimization.bruteforce</li>
+      <li>processing.filtering.pixel_clusters</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/api_optimization_differential_evolution.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/api_processing_filtering_pixel_clusters.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -177,8 +177,59 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi.optimization.bruteforce">
-<span id="optimization-bruteforce"></span><h1>optimization.bruteforce<a class="headerlink" href="#module-pywi.optimization.bruteforce" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pywi.processing.filtering.pixel_clusters">
+<span id="processing-filtering-pixel-clusters"></span><h1>processing.filtering.pixel_clusters<a class="headerlink" href="#module-pywi.processing.filtering.pixel_clusters" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pywi.processing.filtering.pixel_clusters.get_islands">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">get_islands</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#get_islands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.get_islands" title="Permalink to this definition">¶</a></dt>
+<dd><p>…</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>Numpy array</em>) – The input image to clean.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><em>Numpy array</em> – <code class="docutils literal"><span class="pre">filtered_array</span></code> the input image with all pixels below <code class="docutils literal"><span class="pre">threshold</span></code> put to 0 (may contain NaN values).</li>
+<li><em>Numpy array</em> – <code class="docutils literal"><span class="pre">label_array</span></code> define the island id each pixel belongs to (doesn’t contain NaN values).</li>
+<li><em>Integer</em> – <code class="docutils literal"><span class="pre">num_labels</span></code> the number of islands.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.processing.filtering.pixel_clusters.kill_isolated_pixels">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">kill_isolated_pixels</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#kill_isolated_pixels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.kill_isolated_pixels" title="Permalink to this definition">¶</a></dt>
+<dd><p>…</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>Numpy array</em>) – The input image to clean.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The input image <code class="docutils literal"><span class="pre">array</span></code> with isolated islands removed.
+Only keeping the biggest islands (the largest surface).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -191,10 +242,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_optimization_saes.html" class="btn btn-neutral float-right" title="optimization.bruteforce" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api_processing_transform_mrtransform.html" class="btn btn-neutral float-right" title="processing.transform.mrtransform_wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_optimization_bruteforce.html" class="btn btn-neutral" title="optimization.bruteforce" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_processing_filtering_hard_filter.html" class="btn btn-neutral" title="filtering.hard_filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

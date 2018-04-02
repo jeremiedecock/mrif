@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.transform.mrtransform_wrapper &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.processing.transform.mrtransform_wrapper &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -26,20 +26,20 @@
 
   
   
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   
 
   
 
   
         <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Module code" href="../../../index.html"/> 
 
   
-  <script src="../../../_static/js/modernizr.min.js"></script>
+  <script src="../../../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -55,7 +55,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> Python Wavelet Imaging
+            <a href="../../../../index.html" class="icon icon-home"> Python Wavelet Imaging
           
 
           
@@ -72,7 +72,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -90,9 +90,9 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../developer.html">Developer’s notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer.html">Developer’s notes</a></li>
 </ul>
 
             
@@ -107,7 +107,7 @@
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">Python Wavelet Imaging</a>
+          <a href="../../../../index.html">Python Wavelet Imaging</a>
         
       </nav>
 
@@ -135,11 +135,11 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>pywi.transform.mrtransform_wrapper</li>
+      <li>pywi.processing.transform.mrtransform_wrapper</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,7 +156,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pywi.transform.mrtransform_wrapper</h1><div class="highlight"><pre>
+  <h1>Source code for pywi.processing.transform.mrtransform_wrapper</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -203,6 +203,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
+<span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">fits</span>
 
 <span class="c1"># CONSTANTS ##################################################################</span>
 
@@ -211,11 +212,11 @@
 
 <span class="c1"># EXCEPTIONS #################################################################</span>
 
-<div class="viewcode-block" id="MrTransformError"><a class="viewcode-back" href="../../../api_transform_mrtransform.html#pywi.transform.mrtransform_wrapper.MrTransformError">[docs]</a><span class="k">class</span> <span class="nc">MrTransformError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="MrTransformError"><a class="viewcode-back" href="../../../../api_processing_transform_mrtransform.html#pywi.processing.transform.mrtransform_wrapper.MrTransformError">[docs]</a><span class="k">class</span> <span class="nc">MrTransformError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Common `wavelet_mrtransform` module&#39;s error.&quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="WrongDimensionError"><a class="viewcode-back" href="../../../api_transform_mrtransform.html#pywi.transform.mrtransform_wrapper.WrongDimensionError">[docs]</a><span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrTransformError</span><span class="p">):</span>
+<div class="viewcode-block" id="WrongDimensionError"><a class="viewcode-back" href="../../../../api_processing_transform_mrtransform.html#pywi.processing.transform.mrtransform_wrapper.WrongDimensionError">[docs]</a><span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrTransformError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raised when data having a wrong number of dimensions is given.</span>
 
 <span class="sd">    Attributes</span>
@@ -231,7 +232,7 @@
 
 <span class="c1">##############################################################################</span>
 
-<div class="viewcode-block" id="wavelet_transform"><a class="viewcode-back" href="../../../api_transform_mrtransform.html#pywi.transform.mrtransform_wrapper.wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
+<div class="viewcode-block" id="wavelet_transform"><a class="viewcode-back" href="../../../../api_processing_transform_mrtransform.html#pywi.processing.transform.mrtransform_wrapper.wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
                       <span class="n">number_of_scales</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                       <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                       <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -288,7 +289,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># WRITE THE INPUT FILE (FITS) ##########################</span>
 
-        <span class="n">images</span><span class="o">.</span><span class="n">save_fits</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">save_fits_image</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
 
         <span class="c1"># EXECUTE MR_TRANSFORM #################################</span>
 
@@ -302,7 +303,7 @@
 
         <span class="c1"># READ THE MR_TRANSFORM OUTPUT FILE ####################</span>
 
-        <span class="n">wavelet_planes</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">load_fits</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">wavelet_planes</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">load_fits_image</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># CHECK RESULT #########################################</span>
 
@@ -328,7 +329,7 @@
     <span class="k">return</span> <span class="n">wavelet_planes_list</span></div>
 
 
-<div class="viewcode-block" id="inverse_wavelet_transform"><a class="viewcode-back" href="../../../api_transform_mrtransform.html#pywi.transform.mrtransform_wrapper.inverse_wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">inverse_wavelet_transform</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
+<div class="viewcode-block" id="inverse_wavelet_transform"><a class="viewcode-back" href="../../../../api_processing_transform_mrtransform.html#pywi.processing.transform.mrtransform_wrapper.inverse_wavelet_transform">[docs]</a><span class="k">def</span> <span class="nf">inverse_wavelet_transform</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
                               <span class="n">last_plane</span><span class="o">=</span><span class="n">DEFAULT_LAST_SCALE_TREATMENT</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute the inverse wavelet transform of `wavelet_planes`.</span>
 
@@ -402,7 +403,7 @@
 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
+            URL_ROOT:'../../../../',
             VERSION:'0.2.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -410,16 +411,16 @@
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
   
   
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
   
 
   

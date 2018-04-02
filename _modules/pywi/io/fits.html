@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.argparse_commons &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.io.fits &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -139,7 +139,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pywi.ui.argparse_commons</li>
+      <li>pywi.io.fits</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,11 +156,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pywi.ui.argparse_commons</h1><div class="highlight"><pre>
+  <h1>Source code for pywi.io.fits</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="c1"># Copyright (c) 2018 Jérémie DECOCK (http://www.jdhp.org)</span>
+<span class="c1"># Copyright (c) 2016 Jérémie DECOCK (http://www.jdhp.org)</span>
 
 <span class="c1"># This script is provided under the terms and conditions of the MIT license:</span>
 <span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a copy</span>
@@ -179,66 +179,78 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<div class="viewcode-block" id="add_common_arguments"><a class="viewcode-back" href="../../../api_ui_argparse.html#pywi.ui.argparse_commons.add_common_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_common_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Populate the given argparse.ArgumentParser with arguments.</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;load_fits_image&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;save_fits_image&#39;</span><span class="p">]</span>
 
-<span class="sd">    This function can be used to centralize the definition of commons argparse</span>
-<span class="sd">    arguments and avoid the duplication of these definitions among the</span>
-<span class="sd">    executable scripts.</span>
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
 
-<span class="sd">    The following arguments are added to the parser:</span>
 
-<span class="sd">    - **verbose** (boolean): verbose mode</span>
-<span class="sd">    - **debug** (boolean): debug mode</span>
-<span class="sd">    - **plot** (boolean): plot images</span>
-<span class="sd">    - **saveplot** (string): the output file where to save plotted images</span>
-<span class="sd">    - **fileargs** (file paths): the files image to process</span>
+<div class="viewcode-block" id="load_fits_image"><a class="viewcode-back" href="../../../api_io_fits.html#pywi.io.fits.load_fits_image">[docs]</a><span class="k">def</span> <span class="nf">load_fits_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the image array contained in the given HDU of the given FITS file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    parser : argparse.ArgumentParser</span>
-<span class="sd">        The parser to populate.</span>
+<span class="sd">    input_file_path : str</span>
+<span class="sd">        The path of the FITS file to load</span>
+<span class="sd">    hdu_index : int</span>
+<span class="sd">        The HDU to load within the FITS file (one FITS file can contain several</span>
+<span class="sd">        images stored in different HDU)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    argparse.ArgumentParser</span>
-<span class="sd">        Return the populated ArgumentParser object.</span>
+<span class="sd">    ndarray</span>
+<span class="sd">        The loaded image</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    WrongHDUError</span>
+<span class="sd">        If `input_file_path` doesn&#39;t contain the HDU `hdu_index`</span>
+<span class="sd">    NotAnImageError</span>
+<span class="sd">        If `input_file_path` doesn&#39;t contain a valid image in the HDU</span>
+<span class="sd">        `hdu_index`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">hdu_list</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>   <span class="c1"># open the FITS file</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">hdu_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">hdu_list</span><span class="p">)):</span>
+        <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">WrongHDUError</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">)</span>
+
+    <span class="n">hdu</span> <span class="o">=</span> <span class="n">hdu_list</span><span class="p">[</span><span class="n">hdu_index</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hdu</span><span class="o">.</span><span class="n">is_image</span><span class="p">:</span>
+        <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">NotAnImageError</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">)</span>
+
+    <span class="n">image_array</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">data</span>    <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
+
+    <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">image_array</span></div>
+
+
+<div class="viewcode-block" id="save_fits_image"><a class="viewcode-back" href="../../../api_io_fits.html#pywi.io.fits.save_fits_image">[docs]</a><span class="k">def</span> <span class="nf">save_fits_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save the `image_array` image (array_like) to the `output_file_path` FITS file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image_array : array_like</span>
+<span class="sd">        The image to save (should be a 2D or a 3D numpy array)</span>
+<span class="sd">    output_file_path : str</span>
+<span class="sd">        The path of the FITS file where to save the `image_array`</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    WrongDimensionError</span>
+<span class="sd">        If `image_array` has more than 3 dimensions or less than 2 dimensions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verbose mode.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image_array</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--debug&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Debug mode.&quot;</span><span class="p">)</span>
+    <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">image_array</span><span class="p">)</span>
 
-<span class="c1">#    parser.add_argument(&quot;--max-images&quot;, type=int, metavar=&quot;INTEGER&quot;,</span>
-<span class="c1">#                        help=&quot;The maximum number of images to process&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--benchmark&quot;, &quot;-b&quot;, metavar=&quot;STRING&quot;,</span>
-<span class="c1">#                        help=&quot;The benchmark method to use to assess the algorithm for the&quot;</span>
-<span class="c1">#                             &quot;given images&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--label&quot;, &quot;-l&quot;, default=None,</span>
-<span class="c1">#                        metavar=&quot;STRING&quot;,</span>
-<span class="c1">#                        help=&quot;The label attached to the produced results&quot;)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--plot&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Plot images.&quot;</span><span class="p">)</span>
-
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--saveplot&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The output file where to save plotted images.&quot;</span><span class="p">)</span>
-
-<span class="c1">#    parser.add_argument(&quot;--output&quot;, &quot;-o&quot;, default=None,</span>
-<span class="c1">#                        metavar=&quot;FILE&quot;,</span>
-<span class="c1">#                        help=&quot;The output file path (JSON)&quot;)</span>
-
-<span class="c1">#    parser.add_argument(&quot;fileargs&quot;, nargs=&quot;+&quot;, metavar=&quot;FILE&quot;,</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;fileargs&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="n">nargs</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The files image to process.&quot;</span><span class="p">)</span>
-<span class="c1">#                             &quot;If fileargs is a directory,&quot;</span>
-<span class="c1">#                             &quot;all FITS files it contains are processed.&quot;)</span>
-</div>
-    <span class="k">return</span> <span class="n">parser</span>
+    <span class="n">hdu</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># overwrite=True: overwrite the file if it already exists</span></div>
 </pre></div>
 
            </div>

@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>benchmark.metrics.refbased &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="index.html"/>
+        <link rel="up" title="PyWI API" href="api.html"/>
+        <link rel="next" title="filtering.hard_filter" href="api_processing_filtering_hard_filter.html"/>
+        <link rel="prev" title="PyWI API" href="api.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Python Wavelet Imaging
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.benchmark.metrics.refbased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_argparse.html">pywi.ui.argparse_commons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_ui_filter_with_mrtransform.html">pywi.ui.filter_with_mrtransform</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developer’s notes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Python Wavelet Imaging</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="api.html">PyWI API</a> &raquo;</li>
+        
+      <li>benchmark.metrics.refbased</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api_benchmark_metrics_refbased.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pywi.benchmark.metrics.refbased">
+<span id="benchmark-metrics-refbased"></span><h1>benchmark.metrics.refbased<a class="headerlink" href="#module-pywi.benchmark.metrics.refbased" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pywi.benchmark.metrics.refbased.normalize_array">
+<code class="descclassname">pywi.benchmark.metrics.refbased.</code><code class="descname">normalize_array</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/metrics/refbased.html#normalize_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.metrics.refbased.normalize_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize the given array such that its values fit between 0.0
+and 1.0.</p>
+<p>It applies</p>
+<div class="math">
+\[\text{normalize}(\boldsymbol{S}) = \frac{ \boldsymbol{S} - \text{min}(\boldsymbol{S}) }{ \text{max}(\boldsymbol{S}) - \text{min}(\boldsymbol{S}) }\]</div>
+<p>where <span class="math">\(\boldsymbol{S}\)</span> is the input array (an image).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>image</strong> (<em>Numpy array</em>) – The image to normalize (whatever its shape)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The normalized version of the input image (keeping the same dimension
+and shape)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Numpy array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.benchmark.metrics.refbased.mse">
+<code class="descclassname">pywi.benchmark.metrics.refbased.</code><code class="descname">mse</code><span class="sig-paren">(</span><em>image</em>, <em>reference_image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/metrics/refbased.html#mse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.metrics.refbased.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the score of <code class="docutils literal"><span class="pre">image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+with the <em>Mean-Squared Error</em> (MSE) metric.</p>
+<p>It applies</p>
+<div class="math">
+\[\text{MSE}(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \left\langle \left( \hat{\boldsymbol{S}} - \boldsymbol{S}^* \right)^{\circ 2} \right\rangle\]</div>
+<p>with:</p>
+<ul class="simple">
+<li><span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
+<em>cleaned</em> image);</li>
+<li><span class="math">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
+<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math">\(\boldsymbol{S}\)</span>;</li>
+<li><span class="math">\(\boldsymbol{S}^{\circ 2}\)</span> the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)#Analogous_operations">Hadamar power</a>
+(i.e. the element wise square) of matrix <span class="math">\(\boldsymbol{S}\)</span>.</li>
+</ul>
+<p>See <a class="reference external" href="http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-mse">http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-mse</a>
+for more information.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function is not well-suited to high dynamic range images handled with
+this project (errors are correlated with energy levels).</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<em>2D ndarray</em>) – The cleaned image returned by the image cleanning algorithm to assess.</li>
+<li><strong>reference_image</strong> (<em>2D ndarray</em>) – The actual clean image (the best result that can be expected for the
+image cleaning algorithm).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The score of the image cleaning algorithm for the given image.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.benchmark.metrics.refbased.nrmse">
+<code class="descclassname">pywi.benchmark.metrics.refbased.</code><code class="descname">nrmse</code><span class="sig-paren">(</span><em>image</em>, <em>reference_image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/metrics/refbased.html#nrmse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.metrics.refbased.nrmse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the score of <code class="docutils literal"><span class="pre">image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+with the <em>Normalized Root Mean-Squared Error</em> (NRMSE) metric.</p>
+<p>It applies</p>
+<div class="math">
+\[\text{NRMSE}(\hat{\boldsymbol{S}}, \boldsymbol{S}^*) = \frac{\sqrt{\text{MSE}}}{\sqrt{ \left\langle \hat{\boldsymbol{S}} \circ \boldsymbol{S}^* \right\rangle }}\]</div>
+<p>with:</p>
+<ul class="simple">
+<li><span class="math">\(\hat{\boldsymbol{S}}\)</span> the algorithm’s output image (i.e. the
+<em>cleaned</em> image);</li>
+<li><span class="math">\(\boldsymbol{S}^*\)</span> the reference image (i.e. the <em>clean</em> image);</li>
+<li><span class="math">\(\langle \boldsymbol{S} \rangle\)</span> the average of matrix
+<span class="math">\(\boldsymbol{S}\)</span>;</li>
+<li><span class="math">\(\circ\)</span> the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamar product</a>
+(i.e. the element wise product operator).</li>
+</ul>
+<p>See <a class="reference external" href="http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-nrmse">http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-nrmse</a> and
+<a class="reference external" href="https://en.wikipedia.org/wiki/Root-mean-square_deviation">https://en.wikipedia.org/wiki/Root-mean-square_deviation</a> for more information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<em>2D ndarray</em>) – The cleaned image returned by the image cleanning algorithm to assess.</li>
+<li><strong>reference_image</strong> (<em>2D ndarray</em>) – The actual clean image (the best result that can be expected for the
+image cleaning algorithm).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The score of the image cleaning algorithm for the given image.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.benchmark.metrics.refbased.psnr">
+<code class="descclassname">pywi.benchmark.metrics.refbased.</code><code class="descname">psnr</code><span class="sig-paren">(</span><em>image</em>, <em>reference_image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/metrics/refbased.html#psnr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.metrics.refbased.psnr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the score of <code class="docutils literal"><span class="pre">image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+with the <em>Peak Signal-to-Noise Ratio</em> (PSNR) metric.</p>
+<p>See <a class="footnote-reference" href="#id3" id="id1">[5]</a> and <a class="footnote-reference" href="#id4" id="id2">[6]</a> for more information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<em>2D ndarray</em>) – The cleaned image returned by the image cleanning algorithm to assess.</li>
+<li><strong>reference_image</strong> (<em>2D ndarray</em>) – The actual clean image (the best result that can be expected for the
+image cleaning algorithm).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The score of the image cleaning algorithm for the given image.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[5]</a></td><td><a class="reference external" href="http://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_psnr">http://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_psnr</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[6]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio">https://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.benchmark.metrics.refbased.ssim">
+<code class="descclassname">pywi.benchmark.metrics.refbased.</code><code class="descname">ssim</code><span class="sig-paren">(</span><em>image</em>, <em>reference_image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/benchmark/metrics/refbased.html#ssim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.benchmark.metrics.refbased.ssim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the score of <code class="docutils literal"><span class="pre">image</span></code> regarding <code class="docutils literal"><span class="pre">reference_image</span></code>
+with the <em>Structural Similarity Index Measure</em> (SSIM) metric.</p>
+<p>See <a class="footnote-reference" href="#id9" id="id5">[1]</a>, <a class="footnote-reference" href="#id10" id="id6">[2]</a>, <a class="footnote-reference" href="#id11" id="id7">[3]</a> and <a class="footnote-reference" href="#id12" id="id8">[4]</a> for more information.</p>
+<p>The SSIM index is calculated on various windows of an image.
+The measure between two windows <span class="math">\(x\)</span> and <span class="math">\(y\)</span> of common size
+<span class="math">\(N.N\)</span> is:</p>
+<div class="math">
+\[\hbox{SSIM}(x,y) = \frac{(2\mu_x\mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}\]</div>
+<p>with:</p>
+<ul class="simple">
+<li><span class="math">\(\scriptstyle\mu_x\)</span> the average of <span class="math">\(\scriptstyle x\)</span>;</li>
+<li><span class="math">\(\scriptstyle\mu_y\)</span> the average of <span class="math">\(\scriptstyle y\)</span>;</li>
+<li><span class="math">\(\scriptstyle\sigma_x^2\)</span> the variance of <span class="math">\(\scriptstyle x\)</span>;</li>
+<li><span class="math">\(\scriptstyle\sigma_y^2\)</span> the variance of <span class="math">\(\scriptstyle y\)</span>;</li>
+<li><span class="math">\(\scriptstyle \sigma_{xy}\)</span> the covariance of <span class="math">\(\scriptstyle x\)</span> and <span class="math">\(\scriptstyle y\)</span>;</li>
+<li><span class="math">\(\scriptstyle c_1 = (k_1L)^2\)</span>, <span class="math">\(\scriptstyle c_2 = (k_2L)^2\)</span> two variables to stabilize the division with weak denominator;</li>
+<li><span class="math">\(\scriptstyle L\)</span> the dynamic range of the pixel-values (typically this is <span class="math">\(\scriptstyle 2^{\#bits\ per\ pixel}-1\)</span>);</li>
+<li><span class="math">\(\scriptstyle k_1 = 0.01\)</span> and <span class="math">\(\scriptstyle k_2 = 0.03\)</span> by default.</li>
+</ul>
+<p>The SSIM index satisfies the condition of symmetry:</p>
+<div class="math">
+\[\text{SSIM}(x, y) = \text{SSIM}(y, x)\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<em>2D ndarray</em>) – The cleaned image returned by the image cleanning algorithm to assess.</li>
+<li><strong>reference_image</strong> (<em>2D ndarray</em>) – The actual clean image (the best result that can be expected for the
+image cleaning algorithm).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The score of the image cleaning algorithm for the given image.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[1]</a></td><td>Wang, Z., Bovik, A. C., Sheikh, H. R., &amp; Simoncelli, E. P.
+(2004). Image quality assessment: From error visibility to
+structural similarity. IEEE Transactions on Image Processing,
+13, 600-612.
+<a class="reference external" href="https://ece.uwaterloo.ca/~z70wang/publications/ssim.pdf">https://ece.uwaterloo.ca/~z70wang/publications/ssim.pdf</a>,
+DOI:10.1.1.11.2477</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[2]</a></td><td>Avanaki, A. N. (2009). Exact global histogram specification
+optimized for structural similarity. Optical Review, 16, 613-621.
+<a class="reference external" href="http://arxiv.org/abs/0901.0065">http://arxiv.org/abs/0901.0065</a>,
+DOI:10.1007/s10043-009-0119-z</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[3]</a></td><td><a class="reference external" href="http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-ssim">http://scikit-image.org/docs/dev/api/skimage.measure.html#compare-ssim</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[4]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Structural_similarity">https://en.wikipedia.org/wiki/Structural_similarity</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_processing_filtering_hard_filter.html" class="btn btn-neutral float-right" title="filtering.hard_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api.html" class="btn btn-neutral" title="PyWI API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Jérémie Decock.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

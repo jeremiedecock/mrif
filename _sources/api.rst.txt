@@ -15,28 +15,31 @@ Benchmark package:
 .. toctree::
    :maxdepth: 1
 
-   pywi.benchmark.assess <api_benchmark_assess>
+   pywi.benchmark.metrics.refbased <api_benchmark_metrics_refbased>
 
 Filter package:
 
 .. toctree::
    :maxdepth: 1
 
-   pywi.filtering.hard_filter <api_filtering_hard_filter>
+   pywi.processing.filtering.hard_filter <api_processing_filtering_hard_filter>
+   pywi.processing.filtering.pixel_clusters <api_processing_filtering_pixel_clusters>
 
-Image package:
+Transform package:
 
 .. toctree::
    :maxdepth: 1
 
-   pywi.image.pixel_clusters <api_image_pixel_clusters>
+   pywi.processing.transform.mrtransform_wrapper <api_processing_transform_mrtransform>
 
 I/O package:
 
 .. toctree::
    :maxdepth: 1
 
+   pywi.io.fits <api_io_fits>
    pywi.io.images <api_io_images>
+   pywi.io.pil <api_io_pil>
 
 Optimization package:
 
@@ -47,13 +50,6 @@ Optimization package:
    pywi.optimization.differential_evolution <api_optimization_differential_evolution>
    pywi.optimization.saes <api_optimization_saes>
    pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi <api_optimization_objectivefunc_wavelets_mrfilter_delta_psi>
-
-Transform package:
-
-.. toctree::
-   :maxdepth: 1
-
-   pywi.transform.mrtransform_wrapper <api_transform_mrtransform>
 
 User interface package (UI):
 

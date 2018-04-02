@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.filter_with_mrtransform &mdash; Python Wavelet Imaging 0.1.dev16 documentation</title>
+  <title>pywi.ui.filter_with_mrtransform &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev16 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -179,8 +179,7 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="c1"># THE SOFTWARE.</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WaveletTransform&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
 
 <span class="sd">&quot;&quot;&quot;Denoise images with Wavelet Transform.</span>
 
@@ -253,135 +252,13 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">pywi.filtering</span> <span class="k">import</span> <span class="n">hard_filter</span>
-<span class="kn">from</span> <span class="nn">pywi.filtering.hard_filter</span> <span class="k">import</span> <span class="n">filter_planes</span>
-
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrtransform</span> <span class="k">import</span> <span class="n">WaveletTransform</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.filtering</span> <span class="k">import</span> <span class="n">hard_filter</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.transform</span> <span class="k">import</span> <span class="n">mrtransform_wrapper</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
 
-<span class="kn">from</span> <span class="nn">pywi.transform</span> <span class="k">import</span> <span class="n">mrtransform_wrapper</span>
-<span class="kn">from</span> <span class="nn">pywi.transform.mrtransform_wrapper</span> <span class="k">import</span> <span class="n">wavelet_transform</span>
-<span class="kn">from</span> <span class="nn">pywi.transform.mrtransform_wrapper</span> <span class="k">import</span> <span class="n">inverse_wavelet_transform</span>
-
 <span class="kn">from</span> <span class="nn">pywi.ui.argparse_commons</span> <span class="k">import</span> <span class="n">add_common_arguments</span>
-<span class="c1">#from pywi.ui.commons import AbstractCleaningAlgorithm</span>
-
-<span class="c1"># CONSTANTS ##################################################################</span>
-
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="c1">##############################################################################</span>
-
-<span class="c1">#class WaveletTransform(AbstractCleaningAlgorithm):</span>
-<div class="viewcode-block" id="WaveletTransform"><a class="viewcode-back" href="../../../api_ui_filter_with_mrtransform.html#pywi.ui.filter_with_mrtransform.WaveletTransform">[docs]</a><span class="k">class</span> <span class="nc">WaveletTransform</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A wavelet filter based on mr_transform.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;WT (mr_transform)&quot;</span>  <span class="c1"># Name to show in plots</span>
-
-<div class="viewcode-block" id="WaveletTransform.clean_image"><a class="viewcode-back" href="../../../api_ui_filter_with_mrtransform.html#pywi.ui.filter_with_mrtransform.WaveletTransform.clean_image">[docs]</a>    <span class="k">def</span> <span class="nf">clean_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                    <span class="n">input_image</span><span class="p">,</span>
-                    <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">DEFAULT_TYPE_OF_FILTERING</span><span class="p">,</span>
-                    <span class="n">filter_thresholds</span><span class="o">=</span><span class="n">hard_filter</span><span class="o">.</span><span class="n">DEFAULT_FILTER_THRESHOLDS</span><span class="p">,</span>
-                    <span class="n">last_scale_treatment</span><span class="o">=</span><span class="n">mrtransform_wrapper</span><span class="o">.</span><span class="n">DEFAULT_LAST_SCALE_TREATMENT</span><span class="p">,</span>
-                    <span class="n">detect_only_positive_structures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
-                    <span class="n">output_data_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Clean the `input_image` image.</span>
-
-<span class="sd">        Apply the wavelet transform, filter planes and return the reverse</span>
-<span class="sd">        transformed image.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        input_image : array_like</span>
-<span class="sd">            The image to clean.</span>
-<span class="sd">        type_of_filtering : str</span>
-<span class="sd">            Type of filtering: &#39;hard_filtering&#39; or &#39;ksigma_hard_filtering&#39;.</span>
-<span class="sd">        filter_thresholds : list of float</span>
-<span class="sd">            Thresholds used for the plane filtering.</span>
-<span class="sd">        last_scale_treatment : str</span>
-<span class="sd">            Last plane treatment: &#39;keep&#39;, &#39;drop&#39; or &#39;mask&#39;.</span>
-<span class="sd">        detect_only_positive_structures : bool</span>
-<span class="sd">            Detect only positive structures.</span>
-<span class="sd">        kill_isolated_pixels : bool</span>
-<span class="sd">            Suppress isolated pixels in the support.</span>
-<span class="sd">        noise_distribution : bool</span>
-<span class="sd">            The JSON file containing the Cumulated Distribution Function of the</span>
-<span class="sd">            noise model used to inject artificial noise in blank pixels (those</span>
-<span class="sd">            with a NaN value).</span>
-<span class="sd">        tmp_files_directory : str</span>
-<span class="sd">            The path of the directory where temporary files are written.</span>
-<span class="sd">        output_data_dict : dict</span>
-<span class="sd">            A dictionary used to return results and intermediate results.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">            Return the cleaned image.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Filter thresholds:&quot;</span><span class="p">,</span> <span class="n">filter_thresholds</span><span class="p">)</span>
-
-        <span class="n">number_of_scales</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filter_thresholds</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of scales:&quot;</span><span class="p">,</span> <span class="n">number_of_scales</span><span class="p">)</span>
-
-        <span class="c1"># COMPUTE THE WAVELET TRANSFORM #######################################</span>
-
-        <span class="n">wavelet_planes</span> <span class="o">=</span> <span class="n">wavelet_transform</span><span class="p">(</span><span class="n">input_image</span><span class="p">,</span>
-                                           <span class="n">number_of_scales</span><span class="o">=</span><span class="n">number_of_scales</span><span class="p">,</span>
-                                           <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_files_directory</span><span class="p">,</span>
-                                           <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">plane</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">):</span>
-                <span class="n">images</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="s2">&quot;Plane &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
-
-        <span class="c1"># FILTER WAVELET PLANES ###############################################</span>
-
-        <span class="n">filtered_wavelet_planes</span> <span class="o">=</span> <span class="n">filter_planes</span><span class="p">(</span><span class="n">wavelet_planes</span><span class="p">,</span>
-                                                <span class="n">method</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
-                                                <span class="n">thresholds</span><span class="o">=</span><span class="n">filter_thresholds</span><span class="p">,</span>
-                                                <span class="n">detect_only_positive_structures</span><span class="o">=</span><span class="n">detect_only_positive_structures</span><span class="p">)</span>
-
-        <span class="c1">#if DEBUG:</span>
-        <span class="c1">#    for index, plane in enumerate(filtered_wavelet_planes):</span>
-        <span class="c1">#        images.plot(plane, &quot;Filtered plane &quot; + str(index))</span>
-
-        <span class="c1"># COMPUTE THE INVERSE TRANSFORM #######################################</span>
-
-        <span class="n">cleaned_image</span> <span class="o">=</span> <span class="n">inverse_wavelet_transform</span><span class="p">(</span><span class="n">filtered_wavelet_planes</span><span class="p">,</span>
-                                                  <span class="n">last_plane</span><span class="o">=</span><span class="n">last_scale_treatment</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-            <span class="n">images</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">,</span> <span class="s2">&quot;Cleaned image&quot;</span><span class="p">)</span>
-
-        <span class="c1"># KILL ISOLATED PIXELS ################################################</span>
-
-        <span class="n">kill_islands</span> <span class="o">=</span> <span class="n">kill_isolated_pixels_stats</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">)</span>
-        <span class="n">img_cleaned_islands_delta_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_abs_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_num_pixels</span> <span class="o">=</span> <span class="n">kill_islands</span>
-        <span class="n">img_cleaned_num_islands</span> <span class="o">=</span> <span class="n">number_of_islands</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_pe</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_abs_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_abs_pe</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_num_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_num_pixels</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_num_islands&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_num_islands</span>
-
-        <span class="k">if</span> <span class="n">kill_isolated_pixels</span><span class="p">:</span>
-            <span class="n">cleaned_image</span> <span class="o">=</span> <span class="n">scipy_kill_isolated_pixels</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-                <span class="n">images</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cleaned_image</span><span class="p">,</span> <span class="s2">&quot;Cleaned image after island kill&quot;</span><span class="p">)</span>
-</div></div>
-        <span class="k">return</span> <span class="n">cleaned_image</span>
 
 
 <div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../api_ui_filter_with_mrtransform.html#pywi.ui.filter_with_mrtransform.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
@@ -435,8 +312,8 @@
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
-</div>
-    <span class="k">return</span> <span class="n">parser</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -583,7 +460,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev16',
+            VERSION:'0.2.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

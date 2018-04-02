@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.filter_with_mrfilter &mdash; Python Wavelet Imaging 0.1.dev16 documentation</title>
+  <title>pywi.ui.filter_with_mrfilter &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev16 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -374,301 +374,16 @@
 <span class="sd">(http://www.cosmostat.org/software/isap/).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WaveletTransform&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;add_arguments&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span> <span class="k">as</span> <span class="n">scipy_kill_isolated_pixels</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrfilter</span> <span class="k">import</span> <span class="n">WaveletTransform</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
 
 <span class="kn">from</span> <span class="nn">pywi.ui.argparse_commons</span> <span class="k">import</span> <span class="n">add_common_arguments</span>
-<span class="c1">#from pywi.ui.commons import AbstractCleaningAlgorithm</span>
-
-<span class="c1"># CONSTANTS ##################################################################</span>
-
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="c1"># EXCEPTIONS #################################################################</span>
-
-<span class="k">class</span> <span class="nc">MrFilterError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-<span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">MrFilterError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Exception raised when trying to save a FITS with more than 3 dimensions</span>
-<span class="sd">    or less than 2 dimensions.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        message -- explanation of the error</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">WrongDimensionError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Unexpected error: the output FITS file should contain a 2D array.&quot;</span><span class="p">)</span>
-
-
-<span class="c1">##############################################################################</span>
-
-<span class="c1">#class WaveletTransform(AbstractCleaningAlgorithm):</span>
-<span class="k">class</span> <span class="nc">WaveletTransform</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">WaveletTransform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;WT (mr_filter)&quot;</span>  <span class="c1"># Name to show in plots</span>
-
-    <span class="k">def</span> <span class="nf">clean_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                    <span class="n">input_img</span><span class="p">,</span>
-                    <span class="n">type_of_multiresolution_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">type_of_filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">type_of_non_orthog_filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">number_of_scales</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">suppress_last_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">suppress_isolated_pixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">coef_detection_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">k_sigma_noise_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">noise_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">detect_only_positive_structure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">suppress_positivity_constraint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">type_of_filtering</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">first_detection_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">number_of_iterations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">epsilon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">support_file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">precision</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">mask_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">offset_after_calibration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">correction_offset</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">input_image_scale</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="n">noise_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">raw_option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">tmp_files_directory</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>       <span class="c1"># &quot;/Volumes/ramdisk&quot;</span>
-                    <span class="n">mrfilter_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>       <span class="c1"># &quot;/Volumes/ramdisk&quot;</span>
-                    <span class="n">output_data_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Clean the `input_img` image.</span>
-
-<span class="sd">        Apply the wavelet transform, filter planes and return the reverse</span>
-<span class="sd">        transformed image.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        input_img : array_like</span>
-<span class="sd">            The input image to transform.</span>
-<span class="sd">        number_of_scales : int</span>
-<span class="sd">            The number of scales used to transform `input_image` or in other words</span>
-<span class="sd">            the number of wavelet planes returned.</span>
-<span class="sd">        tmp_files_directory : str</span>
-<span class="sd">            The path of the directory used to store mr_transform temporary data.</span>
-<span class="sd">            The default is the current directory, but it may be more appropriate to</span>
-<span class="sd">            specify here the path of a directory mounted in a ramdisk to speedup</span>
-<span class="sd">            I/Os (&quot;/Volumes/ramdisk&quot; on MacOSX or &quot;/dev/shm&quot; on Linux).</span>
-<span class="sd">        noise_distribution : EmpiricalDistribution</span>
-<span class="sd">            The noise distribution used to fill &#39;empty&#39; NaN pixels with the</span>
-<span class="sd">            appropriate random noise distribution. If none, NaN pixels are fill</span>
-<span class="sd">            with zeros (which may add unwanted harmonics in wavelet planes).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        array_like</span>
-<span class="sd">            Return the cleaned image.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        WrongDimensionError</span>
-<span class="sd">            If `cleaned_img` is not a 2D array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">input_img</span> <span class="o">=</span> <span class="n">input_img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">input_img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
-
-        <span class="n">input_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_files_directory</span><span class="p">,</span> <span class="s2">&quot;.tmp_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_in.fits&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
-        <span class="n">mr_output_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_files_directory</span><span class="p">,</span> <span class="s2">&quot;.tmp_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_out.fits&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
-
-        <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_input_tmp_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_file_path</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_output_tmp_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mr_output_file_path</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">mask_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mr_mask_file_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask_file_path</span>
-
-        <span class="c1"># INJECT NOISE IN NAN ##################################</span>
-
-        <span class="c1"># See https://stackoverflow.com/questions/29365194/replacing-missing-values-with-random-in-a-numpy-array</span>
-
-        <span class="n">nan_mask</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">fill_nan_pixels</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">noise_distribution</span><span class="p">)</span>
-
-        <span class="c1"># APPLY AN OFFSET ######################################</span>
-
-        <span class="k">if</span> <span class="n">offset_after_calibration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply an offset after calibration:&quot;</span><span class="p">,</span> <span class="n">offset_after_calibration</span><span class="p">)</span>
-            <span class="n">input_img</span> <span class="o">=</span> <span class="n">input_img</span> <span class="o">+</span> <span class="n">offset_after_calibration</span>
-
-        <span class="c1"># CHANGE THE SCALE #####################################</span>
-
-        <span class="k">if</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply log scale&quot;</span><span class="p">)</span>
-            <span class="c1">#images.plot(input_img)</span>
-            <span class="n">input_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>  <span class="c1"># TODO: it creates NaN values where pixels &lt;= 0</span>
-            <span class="c1">#images.plot(input_img)</span>
-        <span class="k">elif</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply sqrt scale&quot;</span><span class="p">)</span>
-            <span class="c1">#images.plot(input_img)</span>
-            <span class="n">input_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">input_img</span><span class="p">)</span>   <span class="c1"># TODO: it creates NaN values where pixels &lt; 0</span>
-            <span class="c1">#images.plot(input_img)</span>
-
-        <span class="c1"># WRITE THE INPUT FILE (FITS) ##########################</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-            <span class="n">images</span><span class="o">.</span><span class="n">save_fits</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
-            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
-            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;save_tmp_file_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on input FITS file:&quot;</span><span class="p">,</span> <span class="n">input_file_path</span><span class="p">)</span>
-            <span class="k">raise</span>
-
-        <span class="c1"># EXECUTE MR_FILTER ####################################</span>
-
-        <span class="c1"># TODO: improve the following lines</span>
-        <span class="k">if</span> <span class="n">mrfilter_directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;mr_filter&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrfilter_directory</span><span class="p">,</span> <span class="s1">&#39;mr_filter&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">raw_option_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_multiresolution_transform</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_multiresolution_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -T</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_filters</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -U</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_non_orthog_filters</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_non_orthog_filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_scales</span><span class="p">)</span> <span class="k">if</span> <span class="n">number_of_scales</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -K&#39;</span> <span class="k">if</span> <span class="n">suppress_last_scale</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -k&#39;</span> <span class="k">if</span> <span class="n">suppress_isolated_pixels</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>      <span class="c1"># You should use scipy implementation instead (pywi/denoising/kill_isolated_pixels.py); it&#39;s much more efficient</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -C</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coef_detection_method</span><span class="p">)</span> <span class="k">if</span> <span class="n">coef_detection_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -s</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k_sigma_noise_threshold</span><span class="p">)</span> <span class="k">if</span> <span class="n">k_sigma_noise_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -m</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noise_model</span><span class="p">)</span> <span class="k">if</span> <span class="n">noise_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -p&#39;</span> <span class="k">if</span> <span class="n">detect_only_positive_structure</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -P&#39;</span> <span class="k">if</span> <span class="n">suppress_positivity_constraint</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -f</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_of_filtering</span><span class="p">)</span> <span class="k">if</span> <span class="n">type_of_filtering</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -F</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_detection_scale</span><span class="p">)</span> <span class="k">if</span> <span class="n">first_detection_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -i</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number_of_iterations</span><span class="p">)</span> <span class="k">if</span> <span class="n">number_of_iterations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -e</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span> <span class="k">if</span> <span class="n">epsilon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -w</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">support_file_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">support_file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -E</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span> <span class="k">if</span> <span class="n">precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -I </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mask_file_path</span><span class="p">)</span> <span class="k">if</span> <span class="n">mask_file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; -v&#39;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">raw_option_string</span>
-
-        <span class="c1">#self.label = &quot;WT ({})&quot;.format(cmd)  # Name to show in plots</span>
-        <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &quot;</span><span class="si">{}</span><span class="s1">&quot; &quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">mr_output_file_path</span><span class="p">)</span>
-
-        <span class="c1">#cmd = &#39;mr_filter -K -k -C1 -s3 -m3 -n{} &quot;{}&quot; {}&#39;.format(number_of_scales, input_file_path, mr_output_file_path)</span>
-        <span class="c1">#cmd = &#39;mr_filter -K -k -C1 -s3 -m2 -p -P -n{} &quot;{}&quot; {}&#39;.format(number_of_scales, input_file_path, mr_output_file_path)</span>
-
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="s1">&#39; &gt; /dev/null&#39;</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
-            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;mrfilter_cmd_exec_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on command:&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
-            <span class="k">raise</span>
-
-        <span class="c1"># READ THE MR_FILTER OUTPUT FILE #######################</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">load_fits</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
-            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;load_tmp_file_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error on output FITS file:&quot;</span><span class="p">,</span> <span class="n">mr_output_file_path</span><span class="p">)</span>
-            <span class="k">raise</span>
-
-        <span class="c1"># REMOVE FITS FILES ####################################</span>
-
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mr_output_file_path</span><span class="p">)</span>
-
-        <span class="c1"># CHECK RESULT #########################################</span>
-
-        <span class="k">if</span> <span class="n">cleaned_img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">WrongDimensionError</span><span class="p">()</span>
-
-        <span class="c1"># INJECT NOISE IN NAN: PUT BACK NAN VALUES #############</span>
-
-        <span class="n">cleaned_img</span><span class="p">[</span><span class="n">nan_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-
-        <span class="c1"># CHANGE THE SCALE #####################################</span>
-
-        <span class="k">if</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invert log scale&quot;</span><span class="p">)</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="n">cleaned_img</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">input_image_scale</span> <span class="o">==</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invert sqrt scale&quot;</span><span class="p">)</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="n">cleaned_img</span><span class="p">)</span>
-
-        <span class="c1"># INVERT THE OFFSET ####################################</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">offset_after_calibration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">suppress_last_scale</span><span class="p">):</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">cleaned_img</span> <span class="o">-</span> <span class="n">offset_after_calibration</span>
-
-        <span class="c1"># CORRECTION OFFSET ####################################</span>
-
-        <span class="k">if</span> <span class="n">correction_offset</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apply a correction offset after cleaning&quot;</span><span class="p">)</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">cleaned_img</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
-            <span class="n">cleaned_img</span><span class="p">[</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cleaned_img</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>   <span class="c1"># May genereate warnings on NaN values</span>
-
-        <span class="c1"># KILL ISOLATED PIXELS #################################</span>
-
-        <span class="n">img_cleaned_islands_delta_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_abs_pe</span><span class="p">,</span> <span class="n">img_cleaned_islands_delta_num_pixels</span> <span class="o">=</span> <span class="n">kill_isolated_pixels_stats</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
-        <span class="n">img_cleaned_num_islands</span> <span class="o">=</span> <span class="n">number_of_islands</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_pe</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_abs_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_abs_pe</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_islands_delta_num_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_islands_delta_num_pixels</span>
-            <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_num_islands&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">img_cleaned_num_islands</span>
-
-        <span class="k">if</span> <span class="n">kill_isolated_pixels</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kill isolated pixels&quot;</span><span class="p">)</span>
-            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-            <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">scipy_kill_isolated_pixels</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">)</span>
-            <span class="n">exec_time_sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span>
-            <span class="k">if</span> <span class="n">output_data_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">output_data_dict</span><span class="p">[</span><span class="s2">&quot;scipy_kill_isolated_pixels_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exec_time_sec</span>
-
-        <span class="c1">#print(cleaned_img)</span>
-        <span class="c1">#images.plot_hist(cleaned_img)</span>
-        <span class="c1">#images.plot_hist(cleaned_img, num_bins=500, x_max=5)</span>
-
-        <span class="k">return</span> <span class="n">cleaned_img</span>
 
 
 <div class="viewcode-block" id="add_arguments"><a class="viewcode-back" href="../../../api_ui_filter_with_mrfilter.html#pywi.ui.filter_with_mrfilter.add_arguments">[docs]</a><span class="k">def</span> <span class="nf">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
@@ -893,8 +608,8 @@
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmp-dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;DIRECTORY&quot;</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory where temporary files are written.&quot;</span><span class="p">)</span>
-</div>
-    <span class="k">return</span> <span class="n">parser</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -1058,7 +773,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev16',
+            VERSION:'0.2.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

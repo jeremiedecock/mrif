@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.commons &mdash; Python Wavelet Imaging 0.1.dev16 documentation</title>
+  <title>pywi.ui.commons &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.1.dev16 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -189,9 +189,9 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 
-<span class="kn">from</span> <span class="nn">pywi.benchmark</span> <span class="k">import</span> <span class="n">assess</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
-<span class="kn">from</span> <span class="nn">pywi.image.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
+<span class="kn">from</span> <span class="nn">pywi.benchmark.metrics.refbased</span> <span class="k">import</span> <span class="n">mse</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.filtering.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels_stats</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.filtering.pixel_clusters</span> <span class="k">import</span> <span class="n">number_of_islands</span>
 <span class="kn">from</span> <span class="nn">pywi.io.images</span> <span class="k">import</span> <span class="n">image_generator</span>
 <span class="kn">import</span> <span class="nn">pywi.io.images</span>
 
@@ -354,14 +354,10 @@
                     <span class="c1"># ASSESS THE CLEANING #################################</span>
 
                     <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO GEOM</span>
-                    <span class="n">score_tuple</span><span class="p">,</span> <span class="n">score_name_tuple</span> <span class="o">=</span> <span class="n">assess</span><span class="o">.</span><span class="n">assess_image_cleaning</span><span class="p">(</span><span class="n">input_img</span><span class="p">,</span>
-                                                                                 <span class="n">cleaned_img</span><span class="p">,</span>
-                                                                                 <span class="n">reference_img</span><span class="p">,</span>
-                                                                                 <span class="n">benchmark_method</span><span class="p">,</span>
-                                                                                 <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">score</span> <span class="o">=</span> <span class="n">mse</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">,</span> <span class="n">reference_img</span><span class="p">)</span>
 
-                    <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_tuple</span>
-                    <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;score_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_name_tuple</span>
+                    <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span><span class="p">]</span>
+                    <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;score_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mse&quot;</span><span class="p">]</span>
                     <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;full_clean_execution_time_sec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">full_clean_execution_time_sec</span>
 
                     <span class="n">image_dict</span><span class="p">[</span><span class="s2">&quot;img_cleaned_sum_pe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">cleaned_img</span><span class="p">))</span>
@@ -491,7 +487,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.1.dev16',
+            VERSION:'0.2.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

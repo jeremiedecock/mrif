@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>optimization.bruteforce &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>io.fits &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -37,8 +37,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="index.html"/>
         <link rel="up" title="PyWI API" href="api.html"/>
-        <link rel="next" title="optimization.bruteforce" href="api_optimization_saes.html"/>
-        <link rel="prev" title="optimization.bruteforce" href="api_optimization_bruteforce.html"/> 
+        <link rel="next" title="io.images" href="api_io_images.html"/>
+        <link rel="prev" title="transform.mrtransform_wrapper" href="api_processing_transform_mrtransform.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -98,11 +98,11 @@
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.io.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.optimization.differential_evolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_ui_argparse.html">pywi.ui.argparse_commons</a></li>
@@ -158,13 +158,13 @@
         
           <li><a href="api.html">PyWI API</a> &raquo;</li>
         
-      <li>optimization.bruteforce</li>
+      <li>io.fits</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/api_optimization_differential_evolution.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/api_io_fits.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -177,8 +177,61 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi.optimization.bruteforce">
-<span id="optimization-bruteforce"></span><h1>optimization.bruteforce<a class="headerlink" href="#module-pywi.optimization.bruteforce" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pywi.io.fits">
+<span id="io-fits"></span><h1>io.fits<a class="headerlink" href="#module-pywi.io.fits" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pywi.io.fits.load_fits_image">
+<code class="descclassname">pywi.io.fits.</code><code class="descname">load_fits_image</code><span class="sig-paren">(</span><em>input_file_path</em>, <em>hdu_index=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/fits.html#load_fits_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.fits.load_fits_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the image array contained in the given HDU of the given FITS file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The path of the FITS file to load</li>
+<li><strong>hdu_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – The HDU to load within the FITS file (one FITS file can contain several
+images stored in different HDU)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The loaded image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">WrongHDUError</span></code> – If <cite>input_file_path</cite> doesn’t contain the HDU <cite>hdu_index</cite></li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">NotAnImageError</span></code> – If <cite>input_file_path</cite> doesn’t contain a valid image in the HDU
+<cite>hdu_index</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.io.fits.save_fits_image">
+<code class="descclassname">pywi.io.fits.</code><code class="descname">save_fits_image</code><span class="sig-paren">(</span><em>image_array</em>, <em>output_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/fits.html#save_fits_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.fits.save_fits_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the <cite>image_array</cite> image (array_like) to the <cite>output_file_path</cite> FITS file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image_array</strong> (<em>array_like</em>) – The image to save (should be a 2D or a 3D numpy array)</li>
+<li><strong>output_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – The path of the FITS file where to save the <cite>image_array</cite></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">WrongDimensionError</span></code> – If <cite>image_array</cite> has more than 3 dimensions or less than 2 dimensions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -191,10 +244,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_optimization_saes.html" class="btn btn-neutral float-right" title="optimization.bruteforce" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api_io_images.html" class="btn btn-neutral float-right" title="io.images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_optimization_bruteforce.html" class="btn btn-neutral" title="optimization.bruteforce" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_processing_transform_mrtransform.html" class="btn btn-neutral" title="transform.mrtransform_wrapper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
