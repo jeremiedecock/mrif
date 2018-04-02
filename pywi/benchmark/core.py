@@ -28,13 +28,19 @@ def benchmark(benchmark_image_generator,
               benchmark_writter=None,
               score_aggregation_method=None):
 
+    score_list = []
+
     for benchmark_image in image_generator:
         output_image = processing(benchmark_image.input_image)
         score = metrics(output_image, benchmark_image.reference_image)
 
         if benchmark_writter is not None:
+            score_list.append(score)
             benchmark_writter.write(benchmark_image, score)
         else:
             print(score)
 
-        # TODO: how to use score_aggregation_method ?
+    if score_aggregation_method is not None:
+        return score_aggregation_method(score_list)
+    else:
+        return score_list
