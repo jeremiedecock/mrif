@@ -30,12 +30,12 @@ def benchmark(benchmark_image_generator,
 
     score_list = []
 
-    for benchmark_image in image_generator:
+    for benchmark_image in benchmark_image_generator:
         output_image = processing(benchmark_image.input_image)
         score = metrics(output_image, benchmark_image.reference_image)
+        score_list.append(score)
 
         if benchmark_writter is not None:
-            score_list.append(score)
             benchmark_writter.write(benchmark_image, score)
         else:
             print(score)
