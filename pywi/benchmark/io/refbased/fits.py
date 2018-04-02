@@ -100,6 +100,15 @@ def load_benchmark_images(file_path):
 
     hdu_list = fits.open(file_path)   # open the FITS file
 
+    # METADATA ################################################################
+
+    hdu0 = hdu_list[0]
+
+    metadata = {}
+
+    for key, val in hdu0.header.items():
+        metadata[key] = val
+
     # IMAGES ##################################################################
 
     if (len(hdu_list) != 2) or (not hdu_list[0].is_image) or (not hdu_list[1].is_image):
@@ -115,6 +124,6 @@ def load_benchmark_images(file_path):
 
     benchmark_image = BenchmarkImage(input_image=input_image,
                                      reference_image=reference_image,
-                                     metadata={})
+                                     metadata=metadata)
 
     return benchmark_image
