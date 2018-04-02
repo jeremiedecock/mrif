@@ -182,21 +182,16 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fill_nan_pixels&#39;</span><span class="p">,</span>
            <span class="s1">&#39;image_files_in_dir&#39;</span><span class="p">,</span>
            <span class="s1">&#39;image_files_in_paths&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;image_generator&#39;</span><span class="p">,</span>
            <span class="s1">&#39;load_image&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;mpl_save&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;plot&#39;</span><span class="p">,</span>
            <span class="s1">&#39;save_image&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io.pil</span> <span class="k">import</span> <span class="n">load_pil_image</span><span class="p">,</span> <span class="n">save_pil_image</span>
 <span class="kn">from</span> <span class="nn">pywi.io.fits</span> <span class="k">import</span> <span class="n">load_fits_image</span><span class="p">,</span> <span class="n">save_fits_image</span>
+<span class="kn">from</span> <span class="nn">pywi.io.plot</span> <span class="k">import</span> <span class="n">plot</span>
 
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -402,103 +397,7 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong item:&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 
 
-<span class="c1"># LOAD IMAGES ################################################################</span>
-
-<div class="viewcode-block" id="image_generator"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.image_generator">[docs]</a><span class="k">def</span> <span class="nf">image_generator</span><span class="p">(</span><span class="n">path_list</span><span class="p">,</span>
-                    <span class="n">max_num_images</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return an iterable sequence all calibrated images in `path_list`.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    path_list</span>
-<span class="sd">        The path of files containing the images to extract. It can contain</span>
-<span class="sd">        FITS/Simtel files and directories.</span>
-<span class="sd">    max_num_images</span>
-<span class="sd">        The maximum number of images to iterate.</span>
-
-<span class="sd">    Yields</span>
-<span class="sd">    ------</span>
-<span class="sd">    Image1D or Image2D</span>
-<span class="sd">        The named tuple `Image1D` or `Image1D` of the next FITS or Simtel files</span>
-<span class="sd">        in `path_list`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">images_counter</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">image_files_in_paths</span><span class="p">(</span><span class="n">path_list</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">max_num_images</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">images_counter</span> <span class="o">&gt;=</span> <span class="n">max_num_images</span><span class="p">):</span>
-            <span class="k">break</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.fits&quot;</span><span class="p">,</span> <span class="s2">&quot;.fit&quot;</span><span class="p">)):</span>
-                <span class="c1"># FITS FILES</span>
-                <span class="n">image_dict</span><span class="p">,</span> <span class="n">fits_metadata_dict</span> <span class="o">=</span> <span class="n">load_benchmark_images</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>   <span class="c1"># TODO: named tuple</span>
-                <span class="n">images_counter</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">yield</span> <span class="n">Image2D</span><span class="p">(</span><span class="o">**</span><span class="n">image_dict</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">fits_metadata_dict</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong item:&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span></div>
-
-
 <span class="c1"># LOAD AND SAVE FITS FILES ###################################################</span>
-
-<span class="k">def</span> <span class="nf">load_benchmark_images</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return images contained in the given FITS file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    input_file_path : str</span>
-<span class="sd">        The path of the FITS file to load</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    dict</span>
-<span class="sd">        A dictionary containing the loaded images and their metadata</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    WrongFitsFileStructure</span>
-<span class="sd">        If `input_file_path` doesn&#39;t contain a valid structure</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">hdu_list</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>   <span class="c1"># open the FITS file</span>
-
-    <span class="c1"># METADATA ################################################################</span>
-
-    <span class="n">hdu0</span> <span class="o">=</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">metadata_dict</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu0</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
-    <span class="c1">#metadata_dict[&#39;cam_id&#39;] = hdu0.header[&#39;cam_id&#39;]</span>
-
-    <span class="c1"># IMAGES ##################################################################</span>
-
-    <span class="k">if</span> <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hdu_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">is_image</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hdu_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">is_image</span><span class="p">):</span>
-            <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">raise</span> <span class="n">WrongFitsFileStructure</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">)</span>
-
-        <span class="n">hdu0</span><span class="p">,</span> <span class="n">hdu1</span> <span class="o">=</span> <span class="n">hdu_list</span>
-
-        <span class="c1"># IMAGES</span>
-
-        <span class="n">images_dict</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;input_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu0</span><span class="o">.</span><span class="n">data</span>        <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
-        <span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hdu1</span><span class="o">.</span><span class="n">data</span>    <span class="c1"># &quot;hdu.data&quot; is a Numpy Array</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown version number&quot;</span><span class="p">)</span>
-
-    <span class="c1"># METADATA ################################################################</span>
-
-    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>       <span class="c1"># np.sum() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
-    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;min_npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>   <span class="c1"># np.min() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
-    <span class="n">metadata_dict</span><span class="p">[</span><span class="s1">&#39;max_npe&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">images_dict</span><span class="p">[</span><span class="s2">&quot;reference_image&quot;</span><span class="p">]))</span>   <span class="c1"># np.max() returns numpy.int64 objects thus it must be casted with float() to avoid serialization errors with JSON...</span>
-
-    <span class="n">hdu_list</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">images_dict</span><span class="p">,</span> <span class="n">metadata_dict</span>   <span class="c1"># TODO: named tuple</span>
-
 
 <div class="viewcode-block" id="load_image"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.load_image">[docs]</a><span class="k">def</span> <span class="nf">load_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the image array contained in the given image file.</span>
@@ -552,185 +451,6 @@
         <span class="n">save_fits_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">save_pil_image</span><span class="p">(</span><span class="n">image_array</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">)</span></div>
-
-
-<span class="c1"># MATPLOTLIB ##################################################################</span>
-
-<span class="n">COLOR_MAP</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gnuplot2</span>
-
-<div class="viewcode-block" id="mpl_save"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.mpl_save">[docs]</a><span class="k">def</span> <span class="nf">mpl_save</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">output_file_path</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    img should be a 2D numpy array.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
-
-    <span class="c1">#im = ax.imshow(img,</span>
-    <span class="c1">#               origin=&#39;lower&#39;,</span>
-    <span class="c1">#               interpolation=&#39;nearest&#39;,</span>
-    <span class="c1">#               vmin=min(img.min(), 0),</span>
-    <span class="c1">#               cmap=COLOR_MAP)</span>
-
-    <span class="c1"># Manage NaN values (see http://stackoverflow.com/questions/2578752/how-can-i-plot-nan-values-as-a-special-color-with-imshow-in-matplotlib and http://stackoverflow.com/questions/38800532/plot-color-nan-values)</span>
-    <span class="n">masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">img</span><span class="p">)</span>
-
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">COLOR_MAP</span>
-    <span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span>
-                   <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
-                   <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
-                   <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">)</span> <span class="c1"># draw the colorbar</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../../api_io_images.html#pywi.io.images.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    img should be a 2D numpy array.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-
-    <span class="c1">#im = ax.imshow(img,</span>
-    <span class="c1">#               origin=&#39;lower&#39;,</span>
-    <span class="c1">#               interpolation=&#39;nearest&#39;,</span>
-    <span class="c1">#               vmin=min(img.min(), 0),</span>
-    <span class="c1">#               cmap=COLOR_MAP)</span>
-
-    <span class="c1"># Manage NaN values (see http://stackoverflow.com/questions/2578752/how-can-i-plot-nan-values-as-a-special-color-with-imshow-in-matplotlib and http://stackoverflow.com/questions/38800532/plot-color-nan-values)</span>
-    <span class="n">masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">img</span><span class="p">)</span>
-
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">COLOR_MAP</span>
-    <span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span>
-                   <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
-                   <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
-                   <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">)</span> <span class="c1"># draw the colorbar</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
-
-
-<span class="k">def</span> <span class="nf">plot_hist</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">logx</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">logy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Flatten + remove NaN values</span>
-    <span class="n">flat_img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">img</span><span class="p">)]</span>
-
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">logx</span><span class="p">:</span>
-        <span class="c1"># Setup the logarithmic scale on the X axis</span>
-        <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">flat_img</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
-        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">flat_img</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-        <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">num_bins</span><span class="p">)</span> <span class="c1"># Make a range from 10**vmin to 10**vmax</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">bins</span> <span class="o">=</span> <span class="n">num_bins</span>
-
-    <span class="k">if</span> <span class="n">x_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">x_max</span><span class="p">)</span>
-
-    <span class="n">res_tuple</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">flat_img</span><span class="p">,</span>
-                        <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
-                        <span class="n">log</span><span class="o">=</span><span class="n">logy</span><span class="p">,</span>               <span class="c1"># Set log scale on the Y axis</span>
-                        <span class="n">histtype</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span>
-                        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">logx</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>               <span class="c1"># Activate log scale on X axis</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-
-<span class="k">def</span> <span class="nf">_plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
-               <span class="n">title_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">highlight_mask_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">main_title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot several images at once.&quot;&quot;&quot;</span>
-    <span class="n">num_imgs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_list</span><span class="p">)</span>
-
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax_tuple</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">num_imgs</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">num_imgs</span><span class="o">*</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-
-    <span class="k">if</span> <span class="n">title_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">title_list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">img_list</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">highlight_mask_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">highlight_mask_list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">img_list</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax_tuple</span><span class="p">,</span> <span class="n">img_list</span><span class="p">,</span> <span class="n">title_list</span><span class="p">):</span>
-        <span class="n">masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">img</span><span class="p">)</span>
-
-        <span class="n">cmap</span> <span class="o">=</span> <span class="n">COLOR_MAP</span>
-        <span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span>
-                       <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
-                       <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
-                       <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span> <span class="c1"># draw the colorbar</span>
-
-    <span class="k">if</span> <span class="n">main_title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">main_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
-              <span class="n">title_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">highlight_mask_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">metadata_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot several images at once.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    img_list</span>
-<span class="sd">        A list of 2D numpy array to plot.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Main title</span>
-    <span class="n">main_title</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="n">_plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
-               <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
-               <span class="n">highlight_mask_list</span><span class="o">=</span><span class="n">highlight_mask_list</span><span class="p">,</span>
-               <span class="n">main_title</span><span class="o">=</span><span class="n">main_title</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-
-<span class="k">def</span> <span class="nf">mpl_save_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
-                  <span class="n">output_file_path</span><span class="p">,</span>
-                  <span class="n">title_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">highlight_mask_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">metadata_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plot several images at once.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    img_list</span>
-<span class="sd">        A list of 2D numpy array to plot.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Main title</span>
-    <span class="n">main_title</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="n">_plot_list</span><span class="p">(</span><span class="n">img_list</span><span class="p">,</span>
-               <span class="n">title_list</span><span class="o">=</span><span class="n">title_list</span><span class="p">,</span>
-               <span class="n">highlight_mask_list</span><span class="o">=</span><span class="n">highlight_mask_list</span><span class="p">,</span>
-               <span class="n">main_title</span><span class="o">=</span><span class="n">main_title</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
 
 <span class="c1"># DEBUG #######################################################################</span>

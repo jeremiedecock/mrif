@@ -16,6 +16,7 @@ Benchmark package:
    :maxdepth: 1
 
    pywi.benchmark.metrics.refbased <api_benchmark_metrics_refbased>
+   pywi.benchmark.io.refbased.fits <api_benchmark_io_refbased_fits>
 
 Filter package:
 
@@ -40,6 +41,7 @@ I/O package:
    pywi.io.fits <api_io_fits>
    pywi.io.images <api_io_images>
    pywi.io.pil <api_io_pil>
+   pywi.io.plot <api_io_plot>
 
 Optimization package:
 

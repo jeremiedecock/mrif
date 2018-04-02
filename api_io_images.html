@@ -95,12 +95,14 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_metrics_refbased.html">pywi.benchmark.metrics.refbased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_benchmark_io_fits.html">pywi.benchmark.io.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_io_plot.html">pywi.io.plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
@@ -280,29 +282,6 @@ and directories path).</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="pywi.io.images.image_generator">
-<code class="descclassname">pywi.io.images.</code><code class="descname">image_generator</code><span class="sig-paren">(</span><em>path_list</em>, <em>max_num_images=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#image_generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.image_generator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an iterable sequence all calibrated images in <cite>path_list</cite>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path_list</strong> – The path of files containing the images to extract. It can contain
-FITS/Simtel files and directories.</li>
-<li><strong>max_num_images</strong> – The maximum number of images to iterate.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><p class="first last"><em>Image1D or Image2D</em> – The named tuple <cite>Image1D</cite> or <cite>Image1D</cite> of the next FITS or Simtel files
-in <cite>path_list</cite>.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="pywi.io.images.load_image">
 <code class="descclassname">pywi.io.images.</code><code class="descname">load_image</code><span class="sig-paren">(</span><em>input_file_path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#load_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.load_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the image array contained in the given image file.</p>
@@ -323,18 +302,6 @@ mono-channel grayscale.</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pywi.io.images.mpl_save">
-<code class="descclassname">pywi.io.images.</code><code class="descname">mpl_save</code><span class="sig-paren">(</span><em>img</em>, <em>output_file_path</em>, <em>title=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#mpl_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.mpl_save" title="Permalink to this definition">¶</a></dt>
-<dd><p>img should be a 2D numpy array.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pywi.io.images.plot">
-<code class="descclassname">pywi.io.images.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>img</em>, <em>title=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/io/images.html#plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.io.images.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>img should be a 2D numpy array.</p>
 </dd></dl>
 
 <dl class="function">

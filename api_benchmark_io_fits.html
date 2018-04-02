@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyWI API &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>benchmark.io.fits &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
   
 
   
@@ -36,8 +36,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="index.html"/>
-        <link rel="next" title="benchmark.metrics.refbased" href="api_benchmark_metrics_refbased.html"/>
-        <link rel="prev" title="Introduction" href="intro.html"/> 
+        <link rel="up" title="PyWI API" href="api.html"/>
+        <link rel="next" title="processing.filtering.hard_filter" href="api_processing_filtering_hard_filter.html"/>
+        <link rel="prev" title="benchmark.metrics.refbased" href="api_benchmark_metrics_refbased.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -92,9 +93,9 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_metrics_refbased.html">pywi.benchmark.metrics.refbased</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_benchmark_io_refbased_fits.html">pywi.benchmark.io.refbased.fits</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pywi.benchmark.io.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
@@ -157,13 +158,15 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>PyWI API</li>
+          <li><a href="api.html">PyWI API</a> &raquo;</li>
+        
+      <li>benchmark.io.fits</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/api_benchmark_io_fits.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -176,60 +179,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi">
-<span id="pywi-api"></span><h1>PyWI API<a class="headerlink" href="#module-pywi" title="Permalink to this headline">¶</a></h1>
-<p>The library provides classes which are usable by third party tools.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This project is still in <em>beta</em> stage, so the API is not finalized yet.</p>
-</div>
-<p>Benchmark package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_benchmark_metrics_refbased.html">pywi.benchmark.metrics.refbased</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_benchmark_io_refbased_fits.html">pywi.benchmark.io.refbased.fits</a></li>
-</ul>
-</div>
-<p>Filter package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
-</ul>
-</div>
-<p>Transform package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
-</ul>
-</div>
-<p>I/O package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_io_plot.html">pywi.io.plot</a></li>
-</ul>
-</div>
-<p>Optimization package:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_optimization_objectivefunc_wavelets_mrfilter_delta_psi.html">pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi</a></li>
-</ul>
-</div>
-<p>User interface package (UI):</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_argparse.html">pywi.ui.argparse_commons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_commons.html">pywi.ui.commons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_filter_with_mrfilter.html">pywi.ui.filter_with_mrfilter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ui_filter_with_mrtransform.html">pywi.ui.filter_with_mrtransform</a></li>
-</ul>
-</div>
+  <div class="section" id="benchmark-io-fits">
+<h1>benchmark.io.fits<a class="headerlink" href="#benchmark-io-fits" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -242,10 +193,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_benchmark_metrics_refbased.html" class="btn btn-neutral float-right" title="benchmark.metrics.refbased" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api_processing_filtering_hard_filter.html" class="btn btn-neutral float-right" title="processing.filtering.hard_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="intro.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_benchmark_metrics_refbased.html" class="btn btn-neutral" title="benchmark.metrics.refbased" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
