@@ -93,13 +93,12 @@ It also requires Numpy and Matplotlib Python libraries.
 import argparse
 import os
 
-from pywi.processing.compositing.filter_with_mrfilter import WaveletTransform
-from pywi.processing.filtering import hard_filter
-from pywi.processing.transform import mrtransform_wrapper
+from pywi.benchmark.core import benchmark
+from pywi.benchmark.io.refbased import fits
+from pywi.benchmark.metrics.refbased import mse
+from pywi.benchmark.ui.argparse_commons import add_common_arguments
 
-from pywi.io import images
-
-from pywi.ui.argparse_commons import add_common_arguments
+from pywi.processing.compositing.filter_with_mrtransform import clean_image
 
 
 def add_arguments(parser):
@@ -111,16 +110,7 @@ def add_arguments(parser):
 
     The following arguments are added to the parser:
 
-    - **type-of-filtering** (string): type of filtering
-    - **filter-thresholds** (float list): thresholds used for the plane filtering.
-    - **last-scale** (string): last plane treatment
-    - **detect-only-positive-structures** (boolean): detect only positive structures.
-    - **kill-isolated-pixels** (boolean): suppress isolated pixels in the support
-      (scipy implementation)
-    - **noise-cdf-file** (path): the JSON file containing the Cumulated
-      Distribution Function of the noise model used to inject artificial noise
-      in blank pixels (those with a NaN value)
-    - **tmp-dir** (path): the directory where temporary files are written
+    - **...** (...): ...
 
     Parameters
     ----------
@@ -132,27 +122,6 @@ def add_arguments(parser):
     argparse.ArgumentParser
         Return the populated ArgumentParser object.
     """
-
-    parser.add_argument("--type-of-filtering", "-f", metavar="STRING", default=hard_filter.DEFAULT_TYPE_OF_FILTERING,
-                        help="Type of filtering: {}.".format(", ".join(hard_filter.AVAILABLE_TYPE_OF_FILTERING)))
-
-    parser.add_argument("--filter-thresholds", "-t", metavar="FLOAT LIST", default=hard_filter.DEFAULT_FILTER_THRESHOLDS_STR,
-                        help="Thresholds used for the plane filtering.")
-
-    parser.add_argument("--last-scale", "-L", metavar="STRING", default=mrtransform_wrapper.DEFAULT_LAST_SCALE_TREATMENT,
-                        help="Last plane treatment: {}.".format(", ".join(mrtransform_wrapper.AVAILABLE_LAST_SCALE_OPTIONS)))
-
-    parser.add_argument("--detect-only-positive-structures", "-p", action="store_true",
-                        help="Detect only positive structures.")
-
-    parser.add_argument("--kill-isolated-pixels", action="store_true",
-                        help="Suppress isolated pixels in the support (scipy implementation).")
-
-    parser.add_argument("--noise-cdf-file", metavar="FILE",
-                        help="The JSON file containing the Cumulated Distribution Function of the noise model used to inject artificial noise in blank pixels (those with a NaN value). Default=None.")
-
-    parser.add_argument("--tmp-dir", default=".", metavar="DIRECTORY",
-                        help="The directory where temporary files are written.")
 
     return parser
 
@@ -173,94 +142,58 @@ def main():
 
     args = parser.parse_args()
 
-    type_of_filtering = args.type_of_filtering
-    filter_thresholds_str = args.filter_thresholds
-    last_scale_treatment = args.last_scale
-    detect_only_positive_structures = args.detect_only_positive_structures
-    kill_isolated_pixels = args.kill_isolated_pixels
-    noise_cdf_file = args.noise_cdf_file
-    tmp_dir = args.tmp_dir
-
-    verbose = args.verbose
-    debug = args.debug
-#    max_images = args.max_images
-#    benchmark_method = args.benchmark
-#    label = args.label
-    plot = args.plot
-    saveplot = args.saveplot
-
-#    input_file_or_dir_path_list = args.fileargs
-    input_file = args.fileargs[0]
-
-    # CHECK OPTIONS #############################
-
-    if type_of_filtering not in hard_filter.AVAILABLE_TYPE_OF_FILTERING:
-        raise ValueError('Unknown type of filterning: "{}". Should be in {}'.format(type_of_filtering,
-                                                                                    hard_filter.AVAILABLE_TYPE_OF_FILTERING))
-
-    try:
-        filter_thresholds = [float(threshold_str) for threshold_str in filter_thresholds_str.split(",")]
-    except:
-        raise ValueError('Wrong filter thresholds: "{}". Should be in a list of figures separated by a comma (e.g. "3,2,3")'.format(filter_thresholds_str))
-
-    if last_scale_treatment not in mrtransform_wrapper.AVAILABLE_LAST_SCALE_OPTIONS:
-        raise ValueError('Unknown type of last scale treatment: "{}". Should be in {}'.format(last_scale_treatment ,
-                                                                                              mrtransform_wrapper.AVAILABLE_LAST_SCALE_OPTIONS))
-
-    # TODO: check the noise_cdf_file value
-    # TODO: check the tmp_dir value
+#    type_of_filtering = args.type_of_filtering
+#    filter_thresholds_str = args.filter_thresholds
+#    last_scale_treatment = args.last_scale
+#    detect_only_positive_structures = args.detect_only_positive_structures
+#    kill_isolated_pixels = args.kill_isolated_pixels
+#    noise_cdf_file = args.noise_cdf_file
+#    tmp_dir = args.tmp_dir
+#
+#    verbose = args.verbose
+#    debug = args.debug
+##    max_images = args.max_images
+##    benchmark_method = args.benchmark
+##    label = args.label
+#    plot = args.plot
+#    saveplot = args.saveplot
+#
+##    input_file_or_dir_path_list = args.fileargs
+#    input_file = args.fileargs[0]
+#
+#    # CHECK OPTIONS #############################
+#
+#    if type_of_filtering not in hard_filter.AVAILABLE_TYPE_OF_FILTERING:
+#        raise ValueError('Unknown type of filterning: "{}". Should be in {}'.format(type_of_filtering,
+#                                                                                    hard_filter.AVAILABLE_TYPE_OF_FILTERING))
+#
+#    try:
+#        filter_thresholds = [float(threshold_str) for threshold_str in filter_thresholds_str.split(",")]
+#    except:
+#        raise ValueError('Wrong filter thresholds: "{}". Should be in a list of figures separated by a comma (e.g. "3,2,3")'.format(filter_thresholds_str))
+#
+#    if last_scale_treatment not in mrtransform_wrapper.AVAILABLE_LAST_SCALE_OPTIONS:
+#        raise ValueError('Unknown type of last scale treatment: "{}". Should be in {}'.format(last_scale_treatment ,
+#                                                                                              mrtransform_wrapper.AVAILABLE_LAST_SCALE_OPTIONS))
+#
+#    cleaned_img = img_filter.clean_image(input_img_copy,
+#                                         type_of_filtering=type_of_filtering,
+#                                         filter_thresholds=filter_thresholds,
+#                                         last_scale_treatment=last_scale_treatment,
+#                                         detect_only_positive_structures=detect_only_positive_structures,
+#                                         kill_isolated_pixels=kill_isolated_pixels,
+#                                         noise_distribution=noise_distribution,
+#                                         tmp_files_directory=tmp_dir)
 
     #############################################
 
-    #if args.output is None:
-    #    output_file_path = "score_wavelets_benchmark_{}.json".format(benchmark_method)
-    #else:
-    #    output_file_path = args.output
+#    gen = fits.benchmark_image_generator(["dirname"])
+#    processing = clean_image
+#
+#    benchmark(benchmark_image_generator=gen,
+#              processing=processing,
+#              metrics=mse)
 
-    ##if noise_cdf_file is not None:
-    ##    noise_distribution = EmpiricalDistribution(noise_cdf_file)
-    ##else:
-    ##    noise_distribution = None
-    noise_distribution = None
-
-    # CLEAN THE INPUT IMAGE ###################################
-
-    img_filter = WaveletTransform()
-    input_img = images.load_image(input_file)
-
-    # Copy the image (otherwise some cleaning functions may change it)
-    input_img_copy = input_img.astype('float64', copy=True)
-
-    cleaned_img = img_filter.clean_image(input_img_copy,
-                                         type_of_filtering=type_of_filtering,
-                                         filter_thresholds=filter_thresholds,
-                                         last_scale_treatment=last_scale_treatment,
-                                         detect_only_positive_structures=detect_only_positive_structures,
-                                         kill_isolated_pixels=kill_isolated_pixels,
-                                         noise_distribution=noise_distribution,
-                                         tmp_files_directory=tmp_dir)
-
-    # PLOT IMAGES #########################################################
-
-    if plot or (saveplot is not None):
-        image_list = [input_img, cleaned_img] 
-        title_list = ["Input image", "Filtered image"] 
-
-        if plot:
-            images.plot_list(image_list, title_list=title_list)
-
-        if saveplot is not None:
-            plot_file_path = saveplot
-            print("Saving {}".format(plot_file_path))
-            images.mpl_save_list(image_list,
-                                 output_file_path=plot_file_path,
-                                 title_list=title_list)
-
-    # SAVE IMAGE ##########################################################
-
-    basename, extension = os.path.splitext(input_file)
-    output_file_path = "{}-out{}".format(basename, extension)
-    images.save_image(cleaned_img, output_file_path)
 
 if __name__ == "__main__":
     main()

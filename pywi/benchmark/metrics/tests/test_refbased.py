@@ -28,118 +28,106 @@ from pywi.benchmark.metrics import refbased
 
 import numpy as np
 
-import unittest
+# Test the "normalize" function ###########################################
 
-class TestAssess(unittest.TestCase):
-    """
-    Contains unit tests for the "benchmark.metrics.refbased" module.
-    """
+def test_normalize():
+    """Check the output of the "normalize" function."""
 
-    # Test the "normalize" function ###########################################
+    # Input image #################
 
-    def test_normalize(self):
-        """Check the output of the "normalize" function."""
+    input_img = np.array([[1, 2, 2, 1],
+                          [1, 3, 3, 1],
+                          [1, 2, 2, 1]])
 
-        # Input image #################
+    # Expected output image #######
 
-        input_img = np.array([[1, 2, 2, 1],
-                              [1, 3, 3, 1],
-                              [1, 2, 2, 1]])
+    expected_output_img = np.array([[0., 0.5, 0.5, 0.],
+                                    [0., 1.0, 1.0, 0.],
+                                    [0., 0.5, 0.5, 0.]])
 
-        # Expected output image #######
+    # Output image ################
 
-        expected_output_img = np.array([[0., 0.5, 0.5, 0.],
-                                        [0., 1.0, 1.0, 0.],
-                                        [0., 0.5, 0.5, 0.]])
+    output_img = refbased.normalize_array(input_img)
 
-        # Output image ################
+    # Test ########################
 
-        output_img = refbased.normalize_array(input_img)
-
-        # Test ########################
-
-        np.testing.assert_array_equal(output_img, expected_output_img)
+    np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_normalize_with_nan(self):
-        """Check the output of the "normalize" function when the input contains
-        NaN values."""
+def test_normalize_with_nan():
+    """Check the output of the "normalize" function when the input contains
+    NaN values."""
 
-        # Input image #################
+    # Input image #################
 
-        input_img = np.array([[np.nan, 2, 2, np.nan],
-                              [1,      3, 3, 1],
-                              [1,      2, 2, np.nan]])
+    input_img = np.array([[np.nan, 2, 2, np.nan],
+                          [1,      3, 3, 1],
+                          [1,      2, 2, np.nan]])
 
-        # Expected output image #######
+    # Expected output image #######
 
-        expected_output_img = np.array([[np.nan, 0.5, 0.5, np.nan],
-                                        [0.,     1.0, 1.0, 0.],
-                                        [0.,     0.5, 0.5, np.nan]])
+    expected_output_img = np.array([[np.nan, 0.5, 0.5, np.nan],
+                                    [0.,     1.0, 1.0, 0.],
+                                    [0.,     0.5, 0.5, np.nan]])
 
-        # Output image ################
+    # Output image ################
 
-        output_img = refbased.normalize_array(input_img)
+    output_img = refbased.normalize_array(input_img)
 
-        # Test ########################
+    # Test ########################
 
-        np.testing.assert_array_equal(output_img, expected_output_img)
-
-
-    ###########################################################################
-    ###########################################################################
-    # Test the "metric_mse" function                                          #
-    ###########################################################################
-    ###########################################################################
-
-    def test_metric_mse_with_nan(self):
-        """Check the output of the "normalize" function when the input contains
-        NaN values."""
-
-        # Input image #################
-
-        input_image = np.array([[np.nan, -2.,    3.],
-                              [1.,     np.nan, 6.]])
-
-        # Output image ################
-
-        output_image = np.array([[np.nan, 2.,     1.],
-                               [3.,     np.nan, 2.]])
-
-        # Reference image #############
-
-        reference_image = np.array([[np.nan, -2.,    3.],
-                                    [1.,     np.nan, 6.]])
-
-        # Expected mark ###############
-
-        expected_mark = 10.
-
-        # Mark ########################
-
-        mark = refbased.metric_mse(input_image, output_image, reference_image)
-
-        # Test ########################
-
-        np.testing.assert_equal(mark, expected_mark)
+    np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    ###########################################################################
-    ###########################################################################
-    # Test the "metric_nrmse" function                                        #
-    ###########################################################################
-    ###########################################################################
+###########################################################################
+###########################################################################
+# Test the "metric_mse" function                                          #
+###########################################################################
+###########################################################################
 
-    # TODO
+def test_metric_mse_with_nan():
+    """Check the output of the "normalize" function when the input contains
+    NaN values."""
+
+    # Output image ################
+
+    output_image = np.array([[np.nan, 2.,     1.],
+                           [3.,     np.nan, 2.]])
+
+    # Reference image #############
+
+    reference_image = np.array([[np.nan, -2.,    3.],
+                                [1.,     np.nan, 6.]])
+
+    # Expected mark ###############
+
+    expected_mark = 10.
+
+    # Mark ########################
+
+    mark = refbased.mse(output_image, reference_image)
+
+    # Test ########################
+
+    np.testing.assert_equal(mark, expected_mark)
 
 
-    ###########################################################################
-    ###########################################################################
-    # Test the "metric1" function                                             #
-    ###########################################################################
-    ###########################################################################
+###########################################################################
+###########################################################################
+# Test the "metric_nrmse" function                                        #
+###########################################################################
+###########################################################################
 
-    # TODO
+# TODO
+
+
+###########################################################################
+###########################################################################
+# Test the "metric1" function                                             #
+###########################################################################
+###########################################################################
+
+# TODO
 
 
 #    ###########################################################################
@@ -1237,8 +1225,3 @@ class TestAssess(unittest.TestCase):
 #        # Test ########################
 #
 #        np.testing.assert_almost_equal(mark, expected_mark, decimal=10)
-    
-
-if __name__ == '__main__':
-    unittest.main()
-

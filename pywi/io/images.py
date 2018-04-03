@@ -266,7 +266,7 @@ def load_image(input_file_path, **kwargs):
         # FITS FILES
         image_array = load_fits_image(input_file_path)
     else:
-        image_array = load_pil_image(input_file_path)
+        image_array = load_pil_image(input_file_path, **kwargs)
 
     return image_array
 
