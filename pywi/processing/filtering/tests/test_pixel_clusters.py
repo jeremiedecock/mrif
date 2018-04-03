@@ -117,7 +117,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img, threshold=None)
+        output_img = kill_isolated_pixels(input_img)
 
         # Expected output image #######
 
@@ -142,7 +142,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img, threshold=None)
+        output_img = kill_isolated_pixels(input_img, threshold=-2)
 
         # Expected output image #######
 

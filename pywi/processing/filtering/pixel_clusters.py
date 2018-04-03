@@ -63,8 +63,7 @@ def get_islands(array, threshold=0.2):
     filtered_array[np.isnan(filtered_array)] = 0.
 
     # Put to 0 pixels that are below 'threshold'
-    if threshold is not None:
-        filtered_array[filtered_array < threshold] = 0.
+    filtered_array[filtered_array < threshold] = 0.
     mask = filtered_array > 0
 
     # Detect islands ("label")
