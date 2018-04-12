@@ -76,7 +76,8 @@ class WrongDimensionError(MrTransformError):
 def wavelet_transform(input_image,
                       number_of_scales=4,
                       tmp_files_directory=".",
-                      noise_distribution=None):
+                      noise_distribution=None,
+                      debug=False):
     """Compute the wavelet transform of `input_image`.
 
     Parameters
@@ -137,6 +138,10 @@ def wavelet_transform(input_image,
         cmd = 'mr_transform -n{} "{}" {}'.format(number_of_scales,
                                                  input_file_path,
                                                  mr_output_file_path)
+
+        if debug:
+            print(cmd)
+
         os.system(cmd)
 
         cmd = "mv {}.mr {}".format(mr_output_file_path, mr_output_file_path)
