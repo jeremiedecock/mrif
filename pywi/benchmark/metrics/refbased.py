@@ -214,9 +214,13 @@ def nrmse(image, reference_image):
 
     _mse = mse(image, reference_image)
     denom = np.sqrt(np.nanmean((reference_image * image), dtype=np.float64))
-    score = np.sqrt(_mse) / denom
 
-    return float(score)
+    if denom == 0:
+        score = float('nan')
+    else:
+        score = float(np.sqrt(_mse) / denom)
+
+    return score
 
 
 ## Unusual Normalized Root Mean-Squared Error (uNRMSE) #########################
