@@ -31,11 +31,12 @@ import copy
 import numpy as np
 
 from pywi.io import images
+from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels
 
 # CONSTANTS ##################################################################
 
 DEBUG = False                 # TODO: use sys flag
-AVAILABLE_TYPE_OF_FILTERING = ('hard_filtering', 'ksigma_hard_filtering', 'common_hard_filtering')
+AVAILABLE_TYPE_OF_FILTERING = ('hard_filtering', 'cluster_filtering', 'ksigma_hard_filtering', 'common_hard_filtering')
 DEFAULT_TYPE_OF_FILTERING = 'hard_filtering'
 DEFAULT_FILTER_THRESHOLDS_STR = '0,0'            # TODO: change the default value...
 DEFAULT_FILTER_THRESHOLDS = [float(threshold_str) for threshold_str in DEFAULT_FILTER_THRESHOLDS_STR.split(",")]
@@ -75,10 +76,11 @@ def filter_planes(wavelet_planes,
 
         if method in ('hard_filtering', 'common_hard_filtering'):
 
-            if detect_only_positive_structures:
-                plane_mask = plane > thresholds[plane_index]
-            else:
-                plane_mask = abs(plane) > thresholds[plane_index]
+            with np.errstate(invalid='ignore'):      # TODO: to disable warnings on images containing "NaN" values (temporary solution)
+                if detect_only_positive_structures:
+                    plane_mask = plane > thresholds[plane_index]
+                else:
+                    plane_mask = abs(plane) > thresholds[plane_index]
 
             filtered_plane = plane * plane_mask
 
@@ -100,6 +102,10 @@ def filter_planes(wavelet_planes,
                 plane_mask = abs(plane) > (plane_noise_std * thresholds[plane_index])  
 
             filtered_plane = plane * plane_mask
+
+        elif method == 'cluster_filtering':
+
+            filtered_plane = kill_isolated_pixels(plane, threshold=thresholds[plane_index])
 
         else:
 
