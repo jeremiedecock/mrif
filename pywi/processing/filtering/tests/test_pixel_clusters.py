@@ -117,11 +117,11 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img)
+        output_img = kill_isolated_pixels(input_img, threshold=0.2)
 
         # Expected output image #######
 
-        expected_output_img = np.array([[0, 0,-1, 9, 0, 0],
+        expected_output_img = np.array([[0, 0, 0, 9, 0, 0],
                                         [0, 0, 0, 1, 0, 0],
                                         [0, 0, 0, 0, 0, 0],
                                         [0, 0, 0, 0, 0, 0]])
@@ -129,16 +129,16 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example4(self):
+    def test_kill_isolated_pixels_example_negative_threshold(self):
         """Check the output of the kill_isolated_pixels function."""
 
         # Input image #################
 
-        input_img = np.array([[0, 0, 0, 0, 0, 0, 0],
-                              [0, 0, 1, 1, 1, 0, 0],
-                              [0, 0, 1,-1, 1, 0, 0],
-                              [0, 0, 1, 1, 1, 0, 0],
-                              [1, 0, 0, 0, 0, 0, 0]])
+        input_img = np.array([[0, 0,  0,  0,  0, 0, 0],
+                              [0, 0, -1, -1, -1, 0, 0],
+                              [0, 0, -1, -1, -1, 0, 0],
+                              [0, 0, -1, -1, -1, 0, 0],
+                              [0, 0,  0,  0,  0, 0, 0]])
 
         # Output image ################
 
@@ -146,11 +146,37 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Expected output image #######
 
-        expected_output_img = np.array([[0, 0, 0, 0, 0, 0, 0],
-                                        [0, 0, 1, 1, 1, 0, 0],
-                                        [0, 0, 1,-1, 1, 0, 0],
-                                        [0, 0, 1, 1, 1, 0, 0],
-                                        [0, 0, 0, 0, 0, 0, 0]])
+        expected_output_img = np.array([[0, 0,  0,  0,  0, 0, 0],
+                                        [0, 0, -1, -1, -1, 0, 0],
+                                        [0, 0, -1, -1, -1, 0, 0],
+                                        [0, 0, -1, -1, -1, 0, 0],
+                                        [0, 0,  0,  0,  0, 0, 0]])  # < Here there is only one big island!
+
+        np.testing.assert_array_equal(output_img, expected_output_img)
+
+
+    def test_kill_isolated_pixels_example_threshold(self):
+        """Check that every values below threshold is set to 0."""
+
+        # Input image #################
+
+        input_img = np.array([[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                              [1.0, 0.1, 1.0, 1.0, 1.0, 0.1, 1.0],
+                              [0.0, 0.5, 1.0,-1.0, 1.0, 0.5, 0.0],
+                              [1.0, 0.1, 1.0, 1.0, 1.0, 0.1, 1.0],
+                              [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]])
+
+        # Output image ################
+
+        output_img = kill_isolated_pixels(input_img, threshold=0.2)
+
+        # Expected output image #######
+
+        expected_output_img = np.array([[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                                        [0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0],
+                                        [0.0, 0.5, 1.0, 0.0, 1.0, 0.5, 0.0],
+                                        [0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0],
+                                        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]])
 
         np.testing.assert_array_equal(output_img, expected_output_img)
 
@@ -247,9 +273,9 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Expected output image #######
 
-        expected_delta_pe = 10
-        expected_delta_abs_pe = 10
-        expected_delta_num_pixels = 4
+        expected_delta_pe = 9
+        expected_delta_abs_pe = 11
+        expected_delta_num_pixels = 5
 
         self.assertEqual(delta_pe, expected_delta_pe)
         self.assertEqual(delta_abs_pe, expected_delta_abs_pe)

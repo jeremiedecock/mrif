@@ -54,6 +54,9 @@ def get_islands(array, threshold=0.2):
         ``num_labels`` the number of islands.
     """
 
+    if threshold is None:
+        threshold = 0.
+
     array = array.astype('float64', copy=True)
     filtered_array = np.copy(array)
 
@@ -80,6 +83,10 @@ def kill_isolated_pixels(array, threshold=0.2):
     """
     ...
 
+    Notes
+    -----
+        All values below `threshold` is set to 0.
+
     Parameters
     ----------
     array : Numpy array
@@ -97,10 +104,10 @@ def kill_isolated_pixels(array, threshold=0.2):
     array = array.astype('float64', copy=True)
     filtered_array, label_array, num_labels = get_islands(array, threshold)
 
-    # Put NaN pixels to 0
+    # Put NaN pixels to -inf
     # This is OK as long as it is made temporary and internally to avoid issues
     # with scipy
-    filtered_array[np.isnan(filtered_array)] = 0.
+    filtered_array[np.isnan(filtered_array)] = -float('inf')
 
     # Count the number of pixels for each island
     num_pixels_per_island = ndimage.sum(filtered_array, label_array, range(num_labels + 1))
@@ -123,8 +130,8 @@ def kill_isolated_pixels_stats(array, threshold=0.2):
     array = array.astype('float64', copy=True)
     filtered_array = kill_isolated_pixels(array, threshold=threshold)
 
-    delta_pe = np.nansum(array - filtered_array)
-    delta_abs_pe = np.nansum(np.abs(array - filtered_array))
+    delta_value = np.nansum(array - filtered_array)
+    delta_abs_value = np.nansum(np.abs(array - filtered_array))
 
 
     array[np.isfinite(array) & (array != 0)] = 1                              # May genereate warnings on NaN values
@@ -132,7 +139,7 @@ def kill_isolated_pixels_stats(array, threshold=0.2):
 
     delta_num_pixels = np.nansum(array - filtered_array)
 
-    return float(delta_pe), float(delta_abs_pe), float(delta_num_pixels)
+    return float(delta_value), float(delta_abs_value), float(delta_num_pixels)
 
 
 def number_of_islands(array, threshold=0.2):
