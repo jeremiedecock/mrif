@@ -131,9 +131,8 @@ class TestImages(unittest.TestCase):
     # Test the "load_image" function exceptions #####################################
 
     def test_load_wrong_hdu_error(self):
-        """Check the call to `images.load_image` fails with an WrongDimensionError
-        when saved images have more than 3 dimensions or less than 2
-        dimensions."""
+        """Check the call to `images.load_image` fails with a WrongHDUError
+        when trying to load a FITS image from an HDU index that does not exist."""
 
         img = np.random.randint(128, size=(3, 3))        # Make a 2D image
 
