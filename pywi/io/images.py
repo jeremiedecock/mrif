@@ -79,12 +79,12 @@ def fill_nan_pixels(image, noise_distribution=None):
     ... # doctest: +NORMALIZE_WHITESPACE
     array([[False, False,  True],
            [False,  True, False],
-           [ True, False,  True]])
+           [ True, False,  True]], dtype=bool)
     >>> img
     ... # doctest: +NORMALIZE_WHITESPACE
-    array([[1., 2., 0.],
-           [4., 0., 6.],
-           [0., 8., 0.]])
+    array([[ 1., 2., 0.],
+           [ 4., 0., 6.],
+           [ 0., 8., 0.]])
     """
 
     # See https://stackoverflow.com/questions/29365194/replacing-missing-values-with-random-in-a-numpy-array
