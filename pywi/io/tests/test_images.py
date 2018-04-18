@@ -25,7 +25,7 @@ This module contains unit tests for the "io.images" module.
 """
 
 from pywi.io import images
-from pywi.io.images import WrongHDUError, NotAnImageError, WrongDimensionError, WrongFitsFileStructure
+from pywi.io.fits import WrongHDUError, NotAnImageError, WrongDimensionError, WrongFitsFileStructure
 
 import numpy as np
 import os
@@ -106,23 +106,23 @@ class TestImages(unittest.TestCase):
             img_path = os.path.join(temp_dir_path, "test.fits")
 
             # Save the 1D image (should raise an exception)
-            with self.assertRaises(images.WrongDimensionError):
+            with self.assertRaises(WrongDimensionError):
                 images.save_image(img_1d, img_path)
 
             # Save the 2D image (should not raise any exception)
             try:
                 images.save_image(img_2d, img_path)
-            except images.WrongDimensionError:
+            except WrongDimensionError:
                 self.fail("images.save() raised WrongDimensionError unexpectedly!")
 
             # Save the 3D image (should not raise any exception)
             try:
                 images.save_image(img_3d, img_path)
-            except images.WrongDimensionError:
+            except WrongDimensionError:
                 self.fail("images.save() raised WrongDimensionError unexpectedly!")
 
             # Save the 4D image (should raise an exception)
-            with self.assertRaises(images.WrongDimensionError):
+            with self.assertRaises(WrongDimensionError):
                 images.save_image(img_4d, img_path)
 
         # The temporary directory and all its contents are removed now
@@ -146,13 +146,13 @@ class TestImages(unittest.TestCase):
             images.save_image(img, img_path)
 
             # Load the saved image (should raise an exception)
-            with self.assertRaises(images.WrongHDUError):
+            with self.assertRaises(WrongHDUError):
                 loaded_img = images.load_image(img_path, hdu_index=1000)
 
             # Load the saved image (should not raise any exception)
             try:
                 loaded_img = images.load_image(img_path, hdu_index=0)
-            except images.WrongHDUError:
+            except WrongHDUError:
                 self.fail("images.load_image() raised WrongHDUError unexpectedly!")
 
         # The temporary directory and all its contents are removed now

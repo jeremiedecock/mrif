@@ -36,58 +36,6 @@ from pywi.io.plot import plot
 
 DEBUG = False
 
-# EXCEPTIONS #################################################################
-
-class FitsError(Exception):
-    pass
-
-class WrongHDUError(FitsError):
-    """Exception raised when trying to access a wrong HDU in a FITS file.
-
-    Attributes:
-        file_path -- the FITS file concerned by the error
-        hdu_index -- the HDU index concerned by the error
-    """
-
-    def __init__(self, file_path, hdu_index):
-        super().__init__("File {} doesn't have data in HDU {}.".format(file_path, hdu_index))
-        self.file_path = file_path
-        self.hdu_index = hdu_index
-
-class NotAnImageError(FitsError):
-    """Exception raised when trying to load a FITS file which doesn't contain a
-    valid image in the given HDU.
-
-    Attributes:
-        file_path -- the FITS file concerned by the error
-        hdu_index -- the HDU index concerned by the error
-    """
-
-    def __init__(self, file_path, hdu_index):
-        super().__init__("HDU {} in file {} doesn't contain any image.".format(hdu_index, file_path))
-        self.file_path = file_path
-        self.hdu_index = hdu_index
-
-class WrongDimensionError(FitsError):
-    """ Exception raised when trying to save a FITS with more than 3 dimensions
-    or less than 2 dimensions.
-    """
-
-    def __init__(self):
-        super().__init__("The input image should be a 2D or a 3D numpy array.")
-
-class WrongFitsFileStructure(FitsError):
-    """Exception raised when trying to load a FITS file which doesn't contain a
-    valid structure (for benchmark).
-
-    Attributes:
-        file_path -- the FITS file concerned by the error
-    """
-
-    def __init__(self, file_path):
-        super().__init__("File {} doesn't contain a valid structure.".format(file_path))
-        self.file_path = file_path
-
 
 # FILL NAN PIXELS #############################################################
 
@@ -264,7 +212,7 @@ def load_image(input_file_path, **kwargs):
     
     if input_file_path.lower().endswith((".fits", ".fit")):
         # FITS FILES
-        image_array = load_fits_image(input_file_path)
+        image_array = load_fits_image(input_file_path, **kwargs)
     else:
         image_array = load_pil_image(input_file_path, **kwargs)
 
