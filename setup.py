@@ -79,7 +79,7 @@ PACKAGES = find_packages()
 # The following list contains all dependencies that Python will try to
 # install with this project
 # E.g. INSTALL_REQUIRES = ['pyserial >= 2.6']
-INSTALL_REQUIRES = ['numpy >= 1.14.0',
+INSTALL_REQUIRES = ['numpy >= 1.13.0',
                     'scipy >= 1.0.0',
                     'scikit-image >= 0.13.1',
                     'Pillow >= 5.0.0',
