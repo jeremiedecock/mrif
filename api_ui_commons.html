@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ui.commons &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>ui.commons &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="index.html"/>
         <link rel="up" title="PyWI API" href="api.html"/>
         <link rel="next" title="ui.filter_with_mrfilter" href="api_ui_filter_with_mrfilter.html"/>
         <link rel="prev" title="ui.argparse_commons" href="api_ui_argparse.html"/> 
@@ -95,12 +95,14 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="api_benchmark_metrics_refbased.html">pywi.benchmark.metrics.refbased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_benchmark_io_refbased_fits.html">pywi.benchmark.io.refbased.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_hard_filter.html">pywi.processing.filtering.hard_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_filtering_pixel_clusters.html">pywi.processing.filtering.pixel_clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_processing_transform_mrtransform.html">pywi.processing.transform.mrtransform_wrapper</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_fits.html">pywi.io.fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_images.html">pywi.io.images</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_io_pil.html">pywi.io.pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_io_plot.html">pywi.io.plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_bruteforce.html">pywi.optimization.bruteforce</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_differential_evolution.html">pywi.optimization.differential_evolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_optimization_saes.html">pywi.optimization.saes</a></li>
@@ -177,72 +179,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pywi.ui.commons">
-<span id="ui-commons"></span><h1>ui.commons<a class="headerlink" href="#module-pywi.ui.commons" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pywi.ui.commons.AbstractCleaningAlgorithm">
-<em class="property">class </em><code class="descclassname">pywi.ui.commons.</code><code class="descname">AbstractCleaningAlgorithm</code><a class="reference internal" href="_modules/pywi/ui/commons.html#AbstractCleaningAlgorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.commons.AbstractCleaningAlgorithm" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenient optional wrapper to simplify the image cleaning analysis.</p>
-<p>Common processing to run and assess the image cleaning procedure on a set
-of images and save results. This class gather some common procedures to
-avoid code duplication in image cleaning modules:</p>
-<ul class="simple">
-<li>call the cleaning algorithm on an image set;</li>
-<li>assess the cleaning procedure using a set of estimators;</li>
-<li>apply various pre-processing and post-processing procedures (e.g.
-geometry conversion);</li>
-<li>collect and save metadata, results and intermediate values that are
-useful for analysis;</li>
-<li>measure and save the execution time;</li>
-<li>manage exceptions;</li>
-<li>…</li>
-</ul>
-<p>This abstract class is supposed to be inherited by the others image
-cleaning classes.</p>
-<dl class="method">
-<dt id="pywi.ui.commons.AbstractCleaningAlgorithm.run">
-<code class="descname">run</code><span class="sig-paren">(</span><em>cleaning_function_params</em>, <em>input_file_or_dir_path_list</em>, <em>benchmark_method</em>, <em>output_file_path</em>, <em>plot=False</em>, <em>saveplot=None</em>, <em>ref_img_as_input=False</em>, <em>max_num_img=None</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/ui/commons.html#AbstractCleaningAlgorithm.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.ui.commons.AbstractCleaningAlgorithm.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenient optional wrapper to simplify the image cleaning analysis.</p>
-<p>Apply the image cleaning analysis on <cite>input_file_or_dir_path_list</cite>,
-apply some pre-processing and post-processing procedures, collect and
-return results, intermediate values and metadata.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cleaning_function_params</strong> – A dictionary containing the parameters required for the image
-cleaning method.</li>
-<li><strong>input_file_or_dir_path_list</strong> – A list of file to clean. Can be a list of simtel files, fits files
-or directories containing such files.</li>
-<li><strong>benchmark_method</strong> – The list of estimators to use to assess the image cleaning. If
-<cite>None</cite>, images are cleaned but nothing is returned (can be used
-with e.g. the <cite>plot</cite> and/or <cite>saveplot</cite> options).</li>
-<li><strong>output_file_path</strong> – The result file path (a JSON file).</li>
-<li><strong>plot</strong> – The result of each cleaning is plot if <cite>True</cite>.</li>
-<li><strong>saveplot</strong> – The result of each cleaning is saved if <cite>True</cite>.</li>
-<li><strong>ref_img_as_input</strong> – This option is a hack to easily produce a “flatten” CSV results
-files.</li>
-<li><strong>max_num_img</strong> – The number of images to process among the input set
-(<cite>input_file_or_dir_path_list</cite>).</li>
-<li><strong>debug</strong> – Stop the execution and print the full traceback when an exception
-is encountered if this parameter is <cite>True</cite>. Report exceptions and
-continue with the next input image if this parameter is <cite>False</cite>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Results, intermediate values and metadata.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)">dict</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="ui-commons">
+<h1>ui.commons<a class="headerlink" href="#ui-commons" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -289,7 +227,7 @@ continue with the next input image if this parameter is <cite>False</cite>.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

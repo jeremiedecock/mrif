@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.io.fits &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.io.fits &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -185,6 +185,60 @@
 <span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
 
 
+<span class="c1"># EXCEPTIONS #################################################################</span>
+
+<span class="k">class</span> <span class="nc">FitsError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">WrongHDUError</span><span class="p">(</span><span class="n">FitsError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when trying to access a wrong HDU in a FITS file.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        file_path -- the FITS file concerned by the error</span>
+<span class="sd">        hdu_index -- the HDU index concerned by the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{}</span><span class="s2"> doesn&#39;t have data in HDU </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hdu_index</span> <span class="o">=</span> <span class="n">hdu_index</span>
+
+<span class="k">class</span> <span class="nc">NotAnImageError</span><span class="p">(</span><span class="n">FitsError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when trying to load a FITS file which doesn&#39;t contain a</span>
+<span class="sd">    valid image in the given HDU.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        file_path -- the FITS file concerned by the error</span>
+<span class="sd">        hdu_index -- the HDU index concerned by the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;HDU </span><span class="si">{}</span><span class="s2"> in file </span><span class="si">{}</span><span class="s2"> doesn&#39;t contain any image.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hdu_index</span><span class="p">,</span> <span class="n">file_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hdu_index</span> <span class="o">=</span> <span class="n">hdu_index</span>
+
+<span class="k">class</span> <span class="nc">WrongDimensionError</span><span class="p">(</span><span class="n">FitsError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Exception raised when trying to save a FITS with more than 3 dimensions</span>
+<span class="sd">    or less than 2 dimensions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;The input image should be a 2D or a 3D numpy array.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">WrongFitsFileStructure</span><span class="p">(</span><span class="n">FitsError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised when trying to load a FITS file which doesn&#39;t contain a</span>
+<span class="sd">    valid structure (for benchmark).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        file_path -- the FITS file concerned by the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{}</span><span class="s2"> doesn&#39;t contain a valid structure.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+
+<span class="c1">##############################################################################</span>
+
 <div class="viewcode-block" id="load_fits_image"><a class="viewcode-back" href="../../../api_io_fits.html#pywi.io.fits.load_fits_image">[docs]</a><span class="k">def</span> <span class="nf">load_fits_image</span><span class="p">(</span><span class="n">input_file_path</span><span class="p">,</span> <span class="n">hdu_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the image array contained in the given HDU of the given FITS file.</span>
 
@@ -287,7 +341,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

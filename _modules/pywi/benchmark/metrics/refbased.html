@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.benchmark.metrics.refbased &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.benchmark.metrics.refbased &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
   
@@ -373,9 +373,13 @@
 
     <span class="n">_mse</span> <span class="o">=</span> <span class="n">mse</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">reference_image</span><span class="p">)</span>
     <span class="n">denom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">((</span><span class="n">reference_image</span> <span class="o">*</span> <span class="n">image</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">_mse</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
 
-    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">score</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">denom</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">_mse</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">score</span></div>
 
 
 <span class="c1">## Unusual Normalized Root Mean-Squared Error (uNRMSE) #########################</span>
@@ -754,7 +758,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

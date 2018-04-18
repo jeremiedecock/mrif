@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.filter_with_mrfilter &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.ui.filter_with_mrfilter &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -379,7 +379,7 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrfilter</span> <span class="k">import</span> <span class="n">WaveletTransform</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrfilter</span> <span class="k">import</span> <span class="n">clean_image</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io.images</span> <span class="k">import</span> <span class="n">load_image</span><span class="p">,</span> <span class="n">save_image</span>
 <span class="kn">from</span> <span class="nn">pywi.io.plot</span> <span class="k">import</span> <span class="n">plot_list</span><span class="p">,</span> <span class="n">mpl_save_list</span>
@@ -680,38 +680,37 @@
 
     <span class="c1"># CLEAN THE INPUT IMAGE ###################################</span>
 
-    <span class="n">img_filter</span> <span class="o">=</span> <span class="n">WaveletTransform</span><span class="p">()</span>
     <span class="n">input_img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
 
     <span class="c1"># Copy the image (otherwise some cleaning functions may change it)</span>
     <span class="n">input_img_copy</span> <span class="o">=</span> <span class="n">input_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">img_filter</span><span class="o">.</span><span class="n">clean_image</span><span class="p">(</span><span class="n">input_img_copy</span><span class="p">,</span>
-                                         <span class="n">type_of_multiresolution_transform</span><span class="o">=</span><span class="n">type_of_multiresolution_transform</span><span class="p">,</span>
-                                         <span class="n">type_of_filters</span><span class="o">=</span><span class="n">type_of_filters</span><span class="p">,</span>
-                                         <span class="n">type_of_non_orthog_filters</span><span class="o">=</span><span class="n">type_of_non_orthog_filters</span><span class="p">,</span>
-                                         <span class="n">number_of_scales</span><span class="o">=</span><span class="n">number_of_scales</span><span class="p">,</span>
-                                         <span class="n">suppress_last_scale</span><span class="o">=</span><span class="n">suppress_last_scale</span><span class="p">,</span>
-                                         <span class="n">suppress_isolated_pixels</span><span class="o">=</span><span class="n">suppress_isolated_pixels</span><span class="p">,</span>
-                                         <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="n">kill_isolated_pixels</span><span class="p">,</span>
-                                         <span class="n">coef_detection_method</span><span class="o">=</span><span class="n">coef_detection_method</span><span class="p">,</span>
-                                         <span class="n">k_sigma_noise_threshold</span><span class="o">=</span><span class="n">k_sigma_noise_threshold</span><span class="p">,</span>
-                                         <span class="n">noise_model</span><span class="o">=</span><span class="n">noise_model</span><span class="p">,</span>
-                                         <span class="n">detect_only_positive_structure</span><span class="o">=</span><span class="n">detect_only_positive_structure</span><span class="p">,</span>
-                                         <span class="n">suppress_positivity_constraint</span><span class="o">=</span><span class="n">suppress_positivity_constraint</span><span class="p">,</span>
-                                         <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
-                                         <span class="n">first_detection_scale</span><span class="o">=</span><span class="n">first_detection_scale</span><span class="p">,</span>
-                                         <span class="n">number_of_iterations</span><span class="o">=</span><span class="n">number_of_iterations</span><span class="p">,</span>
-                                         <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span>
-                                         <span class="n">support_file_name</span><span class="o">=</span><span class="n">support_file_name</span><span class="p">,</span>
-                                         <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
-                                         <span class="n">mask_file_path</span><span class="o">=</span><span class="n">mask_file_path</span><span class="p">,</span>
-                                         <span class="n">offset_after_calibration</span><span class="o">=</span><span class="n">offset_after_calibration</span><span class="p">,</span>
-                                         <span class="n">correction_offset</span><span class="o">=</span><span class="n">correction_offset</span><span class="p">,</span>
-                                         <span class="n">input_image_scale</span><span class="o">=</span><span class="n">input_image_scale</span><span class="p">,</span>
-                                         <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">,</span>
-                                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-                                         <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_dir</span><span class="p">)</span>
+    <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">clean_image</span><span class="p">(</span><span class="n">input_img_copy</span><span class="p">,</span>
+                              <span class="n">type_of_multiresolution_transform</span><span class="o">=</span><span class="n">type_of_multiresolution_transform</span><span class="p">,</span>
+                              <span class="n">type_of_filters</span><span class="o">=</span><span class="n">type_of_filters</span><span class="p">,</span>
+                              <span class="n">type_of_non_orthog_filters</span><span class="o">=</span><span class="n">type_of_non_orthog_filters</span><span class="p">,</span>
+                              <span class="n">number_of_scales</span><span class="o">=</span><span class="n">number_of_scales</span><span class="p">,</span>
+                              <span class="n">suppress_last_scale</span><span class="o">=</span><span class="n">suppress_last_scale</span><span class="p">,</span>
+                              <span class="n">suppress_isolated_pixels</span><span class="o">=</span><span class="n">suppress_isolated_pixels</span><span class="p">,</span>
+                              <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="n">kill_isolated_pixels</span><span class="p">,</span>
+                              <span class="n">coef_detection_method</span><span class="o">=</span><span class="n">coef_detection_method</span><span class="p">,</span>
+                              <span class="n">k_sigma_noise_threshold</span><span class="o">=</span><span class="n">k_sigma_noise_threshold</span><span class="p">,</span>
+                              <span class="n">noise_model</span><span class="o">=</span><span class="n">noise_model</span><span class="p">,</span>
+                              <span class="n">detect_only_positive_structure</span><span class="o">=</span><span class="n">detect_only_positive_structure</span><span class="p">,</span>
+                              <span class="n">suppress_positivity_constraint</span><span class="o">=</span><span class="n">suppress_positivity_constraint</span><span class="p">,</span>
+                              <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
+                              <span class="n">first_detection_scale</span><span class="o">=</span><span class="n">first_detection_scale</span><span class="p">,</span>
+                              <span class="n">number_of_iterations</span><span class="o">=</span><span class="n">number_of_iterations</span><span class="p">,</span>
+                              <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span>
+                              <span class="n">support_file_name</span><span class="o">=</span><span class="n">support_file_name</span><span class="p">,</span>
+                              <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+                              <span class="n">mask_file_path</span><span class="o">=</span><span class="n">mask_file_path</span><span class="p">,</span>
+                              <span class="n">offset_after_calibration</span><span class="o">=</span><span class="n">offset_after_calibration</span><span class="p">,</span>
+                              <span class="n">correction_offset</span><span class="o">=</span><span class="n">correction_offset</span><span class="p">,</span>
+                              <span class="n">input_image_scale</span><span class="o">=</span><span class="n">input_image_scale</span><span class="p">,</span>
+                              <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">,</span>
+                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                              <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_dir</span><span class="p">)</span>
 
     <span class="c1"># PLOT IMAGES #########################################################</span>
 
@@ -774,7 +773,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

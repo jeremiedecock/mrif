@@ -1,7 +1,0 @@
-=================
-benchmark.io.fits
-=================
-
-.. automodule:: pywi.benchmark.io.fits
-   :members:
-

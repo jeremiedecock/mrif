@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.ui.filter_with_mrtransform &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.ui.filter_with_mrtransform &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -252,7 +252,7 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrtransform</span> <span class="k">import</span> <span class="n">WaveletTransform</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.compositing.filter_with_mrtransform</span> <span class="k">import</span> <span class="n">clean_image</span>
 <span class="kn">from</span> <span class="nn">pywi.processing.filtering</span> <span class="k">import</span> <span class="n">hard_filter</span>
 <span class="kn">from</span> <span class="nn">pywi.processing.transform</span> <span class="k">import</span> <span class="n">mrtransform_wrapper</span>
 
@@ -385,20 +385,19 @@
 
     <span class="c1"># CLEAN THE INPUT IMAGE ###################################</span>
 
-    <span class="n">img_filter</span> <span class="o">=</span> <span class="n">WaveletTransform</span><span class="p">()</span>
     <span class="n">input_img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
 
     <span class="c1"># Copy the image (otherwise some cleaning functions may change it)</span>
     <span class="n">input_img_copy</span> <span class="o">=</span> <span class="n">input_img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">img_filter</span><span class="o">.</span><span class="n">clean_image</span><span class="p">(</span><span class="n">input_img_copy</span><span class="p">,</span>
-                                         <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
-                                         <span class="n">filter_thresholds</span><span class="o">=</span><span class="n">filter_thresholds</span><span class="p">,</span>
-                                         <span class="n">last_scale_treatment</span><span class="o">=</span><span class="n">last_scale_treatment</span><span class="p">,</span>
-                                         <span class="n">detect_only_positive_structures</span><span class="o">=</span><span class="n">detect_only_positive_structures</span><span class="p">,</span>
-                                         <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="n">kill_isolated_pixels</span><span class="p">,</span>
-                                         <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">,</span>
-                                         <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_dir</span><span class="p">)</span>
+    <span class="n">cleaned_img</span> <span class="o">=</span> <span class="n">clean_image</span><span class="p">(</span><span class="n">input_img_copy</span><span class="p">,</span>
+                              <span class="n">type_of_filtering</span><span class="o">=</span><span class="n">type_of_filtering</span><span class="p">,</span>
+                              <span class="n">filter_thresholds</span><span class="o">=</span><span class="n">filter_thresholds</span><span class="p">,</span>
+                              <span class="n">last_scale_treatment</span><span class="o">=</span><span class="n">last_scale_treatment</span><span class="p">,</span>
+                              <span class="n">detect_only_positive_structures</span><span class="o">=</span><span class="n">detect_only_positive_structures</span><span class="p">,</span>
+                              <span class="n">kill_isolated_pixels</span><span class="o">=</span><span class="n">kill_isolated_pixels</span><span class="p">,</span>
+                              <span class="n">noise_distribution</span><span class="o">=</span><span class="n">noise_distribution</span><span class="p">,</span>
+                              <span class="n">tmp_files_directory</span><span class="o">=</span><span class="n">tmp_dir</span><span class="p">)</span>
 
     <span class="c1"># PLOT IMAGES #########################################################</span>
 
@@ -461,7 +460,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

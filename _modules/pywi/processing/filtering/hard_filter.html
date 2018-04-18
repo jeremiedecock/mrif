@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.processing.filtering.hard_filter &mdash; Python Wavelet Imaging 0.2.dev0 documentation</title>
+  <title>pywi.processing.filtering.hard_filter &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
   
@@ -190,11 +190,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.filtering.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span>
 
 <span class="c1"># CONSTANTS ##################################################################</span>
 
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>                 <span class="c1"># TODO: use sys flag</span>
-<span class="n">AVAILABLE_TYPE_OF_FILTERING</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;hard_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;ksigma_hard_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;common_hard_filtering&#39;</span><span class="p">)</span>
+<span class="n">AVAILABLE_TYPE_OF_FILTERING</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;hard_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;cluster_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;ksigma_hard_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;common_hard_filtering&#39;</span><span class="p">)</span>
 <span class="n">DEFAULT_TYPE_OF_FILTERING</span> <span class="o">=</span> <span class="s1">&#39;hard_filtering&#39;</span>
 <span class="n">DEFAULT_FILTER_THRESHOLDS_STR</span> <span class="o">=</span> <span class="s1">&#39;0,0&#39;</span>            <span class="c1"># TODO: change the default value...</span>
 <span class="n">DEFAULT_FILTER_THRESHOLDS</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">threshold_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">threshold_str</span> <span class="ow">in</span> <span class="n">DEFAULT_FILTER_THRESHOLDS_STR</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
@@ -234,10 +235,11 @@
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;hard_filtering&#39;</span><span class="p">,</span> <span class="s1">&#39;common_hard_filtering&#39;</span><span class="p">):</span>
 
-            <span class="k">if</span> <span class="n">detect_only_positive_structures</span><span class="p">:</span>
-                <span class="n">plane_mask</span> <span class="o">=</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">plane_mask</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">plane</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">]</span>
+            <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>      <span class="c1"># TODO: to disable warnings on images containing &quot;NaN&quot; values (temporary solution)</span>
+                <span class="k">if</span> <span class="n">detect_only_positive_structures</span><span class="p">:</span>
+                    <span class="n">plane_mask</span> <span class="o">=</span> <span class="n">plane</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">plane_mask</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">plane</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">]</span>
 
             <span class="n">filtered_plane</span> <span class="o">=</span> <span class="n">plane</span> <span class="o">*</span> <span class="n">plane_mask</span>
 
@@ -259,6 +261,10 @@
                 <span class="n">plane_mask</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">plane</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">plane_noise_std</span> <span class="o">*</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">])</span>  
 
             <span class="n">filtered_plane</span> <span class="o">=</span> <span class="n">plane</span> <span class="o">*</span> <span class="n">plane_mask</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;cluster_filtering&#39;</span><span class="p">:</span>
+
+            <span class="n">filtered_plane</span> <span class="o">=</span> <span class="n">kill_isolated_pixels</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
 
@@ -323,7 +329,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2.dev0',
+            VERSION:'0.2.dev3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
