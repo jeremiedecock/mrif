@@ -11,6 +11,7 @@ all: help
 		 analyse \
 		 clean \
 		 conda \
+		 cov \
 		 doc \
 		 doc-publish \
 		 doc-publish-github \
@@ -82,6 +83,10 @@ init:
 
 conda:
 	$(PYTHON) setup.py bdist_conda
+
+cov:
+	# See http://pytest-cov.readthedocs.io/en/latest/readme.html
+	pytest --cov=pywi pywi/
 
 doc:
 	$(PYTHON) setup.py build_sphinx
