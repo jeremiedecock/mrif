@@ -28,19 +28,26 @@ __all__ = ['get_islands',
 import numpy as np
 import scipy.ndimage as ndimage
 
-# See: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
+"""Pixel clusters filtering.
 
+Notes
+-----
+    Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
+"""
 
-def get_islands(array, threshold=0.2):
-    """
-    ...
+def get_islands(array, threshold=0):
+    """Return pixels clusters in the given image ``array``.
+
+    Notes
+    -----
+        Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
 
     Parameters
     ----------
     array : Numpy array
         The input image to clean.
     threshold : float
-        The "level of the sea" before island cleaning.
+        The "level of the sea" before island cleaning (should be greater or equal to 0).
 
     Returns
     -------
@@ -79,20 +86,19 @@ def get_islands(array, threshold=0.2):
     return filtered_array, label_array, num_labels
 
 
-def kill_isolated_pixels(array, threshold=0.2):
-    """
-    ...
+def kill_isolated_pixels(array, threshold=0):
+    """Keep only the largest cluster of pixels and put all others to 0.
 
     Notes
     -----
-        All values below `threshold` is set to 0.
+    All values below `threshold` is set to 0.
 
     Parameters
     ----------
     array : Numpy array
         The input image to clean.
     threshold : float
-        The "level of the sea" before island cleaning.
+        The "level of the sea" before island cleaning (should be greater or equal to 0).
 
     Returns
     -------
@@ -125,7 +131,27 @@ def kill_isolated_pixels(array, threshold=0.2):
     return filtered_array
 
 
-def kill_isolated_pixels_stats(array, threshold=0.2):
+def kill_isolated_pixels_stats(array, threshold=0):
+    """Return statistics about *pixels clusters* in the given image ``array``.
+
+    Parameters
+    ----------
+    array : array like
+        The image to analyse.
+    threshold : float
+        The "level of the sea" before island cleaning (should be greater or equal to 0).
+
+    Returns
+    -------
+    tuple
+        Return statistics about *pixels clusters* in the given image ``array``.
+        The first value fo the returned tuple is the sum of pixels value lost if
+        ``kill_isolated_pixels`` is applied on the image ``array``.
+        The second value fo the returned tuple is the absolute sum of pixels value
+        lost if ``kill_isolated_pixels`` is applied on the image ``array``.
+        The third value fo the returned tuple is the number of pixel put to 0 if
+        ``kill_isolated_pixels`` is applied on the image ``array``.
+    """
 
     array = array.astype('float64', copy=True)
     filtered_array = kill_isolated_pixels(array, threshold=threshold)
@@ -142,7 +168,21 @@ def kill_isolated_pixels_stats(array, threshold=0.2):
     return float(delta_value), float(delta_abs_value), float(delta_num_pixels)
 
 
-def number_of_islands(array, threshold=0.2):
+def number_of_islands(array, threshold=0):
+    """Return the number of *pixels clusters* in the given image ``array``.
+
+    Parameters
+    ----------
+    array : array like
+        The image to analyse.
+    threshold : float
+        The "level of the sea" before island cleaning (should be greater or equal to 0).
+
+    Returns
+    -------
+    int
+        The number of pixel clusters in the image ``array``.
+    """
+
     filtered_array, label_array, num_labels = get_islands(array, threshold)
     return num_labels
-
