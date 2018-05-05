@@ -74,7 +74,6 @@ def get_pixels_clusters(array, threshold=0):
     --------
 
     Lets search pixels clusters in the following ``img`` image:
-
     >>> import numpy as np
     >>> img = np.array([[0, 0, 1, 3, 0, -1],
     ...                 [0, 0, 0, 5, 0,  0],
@@ -82,9 +81,8 @@ def get_pixels_clusters(array, threshold=0):
     ...                 [0, 0, 0, 8, 0,  0]])
     >>> filtered_array, label_array, num_clusters = get_pixels_clusters(img)
 
-    This image contains 4 pixels clusters.
-    Each of the 4 clusters are labeled with a different integer:
-
+    The default filtering threshold is applied here;
+    the top right pixel is put to 0 before pixels clusters are searched:
     >>> print(filtered_array)
     ... # doctest: +NORMALIZE_WHITESPACE
     [[ 0.  0.  1.  3.  0.  0.]
@@ -92,14 +90,16 @@ def get_pixels_clusters(array, threshold=0):
      [ 4.  3.  0.  0.  1.  0.]
      [ 0.  0.  0.  8.  0.  0.]]
 
+    This image contains 4 pixels clusters:
+    >>> print(num_clusters)
+    4
+
+    Each of the 4 clusters are labeled with a different integer:
     >>> print(label_array)
     [[0 0 1 1 0 0]
      [0 0 0 1 0 0]
      [2 2 0 0 3 0]
      [0 0 0 4 0 0]]
-
-    >>> print(num_clusters)
-    4
 
     See Also
     --------
