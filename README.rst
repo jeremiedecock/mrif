@@ -8,13 +8,14 @@ PyWI - Python Wavelet Imaging
 Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 
 * Web site: http://www.pywi.org/
-* Online documentation: https://jeremiedecock.github.io/pywi/
+* Online documentation: http://www.pywi.org/docs/
 * Source code: https://github.com/jeremiedecock/pywi
 * Issue tracker: https://github.com/jeremiedecock/pywi/issues
 * PyWI on PyPI: https://pypi.org/project/pywi/
 * PyWI on Anaconda Cloud: https://anaconda.org/jdhp/pywi
 
-.. Former documentation: http://sap-cta-data-pipeline.readthedocs.io/en/latest/
+.. Former documentation (readthedocs): http://sap-cta-data-pipeline.readthedocs.io/en/latest/
+.. Former documentation (github pages): https://jeremiedecock.github.io/pywi/
 
 Description
 ===========

@@ -1,2 +1,2 @@
 PYTHON_PACKAGE_NAME=pywi
-HTML_TMP_DIR=html_tmp
+HTML_TMP_DIR=build/sphinx/html

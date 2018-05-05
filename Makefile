@@ -94,7 +94,7 @@ doc:
 doc-show:
 	$(PYTHON) setup.py build_sphinx --open-docs-in-browser
 
-doc-publish: doc-publish-github
+doc-publish: doc-publish-jdhp
 
 doc-publish-github: doc
 	# See https://github.com/davisp/ghp-import
@@ -102,25 +102,12 @@ doc-publish-github: doc
 	ghp-import -n -p -m 'Update gh-pages docs' build/sphinx/html
 
 doc-publish-jdhp: doc
-	# JDHP_DOCS_URI is a shell environment variable that contains the
+	# PYWI_DOCS_URI is a shell environment variable that contains the
 	# destination URI of the HTML files.
-	@if test -z $$JDHP_DOCS_URI ; then exit 1 ; fi
-
-	# Copy HTML
-	@rm -rf $(HTML_TMP_DIR)/
-	@mkdir $(HTML_TMP_DIR)/
-	cp -v $(PYTHON_PACKAGE_NAME).html $(HTML_TMP_DIR)/
-	cp -vr images $(HTML_TMP_DIR)/
+	@if test -z $$PYWI_DOCS_URI ; then exit 1 ; fi
 
 	# Upload the HTML files
-	rsync -r -v -e ssh $(HTML_TMP_DIR)/ ${JDHP_DOCS_URI}/$(PYTHON_PACKAGE_NAME)/
-	
-	# JDHP_DL_URI is a shell environment variable that contains the destination
-	# URI of the PDF files.
-	@if test -z $$JDHP_DL_URI ; then exit 1 ; fi
-	
-	# Upload the PDF file
-	rsync -v -e ssh $(PYTHON_PACKAGE_NAME).pdf ${JDHP_DL_URI}/pdf/
+	rsync -r -v -e ssh $(HTML_TMP_DIR)/ ${PYWI_DOCS_URI}/
 
 pep8:
 	@pep8 --statistics
