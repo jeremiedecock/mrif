@@ -214,7 +214,9 @@ def filter_pixels_clusters_stats(array, threshold=0):
     array : array_like
         The image to analyse.
     threshold : float
-        The "level of the sea" before island cleaning (should be greater or equal to 0).
+        A filtering is applied to the ``array`` image before pixels clusters
+        are searched.
+        See ``get_pixels_clusters`` documentation for more details.
 
     Returns
     -------
@@ -287,7 +289,9 @@ def number_of_pixels_clusters(array, threshold=0):
     array : array_like
         The image to analyse.
     threshold : float
-        The "level of the sea" before island cleaning (should be greater or equal to 0).
+        A filtering is applied to the ``array`` image before pixels clusters
+        are searched.
+        See ``get_pixels_clusters`` documentation for more details.
 
     Returns
     -------
