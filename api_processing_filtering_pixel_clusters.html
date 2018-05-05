@@ -221,16 +221,17 @@ This array never contains <code class="docutils literal"><span class="pre">NaN</
 </table>
 <p class="rubric">Examples</p>
 <p>Lets search pixels clusters in the following <code class="docutils literal"><span class="pre">img</span></code> image:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">filtered_array</span><span class="p">,</span> <span class="n">label_array</span><span class="p">,</span> <span class="n">num_clusters</span> <span class="o">=</span> <span class="n">get_pixels_clusters</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This image contains 4 pixels clusters.
-Each of the 4 clusters are labeled with a different integer:</p>
+<p>The default filtering threshold is applied here;
+the top right pixel is put to 0 before pixels clusters are searched:
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; img = np.array([[0, 0, 1, 3, 0, -1],
+…                 [0, 0, 0, 5, 0,  0],
+…                 [4, 3, 0, 0, 1,  0],
+…                 [0, 0, 0, 8, 0,  0]])
+&gt;&gt;&gt; filtered_array, label_array, num_clusters = get_pixels_clusters(img)</p>
+<p>This image contains 4 pixels clusters:
+&gt;&gt;&gt; print(num_clusters)
+4</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">filtered_array</span><span class="p">)</span>
 <span class="gp">... </span>
 <span class="go">[[ 0.  0.  1.  3.  0.  0.]</span>
@@ -239,17 +240,13 @@ Each of the 4 clusters are labeled with a different integer:</p>
 <span class="go"> [ 0.  0.  0.  8.  0.  0.]]</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label_array</span><span class="p">)</span>
-<span class="go">[[0 0 1 1 0 0]</span>
-<span class="go"> [0 0 0 1 0 0]</span>
-<span class="go"> [2 2 0 0 3 0]</span>
-<span class="go"> [0 0 0 4 0 0]]</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">)</span>
-<span class="go">4</span>
-</pre></div>
-</div>
+<p>Each of the 4 clusters are labeled with a different integer:
+&gt;&gt;&gt; print(label_array)
+[[0 0 1 1 0 0]</p>
+<blockquote>
+<div>[0 0 0 1 0 0]
+[2 2 0 0 3 0]
+[0 0 0 4 0 0]]</div></blockquote>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">

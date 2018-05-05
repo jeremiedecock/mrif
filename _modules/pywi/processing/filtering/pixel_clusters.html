@@ -234,6 +234,8 @@
 
 <span class="sd">    Lets search pixels clusters in the following ``img`` image:</span>
 
+<span class="sd">    The default filtering threshold is applied here;</span>
+<span class="sd">    the top right pixel is put to 0 before pixels clusters are searched:</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; img = np.array([[0, 0, 1, 3, 0, -1],</span>
 <span class="sd">    ...                 [0, 0, 0, 5, 0,  0],</span>
@@ -241,8 +243,9 @@
 <span class="sd">    ...                 [0, 0, 0, 8, 0,  0]])</span>
 <span class="sd">    &gt;&gt;&gt; filtered_array, label_array, num_clusters = get_pixels_clusters(img)</span>
 
-<span class="sd">    This image contains 4 pixels clusters.</span>
-<span class="sd">    Each of the 4 clusters are labeled with a different integer:</span>
+<span class="sd">    This image contains 4 pixels clusters:</span>
+<span class="sd">    &gt;&gt;&gt; print(num_clusters)</span>
+<span class="sd">    4</span>
 
 <span class="sd">    &gt;&gt;&gt; print(filtered_array)</span>
 <span class="sd">    ... # doctest: +NORMALIZE_WHITESPACE</span>
@@ -251,14 +254,12 @@
 <span class="sd">     [ 4.  3.  0.  0.  1.  0.]</span>
 <span class="sd">     [ 0.  0.  0.  8.  0.  0.]]</span>
 
+<span class="sd">    Each of the 4 clusters are labeled with a different integer:</span>
 <span class="sd">    &gt;&gt;&gt; print(label_array)</span>
 <span class="sd">    [[0 0 1 1 0 0]</span>
 <span class="sd">     [0 0 0 1 0 0]</span>
 <span class="sd">     [2 2 0 0 3 0]</span>
 <span class="sd">     [0 0 0 4 0 0]]</span>
-
-<span class="sd">    &gt;&gt;&gt; print(num_clusters)</span>
-<span class="sd">    4</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
