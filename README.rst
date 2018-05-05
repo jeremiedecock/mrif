@@ -7,6 +7,7 @@ PyWI - Python Wavelet Imaging
 
 Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 
+* Web site: http://www.pywi.org/
 * Online documentation: https://jeremiedecock.github.io/pywi/
 * Source code: https://github.com/jeremiedecock/pywi
 * Issue tracker: https://github.com/jeremiedecock/pywi/issues
