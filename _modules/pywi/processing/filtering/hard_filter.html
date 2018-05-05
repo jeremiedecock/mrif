@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.processing.filtering.hard_filter &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
+  <title>pywi.processing.filtering.hard_filter &mdash; Python Wavelet Imaging 0.3.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.3.dev0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -190,7 +190,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pywi.io</span> <span class="k">import</span> <span class="n">images</span>
-<span class="kn">from</span> <span class="nn">pywi.processing.filtering.pixel_clusters</span> <span class="k">import</span> <span class="n">kill_isolated_pixels</span>
+<span class="kn">from</span> <span class="nn">pywi.processing.filtering.pixel_clusters</span> <span class="k">import</span> <span class="n">filter_pixels_clusters</span>
 
 <span class="c1"># CONSTANTS ##################################################################</span>
 
@@ -264,7 +264,7 @@
 
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;cluster_filtering&#39;</span><span class="p">:</span>
 
-            <span class="n">filtered_plane</span> <span class="o">=</span> <span class="n">kill_isolated_pixels</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">])</span>
+            <span class="n">filtered_plane</span> <span class="o">=</span> <span class="n">filter_pixels_clusters</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">thresholds</span><span class="p">[</span><span class="n">plane_index</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
 
@@ -329,7 +329,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2.dev3',
+            VERSION:'0.3.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

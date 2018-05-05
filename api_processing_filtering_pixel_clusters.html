@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing.filtering.pixel_clusters &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
+  <title>processing.filtering.pixel_clusters &mdash; Python Wavelet Imaging 0.3.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.3.dev0 documentation" href="index.html"/>
         <link rel="up" title="PyWI API" href="api.html"/>
         <link rel="next" title="processing.transform.mrtransform_wrapper" href="api_processing_transform_mrtransform.html"/>
         <link rel="prev" title="processing.filtering.hard_filter" href="api_processing_filtering_hard_filter.html"/> 
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -182,49 +182,101 @@
   <div class="section" id="module-pywi.processing.filtering.pixel_clusters">
 <span id="processing-filtering-pixel-clusters"></span><h1>processing.filtering.pixel_clusters<a class="headerlink" href="#module-pywi.processing.filtering.pixel_clusters" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pywi.processing.filtering.pixel_clusters.get_islands">
-<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">get_islands</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#get_islands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.get_islands" title="Permalink to this definition">¶</a></dt>
-<dd><p>…</p>
+<dt id="pywi.processing.filtering.pixel_clusters.get_pixels_clusters">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">get_pixels_clusters</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#get_pixels_clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.get_pixels_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return pixels clusters in the given image <code class="docutils literal"><span class="pre">array</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>Numpy array</em>) – The input image to clean.</li>
-<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning.</li>
+<li><strong>array</strong> (<em>array_like</em>) – The input image where pixels clusters are searched. <code class="docutils literal"><span class="pre">array</span></code> should
+be a 2D Numpy array.
+A pixel cluster is a group of consecutive pixels having a value
+strictly greater than 0.
+Consecutive pixels are vertically or horizontally connected pixels,
+i.e. vertical or horizontal neighbors
+pixels; diagonal neighbors pixels are ignored.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – A filtering is applied to the <code class="docutils literal"><span class="pre">array</span></code> image before pixels clusters
+are searched.
+All pixels strictly lower than <code class="docutils literal"><span class="pre">threshold</span></code> in <code class="docutils literal"><span class="pre">array</span></code> are set to 0.
+If <code class="docutils literal"><span class="pre">threshold</span></code> value is <code class="docutils literal"><span class="pre">None</span></code> or lower than 0 then <code class="docutils literal"><span class="pre">threshold</span></code>
+is automatically set to 0 before the filtering is applied.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><em>Numpy array</em> – <code class="docutils literal"><span class="pre">filtered_array</span></code> the input image with all pixels below <code class="docutils literal"><span class="pre">threshold</span></code> put to 0 (may contain NaN values).</li>
-<li><em>Numpy array</em> – <code class="docutils literal"><span class="pre">label_array</span></code> define the island id each pixel belongs to (doesn’t contain NaN values).</li>
-<li><em>Integer</em> – <code class="docutils literal"><span class="pre">num_labels</span></code> the number of islands.</li>
+<li><strong>filtered_array</strong> (<em>array_like</em>) – The <code class="docutils literal"><span class="pre">array</span></code> image after the pre-processing filtering i.e. with all
+pixels below <code class="docutils literal"><span class="pre">threshold</span></code> put to 0 (may contain <code class="docutils literal"><span class="pre">NaN</span></code> values).</li>
+<li><strong>label_array</strong> (<em>array_like</em>) – An integer Numpy array where each unique pixels cluster in <code class="docutils literal"><span class="pre">input</span></code>
+has a unique ID.
+This array defines the pixels cluster ID each pixel belongs to
+This array never contains <code class="docutils literal"><span class="pre">NaN</span></code> values.</li>
+<li><strong>num_clusters</strong> (<em>int</em>) – The number of pixels clusters in the <code class="docutils literal"><span class="pre">array</span></code> image.</li>
 </ul>
 </p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Lets search pixels clusters in the following <code class="docutils literal"><span class="pre">img</span></code> image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filtered_array</span><span class="p">,</span> <span class="n">label_array</span><span class="p">,</span> <span class="n">num_clusters</span> <span class="o">=</span> <span class="n">get_pixels_clusters</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This image contains 4 pixels clusters.
+Each of the 4 clusters are labeled with a different integer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">filtered_array</span><span class="p">)</span>
+<span class="gp">... </span>
+<span class="go">[[ 0.  0.  1.  3.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  5.  0.  0.]</span>
+<span class="go"> [ 4.  3.  0.  0.  1.  0.]</span>
+<span class="go"> [ 0.  0.  0.  8.  0.  0.]]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">label_array</span><span class="p">)</span>
+<span class="go">[[0 0 1 1 0 0]</span>
+<span class="go"> [0 0 0 1 0 0]</span>
+<span class="go"> [2 2 0 0 3 0]</span>
+<span class="go"> [0 0 0 4 0 0]]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-func docutils literal"><span class="pre">scipy.ndimage.measurements.label()</span></code></dt>
+<dd>The underlying function used for pixels clusters detection (<a class="reference external" href="https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html">https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html</a>)</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="function">
-<dt id="pywi.processing.filtering.pixel_clusters.kill_isolated_pixels">
-<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">kill_isolated_pixels</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#kill_isolated_pixels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.kill_isolated_pixels" title="Permalink to this definition">¶</a></dt>
-<dd><p>…</p>
-<p class="rubric">Notes</p>
-<p>All values below <cite>threshold</cite> is set to 0.</p>
+<dt id="pywi.processing.filtering.pixel_clusters.filter_pixels_clusters">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">filter_pixels_clusters</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#filter_pixels_clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.filter_pixels_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep only pixels belonging to the largest cluster of pixels and put all others pixels to 0.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>Numpy array</em>) – The input image to clean.</li>
-<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning.</li>
+<li><strong>array</strong> (<em>array_like</em>) – The input image to filter. <code class="docutils literal"><span class="pre">array</span></code> should be a 2D Numpy array.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – A filtering is applied to the <code class="docutils literal"><span class="pre">array</span></code> image before pixels clusters
+are searched.
+See <code class="docutils literal"><span class="pre">get_pixels_clusters</span></code> documentation for more details.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The input image <code class="docutils literal"><span class="pre">array</span></code> with isolated islands removed.
-Only keeping the biggest islands (the largest surface).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The input image <code class="docutils literal"><span class="pre">array</span></code> where only pixels belonging to the largest
+cluster of pixels are kept and where all others pixels are put to 0.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Numpy array</p>
@@ -232,6 +284,135 @@ Only keeping the biggest islands (the largest surface).</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Lets search pixels clusters in the following <code class="docutils literal"><span class="pre">img</span></code> image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filtered_array</span> <span class="o">=</span> <span class="n">filter_pixels_clusters</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This image contains 4 pixels clusters.
+Only the biggest one is kept:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">filtered_array</span><span class="p">)</span>
+<span class="gp">... </span>
+<span class="go">[[ 0.  0.  1.  3.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  5.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.  0.]</span>
+<span class="go"> [ 0.  0.  0.  0.  0.  0.]]</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>See <code class="docutils literal"><span class="pre">get_pixels_clusters</span></code> documentation for more details.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pywi.processing.filtering.pixel_clusters.get_pixels_clusters" title="pywi.processing.filtering.pixel_clusters.get_pixels_clusters"><code class="xref py py-func docutils literal"><span class="pre">get_pixels_clusters()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.processing.filtering.pixel_clusters.filter_pixels_clusters_stats">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">filter_pixels_clusters_stats</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#filter_pixels_clusters_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.filter_pixels_clusters_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return statistics about <em>pixels clusters</em> in the given image <code class="docutils literal"><span class="pre">array</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>array_like</em>) – The image to analyse.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning (should be greater or equal to 0).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>delta_value</strong> (<em>float</em>) – The sum of pixels value removed if <code class="docutils literal"><span class="pre">filter_pixels_clusters</span></code> is applied
+on the image <code class="docutils literal"><span class="pre">array</span></code>.</li>
+<li><strong>delta_abs_value</strong> (<em>float</em>) – The sum of the absolute value of pixels removed if <code class="docutils literal"><span class="pre">filter_pixels_clusters</span></code>
+is applied on the image <code class="docutils literal"><span class="pre">array</span></code>.</li>
+<li><strong>delta_num_pixels</strong> (<em>int</em>) – The number of pixel put to 0 if <code class="docutils literal"><span class="pre">filter_pixels_clusters</span></code> is applied
+on the image <code class="docutils literal"><span class="pre">array</span></code>.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>See <code class="docutils literal"><span class="pre">get_pixels_clusters</span></code> documentation for more details.</p>
+<p class="rubric">Examples</p>
+<p>Lets check stats about pixels clusters in the following <code class="docutils literal"><span class="pre">img</span></code> image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta_value</span><span class="p">,</span> <span class="n">delta_abs_value</span><span class="p">,</span> <span class="n">delta_num_pixels</span> <span class="o">=</span> <span class="n">filter_pixels_clusters_stats</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After filtering, the sum of removed pixels is 15:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">delta_value</span><span class="p">)</span>
+<span class="go">15.0</span>
+</pre></div>
+</div>
+<p>After filtering, the sum of the absolute values of removed pixels is 17:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">delta_abs_value</span><span class="p">)</span>
+<span class="go">17.0</span>
+</pre></div>
+</div>
+<p>After filtering, 5 pixels have been put to 0:
+&gt;&gt;&gt; print(delta_num_pixels)
+5</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pywi.processing.filtering.pixel_clusters.get_pixels_clusters" title="pywi.processing.filtering.pixel_clusters.get_pixels_clusters"><code class="xref py py-func docutils literal"><span class="pre">get_pixels_clusters()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pywi.processing.filtering.pixel_clusters.number_of_pixels_clusters">
+<code class="descclassname">pywi.processing.filtering.pixel_clusters.</code><code class="descname">number_of_pixels_clusters</code><span class="sig-paren">(</span><em>array</em>, <em>threshold=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pywi/processing/filtering/pixel_clusters.html#number_of_pixels_clusters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pywi.processing.filtering.pixel_clusters.number_of_pixels_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of <em>pixels clusters</em> in the given image <code class="docutils literal"><span class="pre">array</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>array_like</em>) – The image to analyse.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – The “level of the sea” before island cleaning (should be greater or equal to 0).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The number of pixel clusters in the image <code class="docutils literal"><span class="pre">array</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Lets count pixels clusters in the following <code class="docutils literal"><span class="pre">img</span></code> image:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_clusters</span> <span class="o">=</span> <span class="n">number_of_pixels_clusters</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This image contains 4 pixels clusters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">)</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>See <code class="docutils literal"><span class="pre">get_pixels_clusters</span></code> documentation for more details.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pywi.processing.filtering.pixel_clusters.get_pixels_clusters" title="pywi.processing.filtering.pixel_clusters.get_pixels_clusters"><code class="xref py py-func docutils literal"><span class="pre">get_pixels_clusters()</span></code></a></p>
+</div>
 </dd></dl>
 
 </div>
@@ -280,7 +461,7 @@ Only keeping the biggest islands (the largest surface).</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.2.dev3',
+            VERSION:'0.3.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

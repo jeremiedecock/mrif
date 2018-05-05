@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pywi.benchmark.metrics.refbased &mdash; Python Wavelet Imaging 0.2.dev3 documentation</title>
+  <title>pywi.benchmark.metrics.refbased &mdash; Python Wavelet Imaging 0.3.dev0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="../../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../../search.html"/>
-    <link rel="top" title="Python Wavelet Imaging 0.2.dev3 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Python Wavelet Imaging 0.3.dev0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Module code" href="../../../index.html"/> 
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -192,7 +192,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="c1">#from pywi.image.pixel_clusters import kill_isolated_pixels_stats</span>
+<span class="c1">#from pywi.image.pixel_clusters import filter_pixels_clusters_stats</span>
 
 <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="k">import</span> <span class="n">compare_ssim</span> <span class="k">as</span> <span class="n">ski_ssim</span>
 <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="k">import</span> <span class="n">compare_psnr</span> <span class="k">as</span> <span class="n">ski_psnr</span>
@@ -711,7 +711,7 @@
 <span class="c1"># Clusters of pixels ##########################################################</span>
 
 <span class="c1">#def number_of_clusters(image, reference_image):</span>
-<span class="c1">#    delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(image)</span>
+<span class="c1">#    delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(image)</span>
 <span class="c1">#</span>
 <span class="c1">#    score_dict = collections.OrderedDict((</span>
 <span class="c1">#                    (&#39;kill_isolated_pixels_delta_pe&#39;,         delta_pe),</span>
@@ -758,7 +758,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2.dev3',
+            VERSION:'0.3.dev0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
