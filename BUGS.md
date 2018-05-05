@@ -21,7 +21,7 @@
     File "/tmp/pip-build-av28zfd9/pywi/pywi/benchmark/__init__.py", line 6, in <module>
     from . import assess
     File "/tmp/pip-build-av28zfd9/pywi/pywi/benchmark/assess.py", line 40, in <module>
-    from pywi.image.pixel_clusters import kill_isolated_pixels
+    from pywi.image.pixel_clusters import filter_pixels_clusters
     File "/tmp/pip-build-av28zfd9/pywi/pywi/image/__init__.py", line 6, in <module>
     from . import pixel_clusters
     File "/tmp/pip-build-av28zfd9/pywi/pywi/image/pixel_clusters.py", line 29, in <module>

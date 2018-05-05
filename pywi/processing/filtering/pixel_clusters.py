@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-__all__ = ['get_islands',
-           'kill_isolated_pixels',
-           'kill_isolated_pixels_stats',
-           'number_of_islands']
+__all__ = ['get_pixels_clusters',
+           'filter_pixels_clusters',
+           'filter_pixels_clusters_stats',
+           'number_of_pixels_clusters']
 
 import numpy as np
 import scipy.ndimage as ndimage
@@ -35,30 +35,77 @@ Notes
     Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
 """
 
-def get_islands(array, threshold=0):
+def get_pixels_clusters(array, threshold=0):
     """Return pixels clusters in the given image ``array``.
-
-    Notes
-    -----
-        Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
 
     Parameters
     ----------
-    array : Numpy array
-        The input image to clean.
+    array : array_like
+        The input image where pixels clusters are searched. ``array`` should
+        be a 2D Numpy array.
+        A pixel cluster is a group of consecutive pixels having a value
+        strictly greater than 0.
+        Consecutive pixels are vertically or horizontally connected pixels,
+        i.e. vertical or horizontal neighbors
+        pixels; diagonal neighbors pixels are ignored.
     threshold : float
-        The "level of the sea" before island cleaning (should be greater or equal to 0).
+        A filtering is applied to the ``array`` image before pixels clusters
+        are searched.
+        All pixels strictly lower than ``threshold`` in ``array`` are set to 0.
+        If ``threshold`` value is ``None`` or lower than 0 then ``threshold``
+        is automatically set to 0 before the filtering is applied.
 
     Returns
     -------
-    Numpy array
-        ``filtered_array`` the input image with all pixels below ``threshold`` put to 0 (may contain NaN values).
+    filtered_array : array_like
+        The ``array`` image after the pre-processing filtering i.e. with all
+        pixels below ``threshold`` put to 0 (may contain ``NaN`` values).
 
-    Numpy array
-        ``label_array`` define the island id each pixel belongs to (doesn't contain NaN values).
+    label_array : array_like
+        An integer Numpy array where each unique pixels cluster in ``input``
+        has a unique ID.
+        This array defines the pixels cluster ID each pixel belongs to
+        This array never contains ``NaN`` values.
 
-    Integer
-        ``num_labels`` the number of islands.
+    num_clusters : int
+        The number of pixels clusters in the ``array`` image.
+
+    Examples
+    --------
+
+    Lets search pixels clusters in the following ``img`` image:
+
+    >>> import numpy as np
+    >>> img = np.array([[0, 0, 1, 3, 0, -1],
+    ...                 [0, 0, 0, 5, 0,  0],
+    ...                 [4, 3, 0, 0, 1,  0],
+    ...                 [0, 0, 0, 8, 0,  0]])
+    >>> filtered_array, label_array, num_clusters = get_pixels_clusters(img)
+
+    This image contains 4 pixels clusters.
+    Each of the 4 clusters are labeled with a different integer:
+
+    >>> print(filtered_array)
+    ... # doctest: +NORMALIZE_WHITESPACE
+    [[ 0.  0.  1.  3.  0.  0.]
+     [ 0.  0.  0.  5.  0.  0.]
+     [ 4.  3.  0.  0.  1.  0.]
+     [ 0.  0.  0.  8.  0.  0.]]
+
+    >>> print(label_array)
+    [[0 0 1 1 0 0]
+     [0 0 0 1 0 0]
+     [2 2 0 0 3 0]
+     [0 0 0 4 0 0]]
+
+    >>> print(num_clusters)
+    4
+
+    See Also
+    --------
+    scipy.ndimage.measurements.label
+        The underlying function used for pixels clusters detection
+        (https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html)
     """
 
     if threshold is None:
@@ -76,39 +123,67 @@ def get_islands(array, threshold=0):
     filtered_array[filtered_array < threshold] = 0.
     mask = filtered_array > 0
 
-    # Detect islands ("label")
-    label_array, num_labels = ndimage.label(mask)#, structure=np.ones((5, 5)))
+    # Detect pixels clusters (named "label" in scipy)
+    label_array, num_clusters = ndimage.label(mask) #, structure=np.ones((5, 5)))
 
     # Put back NaN in filtered_array (required to avoid bugs in others
-    # functions (e.g. uncoherent dimensions with pixels_positions).
+    # functions e.g. incoherent dimensions with pixels_positions).
     filtered_array[np.isnan(array)] = np.nan
 
-    return filtered_array, label_array, num_labels
+    return filtered_array, label_array, num_clusters
 
 
-def kill_isolated_pixels(array, threshold=0):
-    """Keep only the largest cluster of pixels and put all others to 0.
-
-    Notes
-    -----
-    All values below `threshold` is set to 0.
+def filter_pixels_clusters(array, threshold=0):
+    """Keep only pixels belonging to the largest cluster of pixels and put all others pixels to 0.
 
     Parameters
     ----------
-    array : Numpy array
-        The input image to clean.
+    array : array_like
+        The input image to filter. ``array`` should be a 2D Numpy array.
     threshold : float
-        The "level of the sea" before island cleaning (should be greater or equal to 0).
+        A filtering is applied to the ``array`` image before pixels clusters
+        are searched.
+        See ``get_pixels_clusters`` documentation for more details.
 
     Returns
     -------
     Numpy array
-        The input image ``array`` with isolated islands removed.
-        Only keeping the biggest islands (the largest surface).
+        The input image ``array`` where only pixels belonging to the largest
+        cluster of pixels are kept and where all others pixels are put to 0.
+
+    Examples
+    --------
+
+    Lets search pixels clusters in the following ``img`` image:
+
+    >>> import numpy as np
+    >>> img = np.array([[0, 0, 1, 3, 0, -1],
+    ...                 [0, 0, 0, 5, 0,  0],
+    ...                 [4, 3, 0, 0, 1,  0],
+    ...                 [0, 0, 0, 8, 0,  0]])
+    >>> filtered_array = filter_pixels_clusters(img)
+
+    This image contains 4 pixels clusters.
+    Only the biggest one is kept:
+
+    >>> print(filtered_array)
+    ... # doctest: +NORMALIZE_WHITESPACE
+    [[ 0.  0.  1.  3.  0.  0.]
+     [ 0.  0.  0.  5.  0.  0.]
+     [ 0.  0.  0.  0.  0.  0.]
+     [ 0.  0.  0.  0.  0.  0.]]
+
+    Notes
+    -----
+        See ``get_pixels_clusters`` documentation for more details.
+
+    See Also
+    --------
+    get_pixels_clusters
     """
 
     array = array.astype('float64', copy=True)
-    filtered_array, label_array, num_labels = get_islands(array, threshold)
+    filtered_array, label_array, num_clusters = get_pixels_clusters(array, threshold)
 
     # Put NaN pixels to -inf
     # This is OK as long as it is made temporary and internally to avoid issues
@@ -116,7 +191,7 @@ def kill_isolated_pixels(array, threshold=0):
     filtered_array[np.isnan(filtered_array)] = -float('inf')
 
     # Count the number of pixels for each island
-    num_pixels_per_island = ndimage.sum(filtered_array, label_array, range(num_labels + 1))
+    num_pixels_per_island = ndimage.sum(filtered_array, label_array, range(num_clusters + 1))
 
     # Only keep the biggest island
     mask_biggest_island = num_pixels_per_island < np.max(num_pixels_per_island)
@@ -131,49 +206,85 @@ def kill_isolated_pixels(array, threshold=0):
     return filtered_array
 
 
-def kill_isolated_pixels_stats(array, threshold=0):
+def filter_pixels_clusters_stats(array, threshold=0):
     """Return statistics about *pixels clusters* in the given image ``array``.
 
     Parameters
     ----------
-    array : array like
+    array : array_like
         The image to analyse.
     threshold : float
         The "level of the sea" before island cleaning (should be greater or equal to 0).
 
     Returns
     -------
-    tuple
-        Return statistics about *pixels clusters* in the given image ``array``.
-        The first value fo the returned tuple is the sum of pixels value lost if
-        ``kill_isolated_pixels`` is applied on the image ``array``.
-        The second value fo the returned tuple is the absolute sum of pixels value
-        lost if ``kill_isolated_pixels`` is applied on the image ``array``.
-        The third value fo the returned tuple is the number of pixel put to 0 if
-        ``kill_isolated_pixels`` is applied on the image ``array``.
+    delta_value : float
+        The sum of pixels value removed if ``filter_pixels_clusters`` is applied
+        on the image ``array``.
+
+    delta_abs_value : float
+        The sum of the absolute value of pixels removed if ``filter_pixels_clusters``
+        is applied on the image ``array``.
+
+    delta_num_pixels : int
+        The number of pixel put to 0 if ``filter_pixels_clusters`` is applied
+        on the image ``array``.
+
+    Notes
+    -----
+        See ``get_pixels_clusters`` documentation for more details.
+
+    Examples
+    --------
+
+    Lets check stats about pixels clusters in the following ``img`` image:
+
+    >>> import numpy as np
+    >>> img = np.array([[0, 0, 1, 3, 0, -1],
+    ...                 [0, 0, 0, 5, 0,  0],
+    ...                 [4, 3, 0, 0, 1,  0],
+    ...                 [0, 0, 0, 8, 0,  0]])
+    >>> delta_value, delta_abs_value, delta_num_pixels = filter_pixels_clusters_stats(img)
+
+    After filtering, the sum of removed pixels is 15:
+
+    >>> print(delta_value)
+    15.0
+
+    After filtering, the sum of the absolute values of removed pixels is 17:
+
+    >>> print(delta_abs_value)
+    17.0
+
+    After filtering, 5 pixels have been put to 0:
+    >>> print(delta_num_pixels)
+    5
+
+    See Also
+    --------
+    get_pixels_clusters
     """
 
     array = array.astype('float64', copy=True)
-    filtered_array = kill_isolated_pixels(array, threshold=threshold)
+    filtered_array = filter_pixels_clusters(array, threshold=threshold)
 
     delta_value = np.nansum(array - filtered_array)
     delta_abs_value = np.nansum(np.abs(array - filtered_array))
-
 
     array[np.isfinite(array) & (array != 0)] = 1                              # May genereate warnings on NaN values
     filtered_array[np.isfinite(filtered_array) & (filtered_array != 0)] = 1   # May genereate warnings on NaN values
 
     delta_num_pixels = np.nansum(array - filtered_array)
 
-    return float(delta_value), float(delta_abs_value), float(delta_num_pixels)
+    return float(delta_value), float(delta_abs_value), int(delta_num_pixels)
 
 
-def number_of_islands(array, threshold=0):
+def number_of_pixels_clusters(array, threshold=0):
     """Return the number of *pixels clusters* in the given image ``array``.
 
     Parameters
     ----------
-    array : array like
+    array : array_like
         The image to analyse.
     threshold : float
         The "level of the sea" before island cleaning (should be greater or equal to 0).
@@ -182,7 +293,32 @@ def number_of_islands(array, threshold=0):
     -------
     int
         The number of pixel clusters in the image ``array``.
+
+    Examples
+    --------
+
+    Lets count pixels clusters in the following ``img`` image:
+
+    >>> import numpy as np
+    >>> img = np.array([[0, 0, 1, 3, 0, -1],
+    ...                 [0, 0, 0, 5, 0,  0],
+    ...                 [4, 3, 0, 0, 1,  0],
+    ...                 [0, 0, 0, 8, 0,  0]])
+    >>> num_clusters = number_of_pixels_clusters(img)
+
+    This image contains 4 pixels clusters:
+
+    >>> print(num_clusters)
+    4
+
+    Notes
+    -----
+        See ``get_pixels_clusters`` documentation for more details.
+
+    See Also
+    --------
+    get_pixels_clusters
     """
 
-    filtered_array, label_array, num_labels = get_islands(array, threshold)
+    filtered_array, label_array, num_labels = get_pixels_clusters(array, threshold)
     return num_labels

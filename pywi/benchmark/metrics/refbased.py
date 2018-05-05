@@ -33,7 +33,7 @@ __all__ = ['normalize_array',
 
 import numpy as np
 
-#from pywi.image.pixel_clusters import kill_isolated_pixels_stats
+#from pywi.image.pixel_clusters import filter_pixels_clusters_stats
 
 from skimage.measure import compare_ssim as ski_ssim
 from skimage.measure import compare_psnr as ski_psnr
@@ -552,7 +552,7 @@ def psnr(image, reference_image):
 # Clusters of pixels ##########################################################
 
 #def number_of_clusters(image, reference_image):
-#    delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(image)
+#    delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(image)
 #
 #    score_dict = collections.OrderedDict((
 #                    ('kill_isolated_pixels_delta_pe',         delta_pe),

@@ -21,10 +21,10 @@
 # THE SOFTWARE.
 
 """
-This module contains unit tests for the "image.kill_isolated_pixels" module.
+This module contains unit tests for the "image.filter_pixels_clusters" module.
 """
 
-from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels, kill_isolated_pixels_stats
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters, filter_pixels_clusters_stats
 
 import numpy as np
 
@@ -32,10 +32,10 @@ import unittest
 
 class TestKillIsolatedPixels(unittest.TestCase):
     """
-    Contains unit tests for the "denoising.kill_isolated_pixels" module.
+    Contains unit tests for the "denoising.filter_pixels_clusters" module.
     """
 
-    # Test the "kill_isolated_pixels" function ################################
+    # Test the "filter_pixels_clusters" function ################################
 
     def test_kill_isolated_pixels_input_copy(self):
         """Check whether the input image is altered during process."""
@@ -50,7 +50,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img)
+        output_img = filter_pixels_clusters(input_img)
 
         # Check whether the input image has changed
 
@@ -58,7 +58,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_example1(self):
-        """Check the output of the kill_isolated_pixels function."""
+        """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
 
@@ -69,7 +69,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img)
+        output_img = filter_pixels_clusters(input_img)
 
         # Expected output image #######
 
@@ -82,7 +82,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_example2(self):
-        """Check the output of the kill_isolated_pixels function."""
+        """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
 
@@ -93,7 +93,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img)
+        output_img = filter_pixels_clusters(input_img)
 
         # Expected output image #######
 
@@ -106,7 +106,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_example3(self):
-        """Check the output of the kill_isolated_pixels function."""
+        """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
 
@@ -117,7 +117,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img, threshold=0.2)
+        output_img = filter_pixels_clusters(input_img, threshold=0.2)
 
         # Expected output image #######
 
@@ -130,7 +130,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_example_negative_threshold(self):
-        """Check the output of the kill_isolated_pixels function."""
+        """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
 
@@ -142,7 +142,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img, threshold=-2)
+        output_img = filter_pixels_clusters(input_img, threshold=-2)
 
         # Expected output image #######
 
@@ -168,7 +168,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img, threshold=0.2)
+        output_img = filter_pixels_clusters(input_img, threshold=0.2)
 
         # Expected output image #######
 
@@ -182,7 +182,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_example_nan_1(self):
-        """Check the output of the kill_isolated_pixels function."""
+        """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
 
@@ -193,7 +193,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        output_img = kill_isolated_pixels(input_img)
+        output_img = filter_pixels_clusters(input_img)
 
         # Expected output image #######
 
@@ -205,10 +205,10 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    # Test the "kill_isolated_pixels_stats" function ##########################
+    # Test the "filter_pixels_clusters_stats" function ##########################
 
     def test_kill_isolated_pixels_stats_example1(self):
-        """Check the output of the kill_isolated_pixels_stats function."""
+        """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
 
@@ -219,7 +219,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(input_img)
+        delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(input_img)
 
         # Expected output image #######
 
@@ -233,7 +233,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_stats_example2(self):
-        """Check the output of the kill_isolated_pixels_stats function."""
+        """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
 
@@ -244,7 +244,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(input_img)
+        delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(input_img)
 
         # Expected output image #######
 
@@ -258,7 +258,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_stats_example3(self):
-        """Check the output of the kill_isolated_pixels_stats function."""
+        """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
 
@@ -269,7 +269,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(input_img, threshold=None)
+        delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(input_img, threshold=None)
 
         # Expected output image #######
 
@@ -283,7 +283,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
 
     def test_kill_isolated_pixels_stats_example_nan_1(self):
-        """Check the output of the kill_isolated_pixels_stats function."""
+        """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
 
@@ -294,7 +294,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
         # Output image ################
 
-        delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(input_img, threshold=None)
+        delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(input_img, threshold=None)
 
         # Expected output image #######
 

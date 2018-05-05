@@ -31,8 +31,8 @@ import time
 import traceback
 
 from pywi.benchmark.metrics.refbased import mse
-from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels_stats
-from pywi.processing.filtering.pixel_clusters import number_of_islands
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters_stats
+from pywi.processing.filtering.pixel_clusters import number_of_pixels_clusters
 from pywi.io.images import image_generator
 import pywi.io.images
 
@@ -154,8 +154,8 @@ class AbstractCleaningAlgorithm(object):
 
                     # FETCH ADDITIONAL IMAGE METADATA #####################
 
-                    delta_pe, delta_abs_pe, delta_num_pixels = kill_isolated_pixels_stats(reference_img)       # TODO: NaN
-                    num_islands = number_of_islands(reference_img)                                             # TODO: NaN
+                    delta_pe, delta_abs_pe, delta_num_pixels = filter_pixels_clusters_stats(reference_img)       # TODO: NaN
+                    num_islands = number_of_pixels_clusters(reference_img)                                             # TODO: NaN
 
                     image_dict["img_ref_islands_delta_pe"] = delta_pe
                     image_dict["img_ref_islands_delta_abs_pe"] = delta_abs_pe

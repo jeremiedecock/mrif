@@ -88,7 +88,7 @@ class ObjectiveFunction:
                         "first_detection_scale": None,
                         "input_image_scale": "linear",
                         #"k_sigma_noise_threshold": "2,2,3,3",
-                        "kill_isolated_pixels": True,
+                        "filter_pixels_clusters": True,
                         "mask_file_path": None,
                         #"mrfilter_directory": "/dev/shm/.jd",
                         "noise_distribution": self.noise_distribution,

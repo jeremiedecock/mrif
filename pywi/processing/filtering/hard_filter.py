@@ -31,7 +31,7 @@ import copy
 import numpy as np
 
 from pywi.io import images
-from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters
 
 # CONSTANTS ##################################################################
 
@@ -105,7 +105,7 @@ def filter_planes(wavelet_planes,
 
         elif method == 'cluster_filtering':
 
-            filtered_plane = kill_isolated_pixels(plane, threshold=thresholds[plane_index])
+            filtered_plane = filter_pixels_clusters(plane, threshold=thresholds[plane_index])
 
         else:
 

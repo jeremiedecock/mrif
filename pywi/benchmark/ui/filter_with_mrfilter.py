@@ -270,7 +270,7 @@ def main():
 #    number_of_scales = args.number_of_scales
 #    suppress_last_scale = args.suppress_last_scale
 #    suppress_isolated_pixels = args.suppress_isolated_pixels
-#    kill_isolated_pixels = args.kill_isolated_pixels
+#    filter_pixels_clusters = args.filter_pixels_clusters
 #    coef_detection_method = args.coef_detection_method
 #    k_sigma_noise_threshold = args.k_sigma_noise_threshold
 #    noise_model = args.noise_model
@@ -327,7 +327,7 @@ def main():
 #                              number_of_scales=number_of_scales,
 #                              suppress_last_scale=suppress_last_scale,
 #                              suppress_isolated_pixels=suppress_isolated_pixels,
-#                              kill_isolated_pixels=kill_isolated_pixels,
+#                              filter_pixels_clusters=filter_pixels_clusters,
 #                              coef_detection_method=coef_detection_method,
 #                              k_sigma_noise_threshold=k_sigma_noise_threshold,
 #                              noise_model=noise_model,

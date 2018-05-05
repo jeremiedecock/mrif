@@ -39,9 +39,9 @@ import os
 
 from pywi.processing.filtering import hard_filter
 from pywi.processing.filtering.hard_filter import filter_planes
-from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels as scipy_kill_isolated_pixels
-from pywi.processing.filtering.pixel_clusters import kill_isolated_pixels_stats
-from pywi.processing.filtering.pixel_clusters import number_of_islands
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters as scipy_kill_isolated_pixels
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters_stats
+from pywi.processing.filtering.pixel_clusters import number_of_pixels_clusters
 from pywi.processing.transform import mrtransform_wrapper
 from pywi.processing.transform.mrtransform_wrapper import wavelet_transform
 from pywi.processing.transform.mrtransform_wrapper import inverse_wavelet_transform
@@ -136,9 +136,9 @@ def clean_image(input_image,
 
     # KILL ISOLATED PIXELS ################################################
 
-    kill_islands = kill_isolated_pixels_stats(cleaned_image)
+    kill_islands = filter_pixels_clusters_stats(cleaned_image)
     img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = kill_islands
-    img_cleaned_num_islands = number_of_islands(cleaned_image)
+    img_cleaned_num_islands = number_of_pixels_clusters(cleaned_image)
 
     if output_data_dict is not None:
         output_data_dict["img_cleaned_islands_delta_pe"] = img_cleaned_islands_delta_pe
