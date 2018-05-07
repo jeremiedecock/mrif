@@ -44,6 +44,9 @@ clean images) and a given performance estimator (a function that assess the
 image filter parameters comparing the cleaned image to the actual clean image),
 the optimizer can determine the optimal filtering level for each scale.
 
+Features
+========
+
 The PyWI library contains:
 
 * wavelet transform and wavelet filtering functions for image multiresolution
