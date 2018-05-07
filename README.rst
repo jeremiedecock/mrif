@@ -20,7 +20,7 @@ Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 Description
 ===========
 
-PyWI is an image filtering library aimed at removing additive background noise
+PyWI is a Python image filtering library aimed at removing additive background noise
 from raster graphics images.
 
 * Input: an image file containing the raster graphics to clean (i.e. an image
