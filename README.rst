@@ -44,6 +44,10 @@ clean images) and a given performance estimator (a function that assess the
 image filter parameters comparing the cleaned image to the actual clean image),
 the optimizer can determine the optimal filtering level for each scale.
 
+.. warning::
+
+    This project is in beta stage.
+
 Features
 ========
 
@@ -63,11 +67,6 @@ The PyWI library contains:
   global optimization problems (Beyer, H. G. (2013) "The theory of evolution
   strategies", Springer Science & Business Media);
 * additional tools to manage and monitor the parameter optimization.
-
-Note:
-
-    This project is in beta stage.
-
 
 Dependencies
 ============
