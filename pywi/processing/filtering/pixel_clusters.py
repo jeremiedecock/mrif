@@ -20,6 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""Pixel clusters filtering.
+
+Notes
+-----
+    Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
+"""
+
 __all__ = ['get_pixels_clusters',
            'filter_pixels_clusters',
            'filter_pixels_clusters_stats',
@@ -27,13 +34,6 @@ __all__ = ['get_pixels_clusters',
 
 import numpy as np
 import scipy.ndimage as ndimage
-
-"""Pixel clusters filtering.
-
-Notes
------
-    Reference: https://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.ndimage.measurements.label.html
-"""
 
 def get_pixels_clusters(array, threshold=0):
     """Return pixels clusters in the given image ``array``.
