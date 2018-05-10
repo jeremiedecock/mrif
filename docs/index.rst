@@ -21,7 +21,8 @@ Contents:
    API <api>
    developer
 
-* Online documentation: https://jeremiedecock.github.io/pywi/
+* Web site: http://www.pywi.org/
+* Online documentation: http://www.pywi.org/docs/
 * Source code: https://github.com/jeremiedecock/pywi
 * Issue tracker: https://github.com/jeremiedecock/pywi/issues
 * PyWI on PyPI: https://pypi.org/project/pywi/
