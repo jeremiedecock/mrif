@@ -105,7 +105,11 @@ def filter_planes(wavelet_planes,
 
         elif method == 'cluster_filtering':
 
-            filtered_plane = filter_pixels_clusters(plane, threshold=thresholds[plane_index])
+            if plane_index == 0:
+                plane_mask = plane > thresholds[plane_index]
+                filtered_plane = plane * plane_mask
+            else:
+                filtered_plane = filter_pixels_clusters(plane, threshold=thresholds[plane_index])
 
         else:
 
@@ -132,5 +136,16 @@ def filter_planes(wavelet_planes,
         for plane_index, plane in enumerate(wavelet_planes[0:-1]):
             filtered_plane = plane * common_significant_pixels_mask
             filtered_wavelet_planes[plane_index] = filtered_plane
+
+    # The next commented part is actually quite useless as a post processing island filtering does more or less the same job...
+    #elif method == 'cluster_filtering':
+
+    #    # Only keep first plane's pixels that are *significant* in the others planes
+    #    significant_pixels_mask = np.zeros(filtered_wavelet_planes[0].shape)
+
+    #    for filtered_plane in filtered_wavelet_planes[1:-1]:
+    #        significant_pixels_mask[filtered_plane != 0] = 1
+
+    #    filtered_wavelet_planes[0] += filtered_wavelet_planes[0] * significant_pixels_mask
 
     return filtered_wavelet_planes
