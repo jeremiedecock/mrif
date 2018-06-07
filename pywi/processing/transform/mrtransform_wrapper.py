@@ -48,7 +48,7 @@ from pywi.io import fits
 
 # CONSTANTS ##################################################################
 
-AVAILABLE_LAST_SCALE_OPTIONS = ('keep', 'drop', 'mask')
+AVAILABLE_LAST_SCALE_OPTIONS = ('keep', 'drop', 'mask', 'posmask')
 DEFAULT_LAST_SCALE_TREATMENT = 'mask'
 
 # EXCEPTIONS #################################################################
@@ -211,6 +211,14 @@ def inverse_wavelet_transform(wavelet_planes,
         significant_pixels_mask = np.zeros(wavelet_planes[0].shape)
         for plane in wavelet_planes[0:-1]:
             significant_pixels_mask[plane != 0] = 1
+        output_image += wavelet_planes[-1] * significant_pixels_mask
+
+    elif last_plane == "posmask":
+
+        # Only keep last plane's pixels that are *significant* with a *positive coefficient* in the others planes
+        significant_pixels_mask = np.zeros(wavelet_planes[0].shape)
+        for plane in wavelet_planes[0:-1]:
+            significant_pixels_mask[plane > 0] = 1
         output_image += wavelet_planes[-1] * significant_pixels_mask
 
     return output_image
