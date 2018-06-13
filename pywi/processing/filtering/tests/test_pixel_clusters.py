@@ -30,12 +30,41 @@ import numpy as np
 
 import unittest
 
+
+# Unit Tests based on the "unittest" package ##################################
+
 class TestKillIsolatedPixels(unittest.TestCase):
     """
     Contains unit tests for the "denoising.filter_pixels_clusters" module.
     """
 
-    # Test the "filter_pixels_clusters" function ################################
+    # Test the "filter_pixels_clusters" function ##############################
+
+    def test_whether_selection_is_based_on_pixels_value(self):
+        """Check whether selection is based on pixels value or number of pixels in clusters."""
+
+        # Input image #################
+
+        input_img = np.array([[0, 0, 0, 0,  0, 0],
+                              [1, 1, 1, 0,  0, 0],
+                              [1, 1, 1, 0, 10, 0],
+                              [1, 1, 1, 0,  0, 0],
+                              [0, 0, 0, 0,  0, 0]])
+
+        # Output image ################
+
+        output_img = filter_pixels_clusters(input_img)
+
+        # Expected output image #######
+
+        expected_output_img = np.array([[0, 0, 0, 0,  0, 0],
+                                        [0, 0, 0, 0,  0, 0],
+                                        [0, 0, 0, 0, 10, 0],
+                                        [0, 0, 0, 0,  0, 0],
+                                        [0, 0, 0, 0,  0, 0]])
+
+        np.testing.assert_array_equal(output_img, expected_output_img)
+
 
     def test_kill_isolated_pixels_input_copy(self):
         """Check whether the input image is altered during process."""
