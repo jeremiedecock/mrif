@@ -230,7 +230,9 @@ def clean_image(input_img,
 
     try:
         initial_time = time.perf_counter()
-        os.system(cmd)
+        return_code = os.system(cmd)
+        if return_code != 0:
+            raise Exception()
         exec_time_sec = time.perf_counter() - initial_time
         if output_data_dict is not None:
             output_data_dict["mrfilter_cmd_exec_time_sec"] = exec_time_sec

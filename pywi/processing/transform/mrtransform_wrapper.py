@@ -142,10 +142,24 @@ def wavelet_transform(input_image,
         if debug:
             print(cmd)
 
-        os.system(cmd)
+        return_code = os.system(cmd)
+        if return_code != 0:
+            msg = """Error: mr_transform execution failed.
+                     The mr_transform executable must be callable from the system path.
+                     Please check that the following command can be executed in your system terminal (from any directory):
+                     
+                     mr_transform -h
+                     
+                     If not, please verify your mr_transform installation and check your PATH environment variable.
+                     
+                     Note: mr_transform is part of the Sparce2D library. Installation instructions are available there: http://www.pywi.org/docs/intro.html#cosmostat-isap-sparce2d-installation."""
+            raise Exception(msg)
 
         cmd = "mv {}.mr {}".format(mr_output_file_path, mr_output_file_path)
-        os.system(cmd)
+        return_code = os.system(cmd)
+        if return_code != 0:
+            msg = "Error: cannot rename the following file {}.".format(mr_output_file_path)
+            raise Exception(msg)
 
         # READ THE MR_TRANSFORM OUTPUT FILE ####################
 
