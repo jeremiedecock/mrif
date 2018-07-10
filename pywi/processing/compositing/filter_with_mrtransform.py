@@ -35,11 +35,9 @@ This script requires the mr_transform program
 It also requires Numpy and Matplotlib Python libraries.
 """
 
-import os
-
 from pywi.processing.filtering import hard_filter
 from pywi.processing.filtering.hard_filter import filter_planes
-from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters as scipy_kill_isolated_pixels
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters
 from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters_stats
 from pywi.processing.filtering.pixel_clusters import number_of_pixels_clusters
 from pywi.processing.transform import mrtransform_wrapper
@@ -134,21 +132,20 @@ def clean_image(input_image,
     if DEBUG:
         images.plot(cleaned_image, "Cleaned image")
 
-    # KILL ISOLATED PIXELS ################################################
-
-    kill_islands = filter_pixels_clusters_stats(cleaned_image)
-    img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = kill_islands
-    img_cleaned_num_islands = number_of_pixels_clusters(cleaned_image)
+    # REMOVE ISOLATED PIXELS ##############################################
 
     if output_data_dict is not None:
-        output_data_dict["img_cleaned_islands_delta_pe"] = img_cleaned_islands_delta_pe
-        output_data_dict["img_cleaned_islands_delta_abs_pe"] = img_cleaned_islands_delta_abs_pe
-        output_data_dict["img_cleaned_islands_delta_num_pixels"] = img_cleaned_islands_delta_num_pixels
+        img_cleaned_clusters_delta_intensity, img_cleaned_clusters_delta_abs_intensity, img_cleaned_clusters_delta_num_pixels = filter_pixels_clusters_stats(cleaned_image)
+        img_cleaned_num_islands = number_of_pixels_clusters(cleaned_image)
+
+        output_data_dict["img_cleaned_clusters_delta_intensity"] = img_cleaned_clusters_delta_intensity
+        output_data_dict["img_cleaned_clusters_delta_abs_intensity"] = img_cleaned_clusters_delta_abs_intensity
+        output_data_dict["img_cleaned_clusters_delta_num_pixels"] = img_cleaned_clusters_delta_num_pixels
         output_data_dict["img_cleaned_num_islands"] = img_cleaned_num_islands
 
     if kill_isolated_pixels:
-        cleaned_image = scipy_kill_isolated_pixels(cleaned_image)
+        cleaned_image = filter_pixels_clusters(cleaned_image)
         if DEBUG:
-            images.plot(cleaned_image, "Cleaned image after island kill")
+            images.plot(cleaned_image, "Cleaned image after cluster filtering")
 
     return cleaned_image

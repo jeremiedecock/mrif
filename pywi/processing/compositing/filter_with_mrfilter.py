@@ -37,7 +37,7 @@ import numpy as np
 import os
 import time
 
-from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters as scipy_kill_isolated_pixels
+from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters
 from pywi.processing.filtering.pixel_clusters import filter_pixels_clusters_stats
 from pywi.processing.filtering.pixel_clusters import number_of_pixels_clusters
 
@@ -290,12 +290,13 @@ def clean_image(input_img,
         cleaned_img = cleaned_img - np.nanmin(cleaned_img)
         cleaned_img[ np.isfinite(cleaned_img) & (cleaned_img < 1.0) ] = 0.   # May genereate warnings on NaN values
 
-    # KILL ISOLATED PIXELS #################################
-
-    img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = filter_pixels_clusters_stats(cleaned_img)
-    img_cleaned_num_islands = number_of_pixels_clusters(cleaned_img)
+    # REMOVE ISOLATED PIXELS ###############################
 
     if output_data_dict is not None:
+        # TODO: drop it ?
+        img_cleaned_islands_delta_pe, img_cleaned_islands_delta_abs_pe, img_cleaned_islands_delta_num_pixels = filter_pixels_clusters_stats(cleaned_img)
+        img_cleaned_num_islands = number_of_pixels_clusters(cleaned_img)
+
         output_data_dict["img_cleaned_islands_delta_pe"] = img_cleaned_islands_delta_pe
         output_data_dict["img_cleaned_islands_delta_abs_pe"] = img_cleaned_islands_delta_abs_pe
         output_data_dict["img_cleaned_islands_delta_num_pixels"] = img_cleaned_islands_delta_num_pixels
@@ -303,12 +304,12 @@ def clean_image(input_img,
 
     if kill_isolated_pixels:
         if verbose:
-            print("Kill isolated pixels")
+            print("Remove isolated pixels")
         initial_time = time.perf_counter()
-        cleaned_img = scipy_kill_isolated_pixels(cleaned_img)
+        cleaned_img = filter_pixels_clusters(cleaned_img)
         exec_time_sec = time.perf_counter() - initial_time
         if output_data_dict is not None:
-            output_data_dict["scipy_kill_isolated_pixels_time_sec"] = exec_time_sec
+            output_data_dict["scipy_remove_isolated_pixels_time_sec"] = exec_time_sec
 
     #print(cleaned_img)
     #images.plot_hist(cleaned_img)
