@@ -42,7 +42,7 @@ Usage
                                  [--number-of-iterations integer] [--epsilon FLOAT]
                                  [--support-file-name FILE]
                                  [--suppress-isolated-pixels]
-                                 [--kill-isolated-pixels] [--suppress-last-scale]
+                                 [--remove-isolated-pixels] [--suppress-last-scale]
                                  [--detect-only-positive-structure]
                                  [--precision FLOAT]
                                  [--first-detection-scale INTEGER]
@@ -152,7 +152,7 @@ Usage
                             save to disk.
       --suppress-isolated-pixels, -k
                             Suppress isolated pixels in the support
-      --kill-isolated-pixels
+      --remove-isolated-pixels
                             Suppress isolated pixels in the support (scipy
                             implementation)
       --suppress-last-scale, -K
@@ -373,7 +373,7 @@ def add_arguments(parser):
     parser.add_argument("--suppress-isolated-pixels", "-k", action="store_true",
                         help="Suppress isolated pixels in the support")
 
-    parser.add_argument("--kill-isolated-pixels", action="store_true",
+    parser.add_argument("--remove-isolated-pixels", action="store_true",
                         help="Suppress isolated pixels in the support (scipy implementation)")
 
     parser.add_argument("--suppress-last-scale", "-K", action="store_true",
@@ -476,7 +476,7 @@ def main():
     number_of_scales = args.number_of_scales
     suppress_last_scale = args.suppress_last_scale
     suppress_isolated_pixels = args.suppress_isolated_pixels
-    kill_isolated_pixels = args.kill_isolated_pixels
+    remove_isolated_pixels = args.remove_isolated_pixels
     coef_detection_method = args.coef_detection_method
     k_sigma_noise_threshold = args.k_sigma_noise_threshold
     noise_model = args.noise_model
@@ -533,7 +533,7 @@ def main():
                               number_of_scales=number_of_scales,
                               suppress_last_scale=suppress_last_scale,
                               suppress_isolated_pixels=suppress_isolated_pixels,
-                              kill_isolated_pixels=kill_isolated_pixels,
+                              kill_isolated_pixels=remove_isolated_pixels,
                               coef_detection_method=coef_detection_method,
                               k_sigma_noise_threshold=k_sigma_noise_threshold,
                               noise_model=noise_model,

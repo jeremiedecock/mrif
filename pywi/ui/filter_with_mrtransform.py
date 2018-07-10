@@ -34,7 +34,7 @@ Usage
                                     [--filter-thresholds FLOAT LIST]
                                     [--last-scale STRING]
                                     [--detect-only-positive-structures]
-                                    [--kill-isolated-pixels]
+                                    [--remove-isolated-pixels]
                                     [--noise-cdf-file FILE] [--tmp-dir DIRECTORY]
                                     [--verbose] [--debug] [--max-images INTEGER]
                                     [--telid INTEGER] [--eventid INTEGER]
@@ -60,7 +60,7 @@ Usage
                             Last plane treatment: keep, drop, mask
       --detect-only-positive-structures, -p
                             Detect only positive structure
-      --kill-isolated-pixels
+      --remove-isolated-pixels
                             Suppress isolated pixels in the support (scipy
                             implementation)
       --noise-cdf-file FILE
@@ -116,7 +116,7 @@ def add_arguments(parser):
     - **filter-thresholds** (float list): thresholds used for the plane filtering.
     - **last-scale** (string): last plane treatment
     - **detect-only-positive-structures** (boolean): detect only positive structures.
-    - **kill-isolated-pixels** (boolean): suppress isolated pixels in the support
+    - **remove-isolated-pixels** (boolean): suppress isolated pixels in the support
       (scipy implementation)
     - **noise-cdf-file** (path): the JSON file containing the Cumulated
       Distribution Function of the noise model used to inject artificial noise
@@ -146,7 +146,7 @@ def add_arguments(parser):
     parser.add_argument("--detect-only-positive-structures", "-p", action="store_true",
                         help="Detect only positive structures.")
 
-    parser.add_argument("--kill-isolated-pixels", action="store_true",
+    parser.add_argument("--remove-isolated-pixels", action="store_true",
                         help="Suppress isolated pixels in the support (scipy implementation).")
 
     parser.add_argument("--noise-cdf-file", metavar="FILE",
@@ -178,7 +178,7 @@ def main():
     filter_thresholds_str = args.filter_thresholds
     last_scale_treatment = args.last_scale
     detect_only_positive_structures = args.detect_only_positive_structures
-    kill_isolated_pixels = args.kill_isolated_pixels
+    remove_isolated_pixels = args.remove_isolated_pixels
     noise_cdf_file = args.noise_cdf_file
     tmp_dir = args.tmp_dir
 
@@ -236,7 +236,7 @@ def main():
                               filter_thresholds=filter_thresholds,
                               last_scale_treatment=last_scale_treatment,
                               detect_only_positive_structures=detect_only_positive_structures,
-                              kill_isolated_pixels=kill_isolated_pixels,
+                              kill_isolated_pixels=remove_isolated_pixels,
                               noise_distribution=noise_distribution,
                               tmp_files_directory=tmp_dir)
 
