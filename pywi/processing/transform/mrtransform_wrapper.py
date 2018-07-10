@@ -25,7 +25,7 @@ __all__ = ['MrTransformError',
            'wavelet_transform',
            'inverse_wavelet_transform']
 
-"""Denoise images with Wavelet Transform.
+"""Starlet Transform.
 
 This module is a wrapper for mr_transform -- a program written CEA/CosmoStat
 (www.cosmostat.org) -- to make Wavelet Transform.
@@ -38,7 +38,6 @@ This script requires the mr_transform program
 It also requires the Numpy library.
 """
 
-import copy
 import numpy as np
 import os
 import time
@@ -54,7 +53,7 @@ DEFAULT_LAST_SCALE_TREATMENT = 'mask'
 # EXCEPTIONS #################################################################
 
 class MrTransformError(Exception):
-    """Common `wavelet_mrtransform` module's error."""
+    """Common `mrtransform_wrapper` module's error."""
     pass
 
 class WrongDimensionError(MrTransformError):
@@ -78,7 +77,7 @@ def wavelet_transform(input_image,
                       tmp_files_directory=".",
                       noise_distribution=None,
                       debug=False):
-    """Compute the wavelet transform of `input_image`.
+    """Compute the starlet transform of `input_image`.
 
     Parameters
     ----------
