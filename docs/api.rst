@@ -32,6 +32,7 @@ Transform package:
    :maxdepth: 1
 
    pywi.processing.transform.mrtransform_wrapper <api_processing_transform_mrtransform>
+   pywi.processing.transform.starlet <api_processing_transform_starlet>
 
 I/O package:
 
@@ -62,4 +63,5 @@ User interface package (UI):
    pywi.ui.commons <api_ui_commons>
    pywi.ui.filter_with_mrfilter <api_ui_filter_with_mrfilter>
    pywi.ui.filter_with_mrtransform <api_ui_filter_with_mrtransform>
+   pywi.ui.filter_with_starlet <api_ui_filter_with_starlet>
 
