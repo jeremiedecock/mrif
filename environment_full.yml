@@ -3,6 +3,11 @@ channels:
   - jdhp
   - conda-forge
 dependencies:
+  - ipython
+  - ipywidgets
+  - cython
+  - jupyter
+  - notebook
   - docutils
   - pep8
   - pytest
@@ -14,11 +19,18 @@ dependencies:
   - sphinx-automodapi
   - sphinxcontrib
   - sphinxcontrib-websupport
+  - traitlets
+  - wheel
+  - xz
+  - yaml
+  - zlib
   - numpy
+  - numpydoc
   - scipy
   - scikit-image
   - pillow
   - astropy
+  - pandas
   - matplotlib
   - pip:
       - pytest_runner
