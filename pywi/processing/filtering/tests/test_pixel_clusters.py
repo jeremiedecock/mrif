@@ -33,7 +33,7 @@ import unittest
 
 # Unit Tests based on the "unittest" package ##################################
 
-class TestKillIsolatedPixels(unittest.TestCase):
+class TestRemoveIsolatedPixels(unittest.TestCase):
     """
     Contains unit tests for the "denoising.filter_pixels_clusters" module.
     """
@@ -66,7 +66,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_input_copy(self):
+    def test_remove_isolated_pixels_input_copy(self):
         """Check whether the input image is altered during process."""
 
         # Input image #################
@@ -86,7 +86,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(input_img_copy, input_img)
 
 
-    def test_kill_isolated_pixels_example1(self):
+    def test_remove_isolated_pixels_example1(self):
         """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
@@ -110,7 +110,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example2(self):
+    def test_remove_isolated_pixels_example2(self):
         """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
@@ -134,7 +134,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example3(self):
+    def test_remove_isolated_pixels_example3(self):
         """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
@@ -158,7 +158,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example_negative_threshold(self):
+    def test_remove_isolated_pixels_example_negative_threshold(self):
         """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
@@ -184,7 +184,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example_threshold(self):
+    def test_remove_isolated_pixels_example_threshold(self):
         """Check that every values below threshold is set to 0."""
 
         # Input image #################
@@ -210,7 +210,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         np.testing.assert_array_equal(output_img, expected_output_img)
 
 
-    def test_kill_isolated_pixels_example_nan_1(self):
+    def test_remove_isolated_pixels_example_nan_1(self):
         """Check the output of the filter_pixels_clusters function."""
 
         # Input image #################
@@ -236,7 +236,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
 
     # Test the "filter_pixels_clusters_stats" function ##########################
 
-    def test_kill_isolated_pixels_stats_example1(self):
+    def test_remove_isolated_pixels_stats_example1(self):
         """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
@@ -261,7 +261,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         self.assertEqual(delta_num_pixels, expected_delta_num_pixels)
 
 
-    def test_kill_isolated_pixels_stats_example2(self):
+    def test_remove_isolated_pixels_stats_example2(self):
         """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
@@ -286,7 +286,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         self.assertEqual(delta_num_pixels, expected_delta_num_pixels)
 
 
-    def test_kill_isolated_pixels_stats_example3(self):
+    def test_remove_isolated_pixels_stats_example3(self):
         """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
@@ -311,7 +311,7 @@ class TestKillIsolatedPixels(unittest.TestCase):
         self.assertEqual(delta_num_pixels, expected_delta_num_pixels)
 
 
-    def test_kill_isolated_pixels_stats_example_nan_1(self):
+    def test_remove_isolated_pixels_stats_example_nan_1(self):
         """Check the output of the filter_pixels_clusters_stats function."""
 
         # Input image #################
