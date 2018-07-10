@@ -7,7 +7,6 @@ dependencies:
   - pep8
   - pytest
   - pytest-cov
-  - readline
   - setuptools
   - sphinx
   - sphinx_rtd_theme
