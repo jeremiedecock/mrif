@@ -19,5 +19,6 @@ dependencies:
   - pillow
   - astropy
   - matplotlib
+  - numba
   - pip:
       - pytest_runner

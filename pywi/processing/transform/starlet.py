@@ -33,6 +33,8 @@ Starlet transform.
 
 import numpy as np
 
+from numba import jit
+
 from pywi.io import images
 
 # CONSTANTS ##################################################################
@@ -62,15 +64,16 @@ class WrongDimensionError(StarletError):
 
 ##############################################################################
 
+@jit
 def get_pixel_value(image, x, y, type_border):
 
     if type_border == 0:
 
-        try:
-            pixel_value = image[x, y]
-            return pixel_value
-        except IndexError as e:
-            return 0
+        #try:
+        pixel_value = image[x, y]
+        return pixel_value
+        #except IndexError as e:
+        #    return 0
 
     elif type_border == 1:
 
@@ -118,6 +121,7 @@ def get_pixel_value(image, x, y, type_border):
         raise ValueError()
 
 
+@jit
 def smooth_bspline(input_image, type_border, step_trou):
     """Apply a convolution kernel on the image using the "à trou" algorithm.
 
@@ -223,6 +227,7 @@ def smooth_bspline(input_image, type_border, step_trou):
     return img_out
 
 
+@jit
 def wavelet_transform(input_image,
                       number_of_scales=4,
                       noise_distribution=None,

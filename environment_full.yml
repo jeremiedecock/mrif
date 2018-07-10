@@ -32,5 +32,6 @@ dependencies:
   - astropy
   - pandas
   - matplotlib
+  - numba
   - pip:
       - pytest_runner
