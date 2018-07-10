@@ -24,7 +24,9 @@
     - [ ] grep -ri fits pywi docs
     - [ ] grep -ri geom pywi docs
     - [ ] grep -ri event pywi docs
+    - [ ] grep -ri kill pywi docs (warning: it requires to update pywi-cta too)
     - [ ] grep -ri tel pywi docs
+    - [ ] grep -ri pe pywi docs
     - [ ] grep -ri tailcut pywi docs
 - [ ] Make a conda package for Linux, MacOSX and Windows + update the installation instructions
 - [ ] Fix the unittests
