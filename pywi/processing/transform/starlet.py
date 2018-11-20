@@ -32,8 +32,15 @@ Starlet transform.
 """
 
 import numpy as np
+import warnings
 
-from numba import jit
+try:
+    from numba import jit
+except ModuleNotFoundError:
+    warnings.warn("Cannot use Numba. Switch to low performance mode.")
+    # Make a decorator that does nothing
+    def jit(f):
+        return f
 
 from pywi.io import images
 
