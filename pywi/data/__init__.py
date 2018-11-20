@@ -5,7 +5,14 @@ This package contains image examples used in tutorials and notebooks.
 
 import numpy as np
 
-def camera():
+import os
+
+# Inspired by https://github.com/scikit-image/scikit-image/blob/master/skimage/data/__init__.py
+data_dir = os.path.abspath(os.path.dirname(__file__))
+
+__all__ = ['galaxy']
+
+def galaxy():
     """Gray-level "galaxy" image.
 
     Often used for tutorials and examples.
@@ -36,4 +43,4 @@ def camera():
     camera : (256, 256) uint8 ndarray
         Galaxy image.
     """
-    return np.load("galaxy.npy")
+    return np.load(os.path.join(data_dir, "galaxy.npy"))
