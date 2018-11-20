@@ -13,6 +13,7 @@ dependencies:
   - sphinx-automodapi
   - sphinxcontrib
   - sphinxcontrib-websupport
+  - numba
   - numpy
   - scipy
   - scikit-image
