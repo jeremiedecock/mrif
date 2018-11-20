@@ -1,7 +1,7 @@
-=======================
-optimization.bruteforce
-=======================
+===================================
+optimization.differential_evolution
+===================================
 
-.. automodule:: pywi.optimization.bruteforce
+.. automodule:: pywi.optimization.differential_evolution
    :members:
 

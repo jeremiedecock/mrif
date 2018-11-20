@@ -1,7 +1,7 @@
-=======================
-optimization.bruteforce
-=======================
+=================
+optimization.saes
+=================
 
-.. automodule:: pywi.optimization.bruteforce
+.. automodule:: pywi.optimization.saes
    :members:
 

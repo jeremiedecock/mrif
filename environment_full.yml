@@ -35,3 +35,4 @@ dependencies:
   - numba
   - pip:
       - pytest_runner
+      - sphinx-gallery
