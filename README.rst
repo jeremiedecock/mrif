@@ -9,6 +9,8 @@ Copyright (c) 2016-2018 Jeremie DECOCK (www.jdhp.org)
 
 * Web site: http://www.pywi.org/
 * Online documentation: http://www.pywi.org/docs/
+* Examples: http://www.pywi.org/docs/gallery/
+* Notebooks: https://github.com/jeremiedecock/pywi-notebooks
 * Source code: https://github.com/jeremiedecock/pywi
 * Issue tracker: https://github.com/jeremiedecock/pywi/issues
 * PyWI on PyPI: https://pypi.org/project/pywi/
