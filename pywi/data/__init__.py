@@ -3,6 +3,8 @@
 This package contains image examples used in tutorials and notebooks.
 """
 
+# Rem: images are stored in ".npy" format to avoid dependencies to PIL, ... (PIL may cause issues on Google Colab)
+
 import numpy as np
 
 import os
