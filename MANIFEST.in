@@ -7,6 +7,8 @@ include *.txt
 include *.rst
 include *.md
 
+recursive-include pywi/data *.npy
+
 recursive-include docs *
 recursive-include examples *.py
 recursive-include scripts *.py
