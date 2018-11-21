@@ -42,7 +42,7 @@ def galaxy():
 
     Returns
     -------
-    camera : (256, 256) uint8 ndarray
+    galaxy : (256, 256) uint8 ndarray
         Galaxy image.
     """
     return np.load(os.path.join(data_dir, "galaxy.npy"))
