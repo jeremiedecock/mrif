@@ -111,6 +111,9 @@ ENV/
 
 # COMMON ######################################################################
 
+# Visual Studio Code files
+.vscode/
+
 # Vim swap files
 *.swp
 
