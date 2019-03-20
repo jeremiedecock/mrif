@@ -26,47 +26,37 @@ import json
 from scipy import optimize
 from pywi.optimization.objectivefunc.wavelets_mrfilter_delta_psi import ObjectiveFunction as WaveletObjectiveFunction
 
-def main():
+input_files = None  # TODO
+noise_distribution = None  # TODO
 
-    input_files = None  # TODO
-    noise_distribution = None  # TODO
+func = WaveletObjectiveFunction(input_files=input_files,
+                                noise_distribution=noise_distribution,
+                                max_num_img=None,
+                                aggregation_method="mean")  # "mean" or "median"
 
-    func = WaveletObjectiveFunction(input_files=input_files,
-                                    noise_distribution=noise_distribution,
-                                    max_num_img=None,
-                                    aggregation_method="mean")  # "mean" or "median"
+s1_slice = slice(1, 5, 1)
+s2_slice = slice(1, 5, 1)
+s3_slice = slice(1, 5, 1)
+s4_slice = slice(1, 5, 1)
 
-    s1_slice = slice(1, 5, 1)
-    s2_slice = slice(1, 5, 1)
-    s3_slice = slice(1, 5, 1)
-    s4_slice = slice(1, 5, 1)
+search_ranges = (s1_slice,
+                 s2_slice,
+                 s3_slice,
+                 s4_slice)
 
-    search_ranges = (s1_slice,
-                     s2_slice,
-                     s3_slice,
-                     s4_slice)
+res = optimize.brute(func,
+                     search_ranges,
+                     full_output=True,
+                     finish=None)     #optimize.fmin)
 
-    res = optimize.brute(func,
-                         search_ranges,
-                         full_output=True,
-                         finish=None)     #optimize.fmin)
+print("x* =", res[0])
+print("f(x*) =", res[1])
 
-    print("x* =", res[0])
-    print("f(x*) =", res[1])
+res_dict = {
+            "best_solution": res[0].tolist(),
+            "best_score": float(res[1]),
+            "solutions": res[2].tolist(),
+            "scores": res[3].tolist()
+            }
 
-    # SAVE RESULTS ############################################################
-
-    res_dict = {
-                "best_solution": res[0].tolist(),
-                "best_score": float(res[1]),
-                "solutions": res[2].tolist(),
-                "scores": res[3].tolist()
-               }
-
-    with open("optimize_sigma.json", "w") as fd:
-        json.dump(res_dict, fd, sort_keys=True, indent=4)  # pretty print format
-
-
-if __name__ == "__main__":
-    main()
-
+print(res_dict)
