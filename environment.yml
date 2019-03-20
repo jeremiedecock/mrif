@@ -4,9 +4,35 @@ channels:
   - conda-forge
 dependencies:
   - astropy
+  - docutils
+  - ipython
+  - ipywidgets
+  - jupyter
+  - jupyterlab
   - matplotlib
+  - nodejs
+  - notebook
   - numba
   - numpy
+  - numpydoc
+  - pandas
+  - pep8
   - pillow
+  - pytables
+  - pytest
+  - pytest-arraydiff
+  - pytest-cov
   - scipy
   - scikit-image
+  - seaborn
+  - setuptools
+  - sphinx
+  - sphinx_rtd_theme
+  - sphinx-automodapi
+  - sphinxcontrib
+  - sphinxcontrib-websupport
+  - yaml
+  - pip:
+      - pytest_runner
+      - ailib
+      - sphinx-gallery
