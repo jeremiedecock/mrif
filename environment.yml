@@ -34,5 +34,4 @@ dependencies:
   - yaml
   - pip:
       - pytest_runner
-      - ailib
       - sphinx-gallery
